@@ -11,6 +11,8 @@ public class Player {
     // xPosition
     // yPosition
     // avatar
+    // name
+    // scoreKeeper (see ScoreKeeper class)
 
     // Methods
     // moveLeft
