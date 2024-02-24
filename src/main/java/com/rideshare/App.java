@@ -21,26 +21,22 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import com.rideshare.GameManager.GameController;
+import com.rideshare.GameManager.Sprite;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
+    private GameController gameController;
 
     @Override
     public void start(Stage stage) throws IOException {
-        GameController gameController = new GameController();
-        gameController.InitializeGame(stage);
-        gameController.LoadHomeScreen(stage);
-    }
+        this.gameController = new GameController();
+        gameController.initialize(stage);
+        gameController.loadHomeScreen(stage);
 
-    public static void setRoot(Scene scene, String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
-
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        Sprite s = new Sprite("girl-1", this.gameController);
+        s.render();
     }
 
     public static void main(String[] args) {

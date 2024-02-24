@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -18,55 +19,78 @@ import javafx.stage.Stage;
  * Class which manages running the game.
  */
 public class GameController {
-    // Attributes
-    // Methods
-    // startGame
-    // initializeGame
-    // pauseGame
     @FXML
     private static Scene scene;
+    private static AnchorPane root = new AnchorPane();
 
-    private void AddSprite(Stage stage) {
-        Image icon = new Image(App.class.getResource("/images/girl-1.png").toString());
-        stage.getIcons().add(icon);
+    public Scene getScene() {
+        return scene;
+    }
+    public AnchorPane getRoot() {
+        return root;
     }
 
-    private void DrawScene(Stage stage) {
-        Group root = new Group();
-        scene = new Scene(root, Color.BLACK);
-        
+    // Creates the basic window of the game
+    private void renderStage(Stage stage) {
+        scene = new Scene(root);
         stage.setTitle("Shared Mobility App");
         stage.setWidth((900));
         stage.setHeight((600));
         stage.setResizable(false);
-
-        // stage.setFullScreen(true);
-
         stage.setScene(scene);
+        stage.show();
     }
 
-    @FXML
-    public void LoadHomeScreen(Stage stage) throws IOException {
+    public void loadHomeScreen(Stage stage) throws IOException {
         try {
-            App.setRoot(scene, "home");
+            setRoot("home");
         } catch (Exception e) {
            e.printStackTrace();
         }
     }
 
-    private void Show(Stage stage) {
-        stage.show();
+    private static void setRoot(String fxml) throws IOException {
+        root = loadFXML(fxml);
+        scene.setRoot(root);
+    }
+
+    private static AnchorPane loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
     }
 
     // Function which sets up the initial variables and elements for the game.
-    public void InitializeGame(Stage stage) {
-        // Create a scene
-        this.DrawScene(stage);
-        // Load the home screen
-        this.Show(stage);
+    public void initialize(Stage stage) {
+        this.renderStage(stage);
     }
 
-    public void RunGame() {
+    public void loadGameScreen() throws IOException {
+        setRoot("game");;
+        // Add avatar
+    }
+
+    @FXML
+    public void start() {
+       System.out.println("Starting");
+    }
+
+    @FXML
+    public void load() {
        
+    }
+
+    @FXML
+    public void end() {
+       
+    }
+
+    @FXML
+    public void save() {
+       
+    }
+
+    @FXML
+    public void pause() {
+        System.out.println("Pausing");
     }
 }

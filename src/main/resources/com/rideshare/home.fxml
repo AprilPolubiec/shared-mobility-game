@@ -24,7 +24,7 @@
             <Font name="Lucida Grande" size="24.0" />
          </font>
       </Text>
-      <Button defaultButton="true" layoutX="387.0" layoutY="249.0" mnemonicParsing="false" style="-fx-background-color: #ec7113; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="New Game">
+      <Button fx:id="newGameButton" defaultButton="true" layoutX="387.0" layoutY="249.0" mnemonicParsing="false" onAction="#start" style="-fx-background-color: #ec7113; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="New Game">
          <font>
             <Font name="Lucida Grande" size="13.0" />
          </font>
