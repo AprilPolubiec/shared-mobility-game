@@ -8,6 +8,9 @@ import java.util.List;
 
 import com.rideshare.App;
 
+import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
+import javafx.animation.Transition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -16,14 +19,20 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 
 public class Sprite {
     private String resource_directory;
     HashMap<String, List<Image>> icons = new HashMap<String, List<Image>>();
     Scene scene;
     GameController gameController;
-    private int xPos;
-    private int yPos;
+    ImageView imageView;
+    private double xPos;
+    private double yPos;
+    private String direction;
+    private int spriteIdx;
+    private int spriteTimer;
+    private boolean isMoving;
 
     public Sprite(String name, GameController gameController) {
         this.gameController = gameController;
@@ -36,22 +45,40 @@ public class Sprite {
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                     case W:
-                        up();
+                        direction = "up";
+                        isMoving = true;
+                        System.out.println("pressed a key");
                         break;
                     case S:
-                        down();
+                        direction = "down";
+                        isMoving = true;
                         break;
                     case A:
-                        left();
+                        direction = "left";
+                        isMoving = true;
                         break;
                     case D:
-                        right();
+                        direction = "right";
+                        isMoving = true;
                         break;
                     default:
                         break;
                 }
             }
-            
+        });
+
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case W:
+                    case A:
+                    case S:
+                    case D:
+                        isMoving = false;
+                        break;
+                }
+            }
         });
     }
 
@@ -81,29 +108,86 @@ public class Sprite {
             e.printStackTrace();
         }
     }
+
     public void render() {
         // Place on the screen
-        ImageView imageView = new ImageView(icons.get("down").get(0));
-        imageView.setX(scene.getWidth() / 2);
-        imageView.setY(scene.getHeight() / 2);
+        imageView = new ImageView(icons.get("down").get(0));
+        xPos = scene.getWidth() / 2;
+        yPos = scene.getHeight() / 2;
+        imageView.setX(xPos);
+        imageView.setY(yPos);
 
         this.gameController.getRoot().getChildren().add(imageView);
+        spriteLoop().playFromStart();
+    }
+
+    private Transition spriteLoop() {
+        Transition loop = new Transition() {
+            { setCycleDuration(Duration.millis(1000 / 60.0)); }
+            @Override
+            protected void interpolate(double frac) {
+                if (frac != 1) 
+                    return;
+                if (isMoving) {
+                    move();
+                }
+            }
+            
+        };
+        loop.setCycleCount(Animation.INDEFINITE);
+        return loop;
+    }
+
+    public void move() {
+        System.out.println(spriteTimer);
+        if (spriteTimer > 12) {
+            if (spriteIdx < 1) {
+                spriteIdx += 1;
+            } else {
+                spriteIdx = 0;
+            }
+            spriteTimer = 0;
+        }
+        var r = icons.get(direction).get(spriteIdx);
+        imageView.setImage(icons.get(direction).get(spriteIdx));
+    
+        switch (direction) {
+            case "up":
+                up();
+                break;
+            case "down":
+                down();
+                break;
+            case "left":
+                left();
+                break;
+            case "right":
+                right();
+                break;
+            default:
+                break;
+        }
+        spriteTimer++;
     }
 
     public void up() {
         System.out.println("UP");
-        yPos -= 10;
+        yPos -= 2;
+        imageView.setY(yPos);
     }
     public void down() {
         System.out.println("down");
-        yPos += 10;
+        yPos += 2;
+        imageView.setY(yPos);
     }
     public void left() {
         System.out.println("left");
-        xPos -= 10;
+        xPos -= 2;
+        imageView.setX(xPos);
     }
     public void right() {
         System.out.println("right");
-        xPos += 10;
+        xPos += 2;
+        imageView.setX(xPos);
     }
 }

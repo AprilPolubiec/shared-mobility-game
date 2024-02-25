@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.rideshare.App;
 
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -16,12 +17,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- * Class which manages running the game.
+ * Class which manages the game GUI
  */
 public class GameController {
     @FXML
     private static Scene scene;
     private static AnchorPane root = new AnchorPane();
+    private static boolean isPaused;
 
     public Scene getScene() {
         return scene;
@@ -72,16 +74,20 @@ public class GameController {
     @FXML
     public void start() {
        System.out.println("Starting");
+       Sprite player = new Sprite("April", this);
+       player.render();
+       // Start timer
+       // Generate first mailbox
     }
 
     @FXML
     public void load() {
-       
+       // Import file
     }
 
     @FXML
     public void end() {
-       
+
     }
 
     @FXML
@@ -92,5 +98,12 @@ public class GameController {
     @FXML
     public void pause() {
         System.out.println("Pausing");
+        isPaused = true;
+    }
+
+    @FXML
+    public void resume() {
+        System.out.println("Resuming");
+        isPaused = false;
     }
 }
