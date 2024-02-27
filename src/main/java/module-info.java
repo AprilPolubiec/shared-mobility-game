@@ -4,4 +4,5 @@ module com.rideshare {
 
     opens com.rideshare to javafx.fxml;
     exports com.rideshare;
+    exports com.rideshare.GameManager;
 }
