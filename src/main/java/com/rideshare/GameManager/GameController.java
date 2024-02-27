@@ -3,6 +3,8 @@ package com.rideshare.GameManager;
 import java.io.IOException;
 
 import com.rideshare.App;
+import com.rideshare.City;
+import com.rideshare.Trip;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -76,8 +78,53 @@ public class GameController {
        System.out.println("Starting");
        Sprite player = new Sprite("April", this);
        player.render();
-       // Start timer
-       // Generate first mailbox
+       // Load city (using City class)
+       // Generate mailboxes (using City class)
+       // Create ScoreKeeper (using ScoreKeeper class)
+       // Start timer (using Timer class)
+       // Randomly show x mailboxes (eg: 1 if user is on level 1) - should loop through the mailboxes on our City instance that are not completed or unavailable
+       // Calculate trips (using TripCalculator)
+       // Show trips in popup (Using ChooseTripPopup)
+       // on trip selection, "do" the trip - TBD?
+    }
+
+    public void loadCity(int difficulty) {
+        // this.addMailboxes(...);
+       return;
+    }
+
+    public void addMailboxes(int amount) {
+       return;
+    }
+
+    public void createScoreKeeper(int budget) {
+       return;
+    }
+
+    public void startTimer() {
+       return;
+    }
+
+    public void showMailboxes(int count) {
+       return;
+    }
+
+    public void calculateTrips(int count) {
+       return;
+    }
+
+    public void renderEducationalPopup(Trip[] trips) {
+       return;
+    }
+
+    @FXML
+    public void takeTrip(Trip trip) {
+       // Character should visually move along the trip route
+        // On arrival, educational popup should show
+    }
+
+    public void showEducationalPopup(Trip[] trips) {
+       // EducationalPopup.show(trips)
     }
 
     @FXML

@@ -47,7 +47,6 @@ public class Sprite {
                     case W:
                         direction = "up";
                         isMoving = true;
-                        System.out.println("pressed a key");
                         break;
                     case S:
                         direction = "down";

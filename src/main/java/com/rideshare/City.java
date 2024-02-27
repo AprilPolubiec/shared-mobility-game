@@ -6,8 +6,10 @@ public class City {
     // Size
     // Routes
     // Difficulty level
+    // Mailboxes - list of type Mailbox
 
     // TODO: methods
     // createCity
     // loadCity
+    // addMailboxes(count)
 }

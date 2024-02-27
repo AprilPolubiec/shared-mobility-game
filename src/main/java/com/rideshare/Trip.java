@@ -7,7 +7,7 @@ public class Trip {
     // TODO: attributes
     // Start coordinates
     // Stop coordinates
-    // RoutesTaken
+    // TripPath - should be a matrix like the Path in city
     // Trip time length
     // Trip distance length
     // Trip emmission

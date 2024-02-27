@@ -10,6 +10,6 @@ public class Route {
     // Stops (where the player can get on and off - or this can be defined in the path matrix, tbd)
 
     // TODO: methods
-    // getPath
-    // createPath
+    // getRoute
+    // createRoute
 }
