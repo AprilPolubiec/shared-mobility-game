@@ -14,7 +14,7 @@ public class Trip {
     
     // TODO: methods
     // getTrip()
-    // takeTrip()
+    // takeTrip(Player p)
     // getTripStats()
     // getTripLength()
     // getTripEmmission()

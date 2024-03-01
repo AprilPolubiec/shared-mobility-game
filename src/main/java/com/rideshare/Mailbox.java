@@ -6,6 +6,7 @@ public class Mailbox {
     // PositionY
     // Status - waiting, complete
     // IsVisible
+    // Timer
 
     // TODO: methods
     // show
