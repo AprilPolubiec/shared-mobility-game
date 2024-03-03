@@ -210,4 +210,26 @@ public class RouteTest {
         assertThrows(Exception.class, () -> new Route(city, transportationMode, path2, stops2, name));
     }
 
+    @Test
+    void Test_CannotHaveStopsOnAModeThatDoesNotSupportStops() {
+        TransportationMode transportationMode = new WalkingTransportationMode();
+        City city = new City(); // TODO: set city dimensions to 5x5
+        String name = "Main Street";
+        int[][] path = {
+            {0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0},
+        };
+        int[][] stops = {
+            {0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0},
+        };
+
+        assertThrows(Exception.class, () -> new Route(city, transportationMode, path, stops, name));
+
+    }
+
 }
