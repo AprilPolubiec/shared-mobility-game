@@ -9,11 +9,10 @@ package com.rideshare;
     Mailboxes (Mailbox[]): a list of Mailboxes which exist within this city
 
     Methods:
-    constructor
-    createCity(): Creates the initial map
-    loadCity(): Prepares a city for gameplay and renders the map to be visible to the player
+    constructor - at your discretion
+    getters/setters - at your discretion
+    loadCity(): Prepares a city for gameplay and renders the map to be visible to the player (is this necessary?)
     addMailboxes(int count): adds n mailboxes to the city
-    any other getters/setters needed
  */
 
 public class City {
