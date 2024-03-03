@@ -33,16 +33,18 @@ public class Sprite {
     private int spriteIdx;
     private int spriteTimer;
     private boolean isMoving;
+    private boolean isWASDEnabled;
 
     public Sprite(String name, GameController gameController) {
         this.gameController = gameController;
-        this.scene = gameController.getScene();
+        this.scene = gameController.get_scene();
+        this.enableWASD(true);
         // Get sprite files
         this.load(name);
-        // Set key event handlers
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+                if (!isWASDEnabled) return;
                 switch (event.getCode()) {
                     case W:
                         direction = "up";
@@ -65,10 +67,10 @@ public class Sprite {
                 }
             }
         });
-
         scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+                if (!isWASDEnabled) return;
                 switch (event.getCode()) {
                     case W:
                     case A:
@@ -79,6 +81,10 @@ public class Sprite {
                 }
             }
         });
+    }
+
+    public void enableWASD(Boolean enabled) {
+        this.isWASDEnabled = enabled;
     }
 
     private void load(String name) {
@@ -116,7 +122,7 @@ public class Sprite {
         imageView.setX(xPos);
         imageView.setY(yPos);
 
-        this.gameController.getRoot().getChildren().add(imageView);
+        this.gameController.get_root().getChildren().add(imageView);
         spriteLoop().playFromStart();
     }
 

@@ -4,7 +4,7 @@ import java.time.LocalTime;
 
 /**
  * Description: a timer is an object which keeps track of time within the game. It is not a reflection of the "real-world" time.
- * 
+ * TODO: should be generalizable across the code
  */
 public class Timer {
     private TimerState state = TimerState.UNINITIALIZED;
