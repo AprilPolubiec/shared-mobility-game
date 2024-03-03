@@ -13,12 +13,14 @@ public class CityTest {
     void Test_CanCreateCity() {
         Route[] routes = {new Route("Green Line"), new Route("Red Line"), new Route("Blue Line")};
         Mailbox[] mailboxes = {new Mailbox(), new Mailbox(), new Mailbox()};
-        int difficultyLevel = 5
+        int difficultyLevel = 5;
+        var dimensions = 5;
         City c = new City("Dublin", routes, mailboxes, 5);
     
         assertEquals("Dublin", c.getName());
-        assertEquals(c.getRoutes().length, 3);
-        assertEquals(c.getMailboxes().length, 5);
+        assertEquals(routes.length, c.getRoutes().length);
+        assertEquals(mailboxes.length, c.getMailboxes().length);
+        assertEquals(dimensions, c.getDimensions());
     }
 
     @Test

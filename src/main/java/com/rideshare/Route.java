@@ -1,18 +1,27 @@
 package com.rideshare;
 /**
- * Definition: A way to get from point A to point B via a mode of transportation.
+ * Description: A route is a way to get from point A to point B via a mode of transportation within a city. A route contains stops where a player can get on and off (eg: a bus stop). The route contains a data structure representing its path throughout the city.
+    Attributes:
+    City (City): The city where this route exists
+    Name (String): a name to identify the route by (eg: the Green Line)
+    TransportationMode (TransportationMode): the type of transport that runs on this route (eg: bus, train)
+    Path: a matrix defining where the route exists within the city
+        Example:
+        [0, 1, 0]
+        [0, 1, 0]
+        [0, 1, 0]
+    Stops: matrix for the coordinates of eligible places to get on/off the route
+        Example:
+        [0, 1, 0]
+        [0, 0, 0]
+        [0, 1, 0]
+    Methods:
+    getPathCoordinates(): returns list of coordinates that the path is on
+    getStopCoordinates(): returns list of coordinates where the stops are
+    isStop(posx, posy): returns true if posx, posy exists as a stop of the path
+    isRoute(posx, posy): returns true if posx, posy exists on the route’s path
+
  */
 public class Route {
-    // TODO: attributes
-    // City
-    // ModeOfTransportation (Bus | Train | Car)
-    // Path matrix 
-    // Stops (where the player can get on and off - or this can be defined in the path matrix, tbd)
-    // Name
 
-    // TODO: methods
-    // getRoute
-    // createRoute
-    // getTransportationType
-    // isStop
 }

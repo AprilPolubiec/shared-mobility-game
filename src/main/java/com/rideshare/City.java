@@ -7,7 +7,8 @@ package com.rideshare;
     Routes (Route[]): all the possible routes that can be traveled on in the city
     DifficultyLevel (Integer): indicates the “difficulty” of the city, integer 0 - 10, where 0 is the easiest and 10 is the hardest.
     Mailboxes (Mailbox[]): a list of Mailboxes which exist within this city
-
+    Dimensions - what is the height/width of the city?
+    
     Methods:
     constructor - at your discretion
     getters/setters - at your discretion
