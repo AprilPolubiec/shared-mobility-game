@@ -29,7 +29,17 @@
             <Font name="Lucida Grande" size="13.0" />
          </font>
       </Button>
-      <Button layoutX="387.0" layoutY="320.0" mnemonicParsing="false" style="-fx-background-color: #118CEE; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="Load Game">
+      <Button fx:id="loadGameButton" layoutX="387.0" layoutY="320.0" mnemonicParsing="false" style="-fx-background-color: #118CEE; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="Load Game">
+         <font>
+            <Font name="Lucida Grande" size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="instructionsButton" layoutX="385.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #118CEE; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="Instructions">
+         <font>
+            <Font name="Lucida Grande" size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="startGameButton" layoutX="385.0" layoutY="475.0" mnemonicParsing="false" style="-fx-background-color: #118CEE; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="Start Game">
          <font>
             <Font name="Lucida Grande" size="13.0" />
          </font>
