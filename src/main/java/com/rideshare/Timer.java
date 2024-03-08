@@ -3,7 +3,10 @@ package com.rideshare;
 import java.time.LocalTime;
 
 /**
- * Description: a timer is an object which keeps track of time within the game. It is not a reflection of the "real-world" time.
+ * Description: a timer is an object which keeps track of time within the game. 
+ * It is not a reflection of the "real-world" time. This is important because, for example,
+ * we want a mailbox to last 15 minutes in the fictional world, but not 15 minutes in real life.
+ * This class should abstract out the logic of mapping the game's time of day to whatever is using this.
  * TODO: should be generalizable across the code
  */
 public class Timer {
