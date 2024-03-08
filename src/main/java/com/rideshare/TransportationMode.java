@@ -15,10 +15,13 @@ public class TransportationMode {
     // - decide how to represent speed (km/hr? pixels/ns?)
     int co2EmissionRate;
     int speed;
+    boolean hasStops;
 
-    public TransportationMode(int co2EmissionRate, int speed) {
-        transportSpeed = speed;
-        co2Emissions = co2EmissionRate;
+    public TransportationMode(int co2eRate, int speedKm, boolean stops) {
+        co2EmissionRate = co2eRate;
+        speed = speedKm;
+        hasStops = stops;
+
     }
 
     public static void main(String[] args) {}
