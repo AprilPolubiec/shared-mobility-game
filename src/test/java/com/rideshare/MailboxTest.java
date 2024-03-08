@@ -68,6 +68,28 @@ public class MailboxTest {
     }
 
     @Test
+    void Test_MailboxTimerPausesOnHide() {
+        int positionX = 0;
+        int positionY = 0;
+        int duration = 5;
+        Mailbox mailbox = new Mailbox(positionX, positionY, duration);
+        mailbox.show();
+        mailbox.hide();
+        assertEquals(TimerState.PAUSED, mailbox.getTimer());
+
+    }
+    @Test
+    void Test_MailboxTimerStopsOnComplete() {
+        int positionX = 0;
+        int positionY = 0;
+        int duration = 5;
+        Mailbox mailbox = new Mailbox(positionX, positionY, duration);
+        mailbox.show();
+        mailbox.markComplete();
+        assertEquals(TimerState.STOPPED, mailbox.getTimer());
+    }
+
+    @Test
     void Test_CanGetMailboxStartTime() {
         int positionX = 0;
         int positionY = 0;
