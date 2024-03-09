@@ -17,5 +17,8 @@ package com.rideshare;
  */
 
 public class City {
-    
+    public Route[] getRoutes() {
+      Route[] routes = {};
+      return routes;
+    }
 }
