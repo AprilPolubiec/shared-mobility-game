@@ -23,5 +23,7 @@ package com.rideshare;
 
  */
 public class Route {
-
+    public boolean isStop(Position pos) {
+        return true;
+    }
 }
