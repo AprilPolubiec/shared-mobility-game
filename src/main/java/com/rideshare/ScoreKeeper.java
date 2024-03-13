@@ -18,4 +18,95 @@ package com.rideshare;
        */
 public class ScoreKeeper {
 
+    // All relevant attributes initialised
+    // The CO2 budget is just a random value here.
+    static final int co2Budget = 10;
+    int CO2Saved;
+    int CO2Used;
+    int mailboxesCompleted;
+    int totalMailboxes;
+    int Level;
+    boolean exceededBudgetFlag;
+    int amountOverBudget;
+
+    // The ScoreKeeper constructor
+    public ScoreKeeper() {
+        CO2Saved = 0;
+        CO2Used = 0;
+        mailboxesCompleted = 0;
+        totalMailboxes = 0;
+        Level = 1;
+        exceededBudgetFlag = false;
+        amountOverBudget = 0;
+    }
+
+    // getters
+    public int getMailboxesCompleted() {
+        return mailboxesCompleted;
+    }
+
+    public int getTotalMailboxes() {
+        return totalMailboxes;
+    }
+
+    public int getCO2Saved() {
+        return CO2Saved;
+    }
+
+    public int getCO2Used() {
+        return CO2Used;
+    }
+
+    
+    // setters
+    public int incrementCO2Saved(int valueIncremented) {
+        if (valueIncremented <= 0) {
+            throw new IllegalArgumentException("Input value must be a positive integer");
+        }
+        CO2Saved += valueIncremented;
+        return CO2Saved;
+    }
+
+    public int incrementCO2Used(int valueIncremented) {
+        if (valueIncremented <= 0) {
+            throw new IllegalArgumentException("Input value must be a positive integer");
+        }
+        CO2Used += valueIncremented;
+        return CO2Used;
+    }
+
+    // Don't know if we need this so I'll just leave it here. I imagine level incrementer
+    public int setLevel(int newLevel) {
+        if (newLevel <= 0) {
+            throw new IllegalArgumentException("Input value must be a positive integer");
+        }
+
+        Level = newLevel;
+        return Level;
+    }
+    
+
+    // budget checkers
+    public boolean hasExceededBudget() {
+        if (CO2Used > co2Budget) {
+            exceededBudgetFlag = true;
+        }
+        return exceededBudgetFlag;
+    }
+
+    public int getAmountOverBudget() {
+        if (hasExceededBudget() == true) {
+            amountOverBudget = CO2Used - co2Budget;
+            return amountOverBudget;
+        } else {
+            return 0;
+        }
+
+    }
+
+
+
+
+
+
 }

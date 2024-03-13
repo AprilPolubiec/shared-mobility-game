@@ -45,7 +45,7 @@ public class ScoreKeeperTest {
         ScoreKeeper scoreKeeper = new ScoreKeeper();
         int newCO2 = scoreKeeper.incrementCO2Used(co2Budget + 1);
         boolean hasExceededBudget = scoreKeeper.hasExceededBudget();
-        boolean amountOverBudget = scoreKeeper.getAmountOverBudget();
+        int amountOverBudget = scoreKeeper.getAmountOverBudget();
         
         assertEquals(co2Budget, newCO2);
         assertEquals(true, hasExceededBudget);
