@@ -19,27 +19,27 @@ public class TransportationMode {
     private final boolean hasStops;
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public int getEmissionRate() {
-        return co2EmissionRate;
+        return this.co2EmissionRate;
     }
 
 
     public int getSpeed() {
-        return speed;
+        return this.speed;
     }
 
     public boolean hasStops() {
-        return hasStops;
+        return this.hasStops;
     }
 
-    public TransportationMode(String modeName, int co2eRate, int speedKm, boolean stops) {
-        name = modeName;
-        co2EmissionRate = co2eRate;
-        speed = speedKm;
-        hasStops = stops;
+    public TransportationMode(String name, int co2eEmissionRate, int speed, boolean hasStops) {
+        this.name = name;
+        this.co2EmissionRate = co2eEmissionRate;
+        this.speed = speed;
+        this.hasStops = hasStops;
 
     }
 
