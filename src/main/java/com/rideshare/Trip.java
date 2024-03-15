@@ -28,7 +28,7 @@ package com.rideshare;
 import java.util.ArrayList;
 
 public class Trip {
-    // TODO: whoever implements this class has the task of deciding how to represent the routes so its clear which portion of 
+    // TODO: whoever implements this class has the task of deciding how to represent the routes so its clear which portion of
     // each route was taken!
 
     private int[] startPosition = new int[2];
@@ -75,6 +75,15 @@ public class Trip {
     public Status getStatus() {
         return this.status;
     }
+
+    public int[] getStartPosition() {
+        return this.startPosition.clone();
+    }
+
+    public int[] getEndPosition() {
+        return this.endPosition.clone();
+    }
+
 
     public static void main(String[] args) {
 
