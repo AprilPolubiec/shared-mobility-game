@@ -9,8 +9,8 @@ public class WalkingTransportationMode extends TransportationMode {
      * 50-260 CO2e per KM. However, this metric is based on GHG emissions associated with food intake required to fuel a kilometre of walking range.
      * Thus, for clarity, it is being treated as CO2e neutral in this class.*/
     // TODO: override the appropriate properties from TransportationMode
-    public WalkingTransportationMode(int co2eRate, int speedKm, boolean stops) {
-        super(0, speedKm, stops);
+    public WalkingTransportationMode(String modeName, int speedKm, boolean stops) {
+        super(modeName,0, speedKm, stops);
     }
 
     public static void main(String[] args) {}
