@@ -31,8 +31,8 @@ public class Trip {
     // TODO: whoever implements this class has the task of deciding how to represent the routes so its clear which portion of 
     // each route was taken!
 
-    private int[] startPosition;
-    private int[] endPosition;
+    private int[] startPosition = new int[2];
+    private int[] endPosition = new int[2];
     private ArrayList<Route> tripPath = new ArrayList<Route>();
     private int tripLength;
     private int tripDistance;
