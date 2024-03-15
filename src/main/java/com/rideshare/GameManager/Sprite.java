@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.rideshare.App;
+import com.rideshare.Player;
 
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
@@ -34,6 +35,7 @@ public class Sprite {
     private int spriteTimer;
     private boolean isMoving;
     private boolean isWASDEnabled;
+    private Player associatedPlayer;
 
     public Sprite(String name, GameController gameController) {
         this.gameController = gameController;
@@ -174,25 +176,50 @@ public class Sprite {
         }
         spriteTimer++;
     }
+    //setter method to associate player with the sprite
+    public void setAssociatedPlayer(Player player) {
+        this.associatedPlayer = player;
+    }
 
     public void up() {
         System.out.println("UP");
         yPos -= 2;
         imageView.setY(yPos);
+        updatePlayerPosition();
     }
     public void down() {
         System.out.println("down");
         yPos += 2;
         imageView.setY(yPos);
+        updatePlayerPosition();
     }
     public void left() {
         System.out.println("left");
         xPos -= 2;
         imageView.setX(xPos);
+        updatePlayerPosition();
     }
     public void right() {
         System.out.println("right");
         xPos += 2;
         imageView.setX(xPos);
+        updatePlayerPosition();
+    }
+
+    //getter methods to return sprite x and y coordinates
+    public double getXPosition() {
+        return xPos;
+    }
+
+    public double getYPosition() {
+        return yPos;
+    }
+    
+    //method to update player coordinates automatically when the player moves
+    private void updatePlayerPosition() {
+        if (associatedPlayer != null) {
+            associatedPlayer.setXPosition(xPos);
+            associatedPlayer.setYPosition(yPos);
+        }
     }
 }
