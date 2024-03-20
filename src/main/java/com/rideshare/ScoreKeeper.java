@@ -20,11 +20,15 @@ public class ScoreKeeper {
 
     // All relevant attributes initialised
     // The CO2 budget is just a random value here.
-    static final int co2Budget = 10;
+    static final int maxCo2Budget = 10;
+    // co2Budget here is a 'more local variable' allowed to go into the negatives in order to check if the budget has been exceeded
+    int co2Budget;
     int CO2Saved;
     int CO2Used;
     int mailboxesCompleted;
     int totalMailboxes;
+    double mailboxesMultiplier;
+    int score;
     int Level;
     boolean exceededBudgetFlag;
     int amountOverBudget;
@@ -71,6 +75,8 @@ public class ScoreKeeper {
         if (valueIncremented <= 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
+        hasExceededBudget(); 
+
         CO2Used += valueIncremented;
         return CO2Used;
     }
@@ -90,18 +96,47 @@ public class ScoreKeeper {
     public boolean hasExceededBudget() {
         if (CO2Used > co2Budget) {
             exceededBudgetFlag = true;
+            // CO2Used = co2Budget;
         }
         return exceededBudgetFlag;
     }
 
     public int getAmountOverBudget() {
-        if (hasExceededBudget() == true) {
-            amountOverBudget = CO2Used - co2Budget;
-            return amountOverBudget;
+        if (hasExceededBudget()) {
+            return CO2Used - co2Budget;
         } else {
             return 0;
         }
 
+    }
+
+    public int resetOverBudget() {
+        if (hasExceededBudget()) {
+            CO2Used = co2Budget;
+            exceededBudgetFlag = false;
+            return co2Budget;
+        } 
+        return CO2Used;
+    }
+
+    public int calculateScore() {
+        mailboxesCompleted = getMailboxesCompleted();
+        totalMailboxes = getTotalMailboxes();
+        int CO2score = CO2Saved;
+
+        double mailboxesRatio = (double) mailboxesCompleted / totalMailboxes;
+        mailboxesMultiplier = mailboxesRatio + 1;
+
+        double scoreDouble = CO2score * mailboxesMultiplier;
+        score = (int) Math.ceil(scoreDouble);
+
+        exceededBudgetFlag = hasExceededBudget();
+        if (exceededBudgetFlag == true) {
+            score = 0;
+            return score;
+        }
+
+        return score;
     }
 
 
