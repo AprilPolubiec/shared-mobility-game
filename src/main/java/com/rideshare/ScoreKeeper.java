@@ -125,7 +125,8 @@ public class ScoreKeeper {
         int CO2score = CO2Saved;
 
         double mailboxesRatio = (double) mailboxesCompleted / totalMailboxes;
-        mailboxesMultiplier = mailboxesRatio + 1;
+        // mailboxesMultiplier = mailboxesRatio + 1;
+        mailboxesMultiplier = mailboxesRatio;
 
         double scoreDouble = CO2score * mailboxesMultiplier;
         score = (int) Math.ceil(scoreDouble);
