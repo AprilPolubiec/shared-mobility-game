@@ -2,8 +2,6 @@ package com.rideshare;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javax.naming.OperationNotSupportedException;
-
 import org.junit.jupiter.api.Test;
 
 public class TripCalculatorTest {

@@ -13,4 +13,8 @@ public class TransportationMode {
     // TODO:
     // - decide how to represent emission rate (per km? per sec?)
     // - decide how to represent speed (km/hr? pixels/ns?)
+    TransportationType type;
+    public int getEmissionRate() {
+        return 2;
+    }
 }

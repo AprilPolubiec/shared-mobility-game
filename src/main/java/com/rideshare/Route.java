@@ -1,4 +1,9 @@
 package com.rideshare;
+
+import java.util.ArrayList;
+
+import javafx.geometry.Point2D;
+
 /**
  * Description: A route is a way to get from point A to point B via a mode of transportation within a city. A route contains stops where a player can get on and off (eg: a bus stop). The route contains a data structure representing its path throughout the city.
     Attributes:
@@ -23,7 +28,22 @@ package com.rideshare;
 
  */
 public class Route {
-    public boolean isStop(Position pos) {
+    TransportationNodeMatrix nodeMatrix;
+    
+    public Route(int[][] routeMatrix, int[][] stopMatrix, TransportationType transportationType) {
+        nodeMatrix = new TransportationNodeMatrix(routeMatrix, stopMatrix, transportationType);
+    }
+
+    public TransportationNodeMatrix getRouteNodes() {
+        return nodeMatrix;
+    }
+    public boolean isStop(Point2D pos) {
         return true;
+    }
+    public boolean isRoute(Point2D pos) {
+        return true;
+    }
+    public TransportationMode getTransportationMode() {
+        return new TransportationMode();
     }
 }

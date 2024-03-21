@@ -33,10 +33,11 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         this.gameController = new GameController();
         gameController.initialize(stage);
-        gameController.loadHomeScreen();
+        gameController.loadGameScreen();
 
-        Sprite s = new Sprite("girl-1", this.gameController);
-        s.render();
+        // Sprite s = new Sprite("girl-1", this.gameController);
+        // s.render();
+        TripCalculator tc = new TripCalculator(this.gameController);
     }
 
     public static void main(String[] args) {
