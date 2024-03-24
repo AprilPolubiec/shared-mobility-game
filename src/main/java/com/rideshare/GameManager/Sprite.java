@@ -22,7 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
-public class Sprite {
+public abstract class Sprite {
     private String resource_directory;
     HashMap<String, List<Image>> icons = new HashMap<String, List<Image>>();
     Scene scene;
@@ -35,7 +35,7 @@ public class Sprite {
     private int spriteTimer;
     private boolean isMoving;
     private boolean isWASDEnabled;
-    private Player associatedPlayer;
+    
 
     public Sprite(String name, GameController gameController) {
         this.gameController = gameController;

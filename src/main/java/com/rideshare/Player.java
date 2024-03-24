@@ -11,14 +11,14 @@ import javafx.scene.image.ImageView;
  * 
  * <p>
  */
-public class Player {
+public class Player extends Sprite {
     private double xPosition; 
     private double yPosition;
     private ImageView avatar;
     private String name;
     private ScoreKeeper scoreKeeper;
     private GameController gameController;
-    private Sprite sprite;
+   
     
 
     public Player(double xPosition, double yPosition, ImageView avatar, String name,GameController gameController){
@@ -42,11 +42,7 @@ public class Player {
         this.yPosition = yPosition;
     }
 
-    //updates the position from the sprite 
-    public void updatePositionFromSprite() {
-        this.xPosition = sprite.getXPosition();
-        this.yPosition = sprite.getYPosition();
-    }
+    
     // getter method for scorekeeper
     public ScoreKeeper getScoreKeeper() {
         return scoreKeeper;
