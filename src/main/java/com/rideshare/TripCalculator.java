@@ -2,10 +2,17 @@ package com.rideshare;
 
 import java.util.ArrayList;
 
+
 import com.rideshare.GameManager.GameController;
 
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 // https://www.youtube.com/watch?v=2JNEme00ZFA&list=RDCMUCS94AD0gxLakurK-6jnqV1w&index=6
 public class TripCalculator {
     final int maxCol = 50;
@@ -31,26 +38,72 @@ public class TripCalculator {
     ArrayList<TransportationNode> openList = new ArrayList<>();
     ArrayList<TransportationNode> checkedList = new ArrayList<>();
 
-    public TripCalculator(City city) {
+    public TripCalculator(City city, Stage stage) {
         this.city = city;
-
-        // drawNodeMap();
+        drawCity(stage);
     }
 
-    // public void calculateCosts() {
-    //     // Calculate costs for each node in the city relative to our current start node
-    //     for (int i = 0; i < this.city.size; i++) {
-    //         int rowIdx = i;
-    //         for (int j = 0; j < this.city.size; j++) {
-    //             int colIdx = j;
-    //             ArrayList<TransportationNode> nodes = city.getRouteNodes(rowIdx, colIdx);
-    //             for (TransportationNode transportationNode : nodes) {
-    //                 transportationNode.getCost(startNode, goalNode);
-    //             }
-    //         }
-    //     }
-    // }
+    private void drawCity(Stage stage){
+        GridPane gridPane = new GridPane();
+        int gridSize = 8; // Size of the grid
+        double cellSize = 60; // Size of each cell in the grid
+        double routeTextOffset = 5; // Offset for route text
 
+        // Create the grid of rectangles
+        for (int row = 0; row < gridSize; row++) {
+            for (int col = 0; col < gridSize; col++) {
+                Rectangle rectangle = new Rectangle(cellSize, cellSize, Color.WHITE);
+                rectangle.setStroke(Color.BLACK);
+                gridPane.add(rectangle, col, row);
+            }
+        }
+        
+    
+        for (RouteNodeMatrix route : this.city.routes) {
+            TransportationNode[][] matrix = route.get();
+            for (int i = 0; i < matrix.length; i++) {
+                TransportationNode[] row = matrix[i];
+                for (int j = 0; j < row.length; j++) {
+                    TransportationNode n = matrix[i][j];
+
+                    if (n.solid == false) {
+                        Text text = new Text(Integer.toString(route.getTransportationType().ordinal()));
+                        // Check if a Text node already exists at this position
+                        Text existingText = getTextFromGridPane(gridPane, j, i);
+
+                        if(n.modeOfTransport.hasStops() && n.canStop) {
+                            text.setFill(Color.RED);
+                        }
+
+                        // If a Text node exists, append text to it; otherwise, add a new Text node
+                        if (existingText != null) {
+                            existingText.setText(existingText.getText() + " " + text.getText());
+                        } else {
+                            gridPane.add(text, j, i);
+                            text.setTranslateX(10);
+                        }
+                    }
+                }
+                }
+            }
+
+        Scene scene = new Scene(gridPane, Color.WHITE); // Set background color as needed
+        stage.setScene(scene);
+        stage.setTitle("City Map");
+        stage.show();
+    }
+
+    private Text getTextFromGridPane(GridPane gridPane, int col, int row) {
+        for (javafx.scene.Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                if (node instanceof Text) {
+                    return (Text) node;
+                }
+                // If the node is not a Text, skip it
+            }
+        }
+        return null; // No Text node found at the specified position
+    }
     public ArrayList<Trip> calculateTrips(int startX, int startY, int endX, int endY) {
         ArrayList<Trip> trips = new ArrayList<Trip>();
         this.startX = startX;

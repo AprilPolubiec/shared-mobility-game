@@ -39,7 +39,7 @@ public class App extends Application {
         // Sprite s = new Sprite("girl-1", this.gameController);
         // s.render();
         City city = createCity();
-        TripCalculator tc = new TripCalculator(this.gameController, city, 0, 0, 7, 7);
+        TripCalculator tc = new TripCalculator(city, stage);
     }
 
     private City createCity() {

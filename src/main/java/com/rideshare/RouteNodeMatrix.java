@@ -3,9 +3,10 @@ package com.rideshare;
 // RouteNodeMatrix is a matrix of Transportation nodes for a given route
 public class RouteNodeMatrix {
     private TransportationNode[][] matrix;
-  
+    private TransportationType transportationType;
     public RouteNodeMatrix(int[][] routeMatrix, int[][] stopMatrix, TransportationType transportationType) {
         matrix = new TransportationNode[routeMatrix.length][routeMatrix[0].length];
+        this.transportationType = transportationType;
         for (int i = 0; i < routeMatrix.length; i++) {
             int rowIdx = i;
             int[] row = routeMatrix[i];
@@ -29,5 +30,8 @@ public class RouteNodeMatrix {
     }
     public TransportationNode[][] get() {
       return matrix;
+    }
+    public TransportationType getTransportationType() {
+      return this.transportationType;
     }
 }
