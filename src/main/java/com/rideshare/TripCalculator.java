@@ -6,79 +6,75 @@ import com.rideshare.GameManager.GameController;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
-
+// https://www.youtube.com/watch?v=2JNEme00ZFA&list=RDCMUCS94AD0gxLakurK-6jnqV1w&index=6
 public class TripCalculator {
     final int maxCol = 50;
     final int maxRow = 50;
     final int nodeSize = 16;
     final int screenWidth = nodeSize * maxCol;
     final int screenHeight = nodeSize * maxRow;
+    
+    int startX;
+    int startY;
+    int endX;
+    int endY;
+
     boolean goalReached = false;
     GameController gameController;
     Scene scene;
     City city;
 
     // NODE
-    TransportationNode[][] node = new TransportationNode[maxCol][maxRow];
+    // TransportationNode[][] node = new TransportationNode[maxCol][maxRow];
     TransportationNode startNode, goalNode, currentNode;
+    RouteNodeMatrix currentRouteMatrix;
     ArrayList<TransportationNode> openList = new ArrayList<>();
     ArrayList<TransportationNode> checkedList = new ArrayList<>();
 
-    // calculateTrips (locationA, locationB, city)
-    public TripCalculator(GameController gameController, City city) {
-        this.gameController = gameController;
-        this.scene = gameController.get_scene();
+    public TripCalculator(City city) {
         this.city = city;
 
-        drawNodeMap();
+        // drawNodeMap();
     }
 
-    private void setStartNode(int col, int row) {
-        node[col][row].setAsStart();
-        startNode = node[col][row];
-        currentNode = startNode;
-    }
+    // public void calculateCosts() {
+    //     // Calculate costs for each node in the city relative to our current start node
+    //     for (int i = 0; i < this.city.size; i++) {
+    //         int rowIdx = i;
+    //         for (int j = 0; j < this.city.size; j++) {
+    //             int colIdx = j;
+    //             ArrayList<TransportationNode> nodes = city.getRouteNodes(rowIdx, colIdx);
+    //             for (TransportationNode transportationNode : nodes) {
+    //                 transportationNode.getCost(startNode, goalNode);
+    //             }
+    //         }
+    //     }
+    // }
 
-    private void setGoalNode(int col, int row) {
-        node[col][row].setAsGoal();
-        goalNode = node[col][row];
-    }
+    public ArrayList<Trip> calculateTrips(int startX, int startY, int endX, int endY) {
+        ArrayList<Trip> trips = new ArrayList<Trip>();
+        this.startX = startX;
+        this.startY = startY;
+        this.endX = endX;
+        this.endY = endY;
 
-    private void setSolidNode(int col, int row) {
-        node[col][row].setAsSolid();
-    }
-
-    public void drawNodeMap() {
-        // Make grid - this will be done elsewhere ultimately
-        GridPane grid = new GridPane();
-
-        // PLACE NODES
-        int col = 0;
-        int row = 0;
-        // This loop should actually be going through each index of the city grid and
-        // looking for route
-        while (col < maxCol && row < maxRow) {
-            node[col][row] = new TransportationNode(col, row, TransportationType.WALKING, grid);
-            col++;
-            if (col == maxCol) {
-                col = 0;
-                row++;
+        // Start at the node with the lowest CO2 emissions
+        ArrayList<TransportationNode> startNodeOptions = city.getRouteNodes(startY, startX);
+        int minEmissions = Integer.MAX_VALUE;
+        for (TransportationNode transportationNode : startNodeOptions) {
+            if(transportationNode.co2EmissionRate < minEmissions) {
+                this.startNode = transportationNode;
+                minEmissions = transportationNode.co2EmissionRate;
             }
         }
-        this.gameController.get_root().getChildren().add(grid);
+        this.currentNode = startNode;
+        this.currentRouteMatrix = this.currentNode.routeMatrix;
+        this.goalNode = city.getRouteNodes(endY, endX).get(0); // Just get the first transportationtype, doesn't really matter
 
-        setStartNode(0, 0);
-        setGoalNode(20, 20);
-
-        while(col < maxCol && row < maxRow) {
-            node[col][row].getCost(node[0][0], node[20][20]);;
-            col++;
-            if (col == maxCol) {
-                col = 0;
-                row++;
-            }
-        }
+        autoSearch();
+        return trips;
     }
+
 
     public void autoSearch() {
         while (goalReached == false) {
@@ -91,19 +87,40 @@ public class TripCalculator {
 
             // OPEN NODES
             if (row - 1 >= 0) { // Node above
-                openNode(node[col][row - 1]);
+                openNode(this.currentRouteMatrix.getNode(row - 1, col));
+                if (currentNode.modeOfTransport.hasStops() && currentNode.canStop) {
+                    // Check all of the surrounding route options!
+                    for (RouteNodeMatrix route : this.city.routes) {
+                        openNode(route.getNode(row - 1, col));
+                    }
+                }
             }
 
             if (col - 1 >= 0) { // Node to the left
-                openNode(node[col - 1][row]);
+                openNode(this.currentRouteMatrix.getNode(row, col - 1));
+                if (currentNode.modeOfTransport.hasStops() && currentNode.canStop) {
+                    for (RouteNodeMatrix route : this.city.routes) {
+                        openNode(route.getNode(row - 1, col));
+                    }
+                }
             }
 
             if (row + 1 < maxRow) { // Node below
-                openNode(node[col][row + 1]);
+                openNode(this.currentRouteMatrix.getNode(row + 1, col));
+                if (currentNode.modeOfTransport.hasStops() && currentNode.canStop) {
+                    for (RouteNodeMatrix route : this.city.routes) {
+                        openNode(route.getNode(row - 1, col));
+                    }
+                }
             }
 
             if (col + 1 < maxCol) { // Node to the right
-                openNode(node[col + 1][row]);
+                openNode(this.currentRouteMatrix.getNode(row, col + 1));
+                if (currentNode.modeOfTransport.hasStops() && currentNode.canStop) {
+                    for (RouteNodeMatrix route : this.city.routes) {
+                        openNode(route.getNode(row - 1, col));
+                    }
+                }
             }
 
             // FIND BEST NODE
@@ -112,13 +129,15 @@ public class TripCalculator {
 
             for (int i = 0; i < openList.size(); i++) {
                 // Check if the F cost is better than current best
-                if (openList.get(i).fCost < bestNodeFCost) {
+                TransportationNode nodeToCheck = openList.get(i);
+                nodeToCheck.getCost(startNode, currentNode);
+                if (nodeToCheck.fCost < bestNodeFCost) {
                     bestNodeIdx = i;
-                    bestNodeFCost = openList.get(i).fCost;
+                    bestNodeFCost = nodeToCheck.fCost;
                 }
                 // If F cost is equal, check the G cost
-                else if (openList.get(i).fCost == bestNodeFCost) {
-                    if (openList.get(i).gCost < openList.get(bestNodeIdx).gCost) {
+                else if (nodeToCheck.fCost == bestNodeFCost) {
+                    if (nodeToCheck.gCost < openList.get(bestNodeIdx).gCost) {
                         bestNodeIdx = i;
                     }
                 }
@@ -126,9 +145,11 @@ public class TripCalculator {
 
             // After loop, get the best node
             currentNode = openList.get(bestNodeIdx);
+            currentRouteMatrix = currentNode.routeMatrix; // Switch our route matrix
             if (currentNode == goalNode) {
                 goalReached = true;
-                trackThePath();
+                // Do the thing
+                // trackThePath();
             }
         }
     }
@@ -153,26 +174,6 @@ public class TripCalculator {
         }
     }
 
-    public Trip[] calculateTrips(Position startLocation, Position endLocation, City city) {
-        Trip[] trips = {};
-        // Get routes in the city
-        Route[] routes = city.getRoutes();
-        for (Route route : routes) {
-            // Check if startLocation and endLocation are a valid stop
-            if (!(route.isStop(startLocation) && route.isStop(endLocation))) {
-                continue;
-            }
-            // Starting at startLocation, walk through the route until the next stop or
-            // endLocation is reached. If we hit a stop, we run the search from there.
-
-            // TODO: This is a pathfinding algorithm :')
-            // Consider just finding a library to do this
-        }
-
-        drawNodeMap();
-
-        return trips;
-    }
 }
 
 /**

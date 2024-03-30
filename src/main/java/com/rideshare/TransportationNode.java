@@ -27,30 +27,26 @@ public class TransportationNode {
     boolean open;
     boolean checked;
     boolean canStop;
-    GridPane grid;
     TransportationMode modeOfTransport;
+    RouteNodeMatrix routeMatrix;
 
-    // For visualizations
-    Button button = new Button();
-    int tileSize = 16;
-
-    public TransportationNode(int col, int row, TransportationType transportationType) {
+    public TransportationNode(int col, int row, TransportationType transportationType, RouteNodeMatrix routeNodeMatrix) {
         this.col = col;
         this.row = row;
-        // this.grid = grid;
+        this.routeMatrix = routeNodeMatrix;
 
         switch (transportationType) {
             case BUS:
-                modeOfTransport = new BusTransportationMode();
+                modeOfTransport = new BusTransportationMode("39A", 12, true);
                 break;
             case CAR:
-                modeOfTransport = new CarTransportationMode();
+                modeOfTransport = new CarTransportationMode("Honda Civic", 12, false);
                 break;
             case TRAIN:
-                modeOfTransport = new TrainTransportationMode();  
+                modeOfTransport = new TrainTransportationMode("B", 15, true);  
                 break;
             case WALKING:
-                modeOfTransport = new WalkingTransportationMode();
+                modeOfTransport = new WalkingTransportationMode("", 1, false);
                 break;
             default:
                 break;
@@ -62,23 +58,15 @@ public class TransportationNode {
         // renderNode();
     }
 
-    // public void renderNode() {
-    //     button.setPrefSize(tileSize, tileSize);
-    //     grid.add(button, col, row);
-    // }
-    
     public void setAsStart() {
-        button.setStyle("-fx-background-color: #324aa8; ");
         start = true;
     }
 
     public void setAsGoal() {
-        button.setStyle("-fx-background-color: #ebca10; ");
         goal = true;
     }
 
     public void setAsSolid() {
-        button.setStyle("-fx-background-color: #000000; ");
         solid = true;
     }
 
@@ -91,14 +79,12 @@ public class TransportationNode {
     }
 
     public void setAsChecked() {
-        if(start == false && goal == false) {
-            button.setStyle("-fx-background-color: #eb9834; ");
-        }
         checked = true;
     }
 
     public void setAsPath() {
-       button.setStyle("-fx-background-color: #04d457;");
+    //    button.setStyle("-fx-background-color: #04d457;");
+    // TODO: do something
     }
 
     public void getCost(TransportationNode startNode, TransportationNode endNode) {
@@ -110,7 +96,7 @@ public class TransportationNode {
         // GET HCOST
         xDistance = Math.abs(this.col - endNode.col);
         yDistance = Math.abs(this.row - endNode.row);
-        this.hCost = xDistance + yDistance + this.co2EmissionRate;
+        this.hCost = xDistance + yDistance + this.co2EmissionRate; // Weighted by emission for now
 
         // GET FCOST
         this.fCost = this.gCost + this.hCost;

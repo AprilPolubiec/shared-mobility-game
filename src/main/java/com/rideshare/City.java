@@ -21,27 +21,31 @@ import javafx.geometry.Point2D;
  */
 
 public class City {
-  Route[] routes = {};
-  ArrayList<ArrayList<ArrayList<TransportationNode>>> grid;
-  public City(int size) {
-    // grid = new TransportationNode[size][size][];
+  ArrayList<RouteNodeMatrix> routes;
+  int size;
+  
+  public City(int size, ArrayList<RouteNodeMatrix> routes) {
+    this.routes = routes;
+    this.size = size;
   }
 
-  /**
-   * Iterates over each value in the route map
-   * @param routeMap
-   */
-  private void addRoute(Route route) {
-    for (int i = 0; i < route.nodeMatrix.get().length; i++) {
-      int rowIdx = i;
-      TransportationNode[] row = route.nodeMatrix.get()[rowIdx];
-      for (int j = 0; j < row.length; j++) {
-        
-      }
-    }
-  }
-
-  public Route[] getRoutes() {
+  public ArrayList<RouteNodeMatrix> getRoutes() {
     return routes;
   }
+
+  
+  /** 
+   * @param rowIdx Row/y to get node at
+   * @param colIdx Column/x to get node at
+   * @return ArrayList<TransportationNode> list of transportation nodes which exist at these coordinates in the city
+   */
+  public ArrayList<TransportationNode> getRouteNodes(int rowIdx, int colIdx) {
+    ArrayList<TransportationNode> nodes = new ArrayList<TransportationNode>();
+    for (RouteNodeMatrix routeNodeMatrix : routes) {
+      TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+      nodes.add(node);
+    }
+    return nodes;
+  }
+
 }

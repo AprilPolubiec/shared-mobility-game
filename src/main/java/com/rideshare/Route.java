@@ -28,13 +28,13 @@ import javafx.geometry.Point2D;
 
  */
 public class Route {
-    TransportationNodeMatrix nodeMatrix;
+    RouteNodeMatrix nodeMatrix;
     
     public Route(int[][] routeMatrix, int[][] stopMatrix, TransportationType transportationType) {
-        nodeMatrix = new TransportationNodeMatrix(routeMatrix, stopMatrix, transportationType);
+        nodeMatrix = new RouteNodeMatrix(routeMatrix, stopMatrix, transportationType);
     }
 
-    public TransportationNodeMatrix getRouteNodes() {
+    public RouteNodeMatrix getRouteNodes() {
         return nodeMatrix;
     }
     public boolean isStop(Point2D pos) {

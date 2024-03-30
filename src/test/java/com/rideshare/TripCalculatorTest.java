@@ -2,21 +2,106 @@ package com.rideshare;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 public class TripCalculatorTest {
+    private City createTestCity() {
+        ArrayList<RouteNodeMatrix> routes = new ArrayList<RouteNodeMatrix>();
+        int[][] busMatrix = {
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0},
+          };
+        int[][] busStopMatrix = {
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 0, 0, 0, 1, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+          };
+        RouteNodeMatrix busRoute = new RouteNodeMatrix(busMatrix, busStopMatrix, TransportationType.BUS);
+        routes.add(busRoute);
+        int[][] trainMatrix = {
+            {0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0, 1, 0},
+            {0, 0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 1, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0},
+            {0, 1, 0, 0, 0, 0, 0, 0},
+            {1, 0, 0, 0, 0, 0, 0, 0},
+          };
+          int[][] trainStopMatrix = {
+            {0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 0, 0, 0, 0, 0, 0, 0},
+          };
+          RouteNodeMatrix trainRoute = new RouteNodeMatrix(trainMatrix, trainStopMatrix, TransportationType.TRAIN);
+          routes.add(trainRoute);
+        int[][] carMatrix = {
+            {1, 0, 1, 0, 1, 0, 1, 1},
+            {1, 0, 1, 0, 1, 0, 1, 0},
+            {1, 0, 1, 0, 1, 1, 1, 0},
+            {1, 0, 1, 0, 1, 0, 1, 0},
+            {1, 0, 1, 1, 1, 0, 1, 0},
+            {1, 0, 1, 0, 1, 0, 1, 0},
+            {1, 1, 1, 0, 1, 0, 1, 0},
+            {1, 0, 1, 0, 1, 0, 1, 0},
+          };
+          RouteNodeMatrix carRoute = new RouteNodeMatrix(carMatrix, carMatrix, TransportationType.CAR);
+          routes.add(carRoute);
+
+        int[][] walkingMatrix = {
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+        };
+        RouteNodeMatrix walkingRoute = new RouteNodeMatrix(walkingMatrix, walkingMatrix, TransportationType.WALKING);
+        routes.add(walkingRoute);
+        City city = new City(8, routes);
+        return city;
+    }
+   
     @Test
     public void Test_CanCreateTripCalculator() {
-        TripCalculator calc = new TripCalculator();
+        City c = createTestCity();
+        TripCalculator calc = new TripCalculator(c);
     }
+
     @Test
     public void Test_ReturnsEmptyListIfNoRoutesAvailable() {
-        int[] positionA = { 0, 0 };
-        int[] positionB = { 2, 2 };
-        City city = new City();
-        TripCalculator calc = new TripCalculator();
-        Trip[] trips = calc.calculateTrips(positionA, positionB, city);
-        assertEquals(0, trips.length);
+        City city = createTestCity();
+        TripCalculator calc = new TripCalculator(city);
+        ArrayList<Trip> trips = calc.calculateTrips(0, 0, 0, 0);
+        assertEquals(0, trips.size());
+    }
+
+    @Test
+    public void Test_Foo() {
+        City city = createTestCity();
+        TripCalculator calc = new TripCalculator(city);
+        ArrayList<Trip> trips = calc.calculateTrips(0, 0, 0, 0);
+        assertEquals(0, trips.size());
     }
 
     @Test
