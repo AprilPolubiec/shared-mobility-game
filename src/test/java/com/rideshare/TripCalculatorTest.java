@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.GameManager.GameController;
+
 public class TripCalculatorTest {
     private City createTestCity() {
         ArrayList<RouteNodeMatrix> routes = new ArrayList<RouteNodeMatrix>();
@@ -85,13 +87,22 @@ public class TripCalculatorTest {
     @Test
     public void Test_CanCreateTripCalculator() {
         City c = createTestCity();
-        TripCalculator calc = new TripCalculator(c);
+        GameController gc = new GameController();
+        TripCalculator calc = new TripCalculator(c, gc);
+    }
+
+    @Test
+    public void Test_CanCreateTripCalculator() {
+        City c = createTestCity();
+        GameController gc = new GameController();
+        TripCalculator calc = new TripCalculator(c, gc);
     }
 
     @Test
     public void Test_ReturnsEmptyListIfNoRoutesAvailable() {
         City city = createTestCity();
-        TripCalculator calc = new TripCalculator(city);
+        GameController gc = new GameController();
+        TripCalculator calc = new TripCalculator(city, gc);
         ArrayList<Trip> trips = calc.calculateTrips(0, 0, 0, 0);
         assertEquals(0, trips.size());
     }

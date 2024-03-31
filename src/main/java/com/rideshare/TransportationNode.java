@@ -28,13 +28,14 @@ public class TransportationNode {
     boolean checked;
     boolean canStop;
     TransportationMode modeOfTransport;
+    TransportationType transportationType;
     RouteNodeMatrix routeMatrix;
 
     public TransportationNode(int col, int row, TransportationType transportationType, RouteNodeMatrix routeNodeMatrix) {
         this.col = col;
         this.row = row;
         this.routeMatrix = routeNodeMatrix;
-
+        this.transportationType = transportationType;
         switch (transportationType) {
             case BUS:
                 modeOfTransport = new BusTransportationMode("39A", 12, true);

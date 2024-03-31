@@ -39,7 +39,8 @@ public class App extends Application {
         // Sprite s = new Sprite("girl-1", this.gameController);
         // s.render();
         City city = createCity();
-        TripCalculator tc = new TripCalculator(city, stage);
+        TripCalculator tc = new TripCalculator(city, this.gameController);
+        tc.calculateTrips(0, 0, 7, 7);
     }
 
     private City createCity() {
@@ -102,14 +103,14 @@ public class App extends Application {
           routes.add(carRoute);
 
         int[][] walkingMatrix = {
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
         };
         RouteNodeMatrix walkingRoute = new RouteNodeMatrix(walkingMatrix, walkingMatrix, TransportationType.WALKING);
         routes.add(walkingRoute);
