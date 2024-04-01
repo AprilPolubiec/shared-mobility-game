@@ -16,10 +16,10 @@ import javafx.stage.Stage;
 
 // https://www.youtube.com/watch?v=2JNEme00ZFA&list=RDCMUCS94AD0gxLakurK-6jnqV1w&index=6
 public class TripCalculator {
-    int startX;
-    int startY;
-    int endX;
-    int endY;
+    int startRow;
+    int startCol;
+    int endRow;
+    int endCol;
 
     int cityHeight;
     int cityWidth;
@@ -34,23 +34,22 @@ public class TripCalculator {
     ArrayList<TransportationNode> openList = new ArrayList<>();
     ArrayList<TransportationNode> checkedList = new ArrayList<>();
 
-    public TripCalculator(City city, GameController gameController) {
+    public TripCalculator(City city) {
         this.gameController = gameController;
         this.city = city;
         this.cityHeight = this.city.size;
         this.cityWidth = this.city.size;
-        // drawCity();
     }
 
-    public ArrayList<Trip> calculateTrips(int startX, int startY, int endX, int endY) {
+    public ArrayList<Trip> calculateTrips(int startRow, int startCol, int endRow, int endCol) {
         ArrayList<Trip> trips = new ArrayList<Trip>();
-        this.startX = startX;
-        this.startY = startY;
-        this.endX = endX;
-        this.endY = endY;
+        this.startRow = startRow;
+        this.startCol = startCol;
+        this.endRow = endRow;
+        this.endCol = endCol;
 
         // Start at the node with the lowest CO2 emissions
-        ArrayList<TransportationNode> startNodeOptions = city.getRouteNodes(startY, startX);
+        ArrayList<TransportationNode> startNodeOptions = city.getRouteNodes(startRow, startCol);
         int minEmissions = Integer.MAX_VALUE;
         for (TransportationNode transportationNode : startNodeOptions) {
             if (transportationNode.co2EmissionRate < minEmissions) {
@@ -62,7 +61,7 @@ public class TripCalculator {
         this.currentRouteMatrix = this.currentNode.routeMatrix;
 
         // Always use the walking node because its guaranteed to be there
-        for (TransportationNode transportationNode : city.getRouteNodes(endY, endX)) {
+        for (TransportationNode transportationNode : city.getRouteNodes(endRow, endCol)) {
             if(transportationNode.transportationType == TransportationType.WALKING) {
                 this.goalNode = transportationNode;
                 break;
@@ -203,24 +202,8 @@ public class TripCalculator {
         while (current != startNode) {
             current = current.parent;
             if (current != startNode) {
-                // for (Node node : gridPane.getChildren()) {
-                //     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == current.row &&
-                //             GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == current.col &&
-                //             node instanceof Rectangle) {
-                //         if (current.transportationType == TransportationType.BUS) {
-                //             ((Rectangle) node).setFill(Color.YELLOW);
-                //         }
-                //         if (current.transportationType == TransportationType.WALKING) {
-                //             ((Rectangle) node).setFill(Color.GRAY);
-                //         }
-                //         if (current.transportationType == TransportationType.TRAIN) {
-                //             ((Rectangle) node).setFill(Color.BLUE);
-                //         }
-                //         if (current.transportationType == TransportationType.CAR) {
-                //             ((Rectangle) node).setFill(Color.ORANGE);
-                //         }
-                //     }
-                // }
+                // things
+                print(String.format("[%s, %s] %s", current.row, current.col, current.transportationType.name()));
             }
         }
     }

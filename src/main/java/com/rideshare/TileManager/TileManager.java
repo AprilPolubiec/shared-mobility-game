@@ -1,19 +1,13 @@
 package com.rideshare.TileManager;
 
-import java.io.IOException;
-
 import com.rideshare.App;
-import com.rideshare.City;
 import com.rideshare.GameManager.MapLoader;
 
-import javafx.scene.Parent;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 public class TileManager {
-    Tile[] tiles;
     private TiledMapLayer[] _layers;
     AnchorPane _root;
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.rideshare.App;
 import com.rideshare.City;
 import com.rideshare.Trip;
+import com.rideshare.TripCalculator;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -91,6 +92,8 @@ public class GameController {
             MapLoader loader = new MapLoader(_scene);
             loader.load("test-map");
             City city = loader.getCity();
+            TripCalculator tc = new TripCalculator(city);
+            tc.calculateTrips(0, 15, 3, 15);
             System.out.println("Got the city!");
         } catch (Exception e) {
             e.printStackTrace();
