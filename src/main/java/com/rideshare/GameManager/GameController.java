@@ -46,7 +46,9 @@ public class GameController {
     private void renderStage(Stage stage) {
         _scene = new Scene(_root);
         stage.setTitle("Shared Mobility App");
-        stage.setFullScreen(true);
+        // stage.setFullScreen(true);
+        stage.setWidth(480);
+        stage.setHeight(480);
         stage.setScene(_scene);
         stage.show();
     }
@@ -70,7 +72,7 @@ public class GameController {
     public void loadHomeScreen(){
         try {
             setRoot("home");
-            _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
+            // _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
         } catch (Exception e) {
            e.printStackTrace();
         }
@@ -81,9 +83,9 @@ public class GameController {
             setRoot("game");
             // Load player's game
             // Load image
-            Image image = new Image(App.class.getResource("/images/bg/map_V1.png").toString()); 
-            ImageView imageView = new ImageView(image);
-            _root.getChildren().add(imageView);
+            MapLoader loader = new MapLoader(_root);
+            loader.load("test-map");
+            loader.getCity("test-map");
         } catch (Exception e) {
             e.printStackTrace();
         }
