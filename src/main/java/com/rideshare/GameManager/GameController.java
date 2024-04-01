@@ -8,6 +8,8 @@ import com.rideshare.Trip;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -21,13 +23,13 @@ public class GameController {
     private static Boolean isPaused;
 
     @FXML
-    private javafx.scene.control.Button loadGameButton; 
+    public javafx.scene.control.Button loadGameButton; 
     @FXML
-    private javafx.scene.control.Button newGameButton; 
+    public javafx.scene.control.Button newGameButton; 
     @FXML
-    private javafx.scene.control.Button startGameButton; 
+    public javafx.scene.control.Button startGameButton; 
     @FXML
-    private javafx.scene.control.Button instructionsButton; 
+    public javafx.scene.control.Button instructionsButton; 
 
     public Scene get_scene() {
         return _scene;
@@ -44,9 +46,7 @@ public class GameController {
     private void renderStage(Stage stage) {
         _scene = new Scene(_root);
         stage.setTitle("Shared Mobility App");
-        stage.setWidth((900));
-        stage.setHeight((600));
-        stage.setResizable(false);
+        stage.setFullScreen(true);
         stage.setScene(_scene);
         stage.show();
     }
@@ -70,6 +70,7 @@ public class GameController {
     public void loadHomeScreen(){
         try {
             setRoot("home");
+            _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
         } catch (Exception e) {
            e.printStackTrace();
         }
@@ -78,6 +79,11 @@ public class GameController {
     public void loadGameScreen() {
         try {
             setRoot("game");
+            // Load player's game
+            // Load image
+            Image image = new Image(App.class.getResource("/images/bg/map_V1.png").toString()); 
+            ImageView imageView = new ImageView(image);
+            _root.getChildren().add(imageView);
         } catch (Exception e) {
             e.printStackTrace();
         }
