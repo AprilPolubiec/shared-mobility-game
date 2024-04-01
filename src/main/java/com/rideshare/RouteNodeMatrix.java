@@ -4,6 +4,7 @@ package com.rideshare;
 public class RouteNodeMatrix {
     private TransportationNode[][] matrix;
     private TransportationType transportationType;
+  
     public RouteNodeMatrix(int[][] routeMatrix, int[][] stopMatrix, TransportationType transportationType) {
         matrix = new TransportationNode[routeMatrix.length][routeMatrix[0].length];
         this.transportationType = transportationType;
@@ -28,9 +29,11 @@ public class RouteNodeMatrix {
     public TransportationNode getNode(int rowIdx, int colIdx) {
       return matrix[rowIdx][colIdx];
     }
+  
     public TransportationNode[][] get() {
       return matrix;
     }
+  
     public TransportationType getTransportationType() {
       return this.transportationType;
     }
