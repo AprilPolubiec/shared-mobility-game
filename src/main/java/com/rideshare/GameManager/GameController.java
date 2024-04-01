@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 public class GameController {
     @FXML
     private static Scene _scene;
+    private static Stage _stage;
     private static AnchorPane _root = new AnchorPane();
     private static Boolean isPaused;
 
@@ -45,6 +46,7 @@ public class GameController {
      * Sets up the general configuration for the game window (heigh, width, etc) and renders
      */
     private void renderStage(Stage stage) {
+        _stage = stage;
         _scene = new Scene(_root);
         stage.setTitle("Shared Mobility App");
         // stage.setFullScreen(true);
@@ -60,9 +62,11 @@ public class GameController {
     }
   
     //region Screen loading functions
-    private static void setRoot(String fxml) throws IOException {
+    private static void setScene(String fxml) throws IOException {
         _root = loadFXML(fxml);
-        _scene.setRoot(_root);
+        Scene scene = new Scene(_root);
+        _stage.setScene(scene);
+        _scene = scene;
     }
 
     private static AnchorPane loadFXML(String fxml) throws IOException {
@@ -72,8 +76,8 @@ public class GameController {
 
     public void loadHomeScreen(){
         try {
-            setRoot("home");
-            // _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
+            setScene("home");
+            _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
         } catch (Exception e) {
            e.printStackTrace();
         }
@@ -81,7 +85,7 @@ public class GameController {
 
     public void loadGameScreen() {
         try {
-            setRoot("game");
+            setScene("game");
             // Load player's game
             // Load image
             MapLoader loader = new MapLoader(_root);
@@ -95,7 +99,7 @@ public class GameController {
     
     public void loadInstructionsScreen() {
         try {
-            setRoot("instructions");
+            setScene("instructions");
         } catch (Exception e) {
             e.printStackTrace();
         }
