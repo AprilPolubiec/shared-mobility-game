@@ -14,6 +14,7 @@ import com.rideshare.Route;
 import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationNode;
 import com.rideshare.TransportationType;
+import com.rideshare.TileManager.TileUtils;
 
 public class MapLoaderTest {
     @Test
@@ -51,8 +52,8 @@ public class MapLoaderTest {
         MapJson map = MapLoader.getMapDataFromFile("test-map");
         int[][] matrix = MapLoader.arrayToMatrix(map.layers[1].data, map.height, map.width);
         Route walkingRoute = MapLoader.getRoute(map, "Walking", TransportationType.WALKING, "");
-        assertEquals(TransportationType.WALKING, walkingRoute.getTransportationMode());
-        RouteNodeMatrix routeNodeMatrix = walkingRoute.getRouteNodes();
+        assertEquals(TransportationType.WALKING, walkingRoute.getTransportationType());
+        RouteNodeMatrix routeNodeMatrix = walkingRoute.getRouteNodeMatrix();
         for (int i = 0; i < matrix.length; i++) {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {
@@ -73,8 +74,8 @@ public class MapLoaderTest {
         MapJson map = MapLoader.getMapDataFromFile("test-map");
         int[][] matrix = MapLoader.arrayToMatrix(map.layers[2].data, map.height, map.width);
         Route carRoute = MapLoader.getRoute(map, "Roads", TransportationType.CAR, "");
-        assertEquals(TransportationType.CAR, carRoute.getTransportationMode());
-        RouteNodeMatrix routeNodeMatrix = carRoute.getRouteNodes();
+        assertEquals(TransportationType.CAR, carRoute.getTransportationType());
+        RouteNodeMatrix routeNodeMatrix = carRoute.getRouteNodeMatrix();
         for (int i = 0; i < matrix.length; i++) {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {
@@ -97,9 +98,9 @@ public class MapLoaderTest {
         MapJson map = MapLoader.getMapDataFromFile("test-map");
         int[][] matrix = MapLoader.arrayToMatrix(map.layers[4].data, map.height, map.width);
         Route trainRoute = MapLoader.getRoute(map, "Train", TransportationType.TRAIN, "A train");
-        assertEquals(TransportationType.TRAIN, trainRoute.getTransportationMode());
+        assertEquals(TransportationType.TRAIN, trainRoute.getTransportationType());
         
-        RouteNodeMatrix routeNodeMatrix = trainRoute.getRouteNodes();
+        RouteNodeMatrix routeNodeMatrix = trainRoute.getRouteNodeMatrix();
         for (int i = 0; i < matrix.length; i++) {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {
@@ -124,9 +125,9 @@ public class MapLoaderTest {
         MapJson map = MapLoader.getMapDataFromFile("test-map");
         int[][] matrix = MapLoader.arrayToMatrix(map.layers[3].data, map.height, map.width);
         Route busRoute = MapLoader.getRoute(map, "Bus", TransportationType.BUS, "39A");
-        assertEquals(TransportationType.BUS, busRoute.getTransportationMode());
+        assertEquals(TransportationType.BUS, busRoute.getTransportationType());
         
-        RouteNodeMatrix routeNodeMatrix = busRoute.getRouteNodes();
+        RouteNodeMatrix routeNodeMatrix = busRoute.getRouteNodeMatrix();
         for (int i = 0; i < matrix.length; i++) {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {

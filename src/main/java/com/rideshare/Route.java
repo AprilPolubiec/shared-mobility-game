@@ -20,10 +20,10 @@ public class Route {
         this.name = name;
     }
 
-    public RouteNodeMatrix getRouteNodes() {
+    public RouteNodeMatrix getRouteNodeMatrix() {
         return nodeMatrix;
     }
-    public TransportationType getTransportationMode() {
+    public TransportationType getTransportationType() {
         return this.transportationType;
     }
 }

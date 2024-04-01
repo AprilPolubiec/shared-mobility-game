@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.rideshare.GameManager.TileUtils;
+import com.rideshare.TileManager.TileUtils;
 
 // RouteNodeMatrix is a matrix of Transportation nodes for a given route
 public class RouteNodeMatrix {
@@ -30,7 +30,6 @@ public class RouteNodeMatrix {
         openCodes.put(TransportationType.TRAIN, TileUtils.TRAIN_TILE_IDS);
       }  
     public RouteNodeMatrix(int[][] mapDataMatrix, TransportationType transportationType) {
-      // TODO: handle the different values that we will be getting for different routes
         matrix = new TransportationNode[mapDataMatrix.length][mapDataMatrix[0].length];
         this.transportationType = transportationType;
         for (int i = 0; i < mapDataMatrix.length; i++) {

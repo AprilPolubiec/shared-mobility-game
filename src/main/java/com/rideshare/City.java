@@ -42,7 +42,7 @@ public class City {
   public ArrayList<TransportationNode> getRouteNodes(int rowIdx, int colIdx) {
     ArrayList<TransportationNode> nodes = new ArrayList<TransportationNode>();
     for (Route route : routes) {
-      RouteNodeMatrix routeNodeMatrix = route.getRouteNodes();
+      RouteNodeMatrix routeNodeMatrix = route.getRouteNodeMatrix();
       TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
       nodes.add(node);
     }

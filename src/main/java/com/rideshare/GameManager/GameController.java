@@ -88,9 +88,9 @@ public class GameController {
             setScene("game");
             // Load player's game
             // Load image
-            MapLoader loader = new MapLoader(_root);
+            MapLoader loader = new MapLoader(_scene);
             loader.load("test-map");
-            City city = loader.getCity("test-map");
+            City city = loader.getCity();
             System.out.println("Got the city!");
         } catch (Exception e) {
             e.printStackTrace();

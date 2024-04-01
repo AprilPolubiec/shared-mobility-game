@@ -1,4 +1,4 @@
-package com.rideshare.GameManager;
+package com.rideshare.TileManager;
 
 public class TileUtils {
     public static final Integer[] ROAD_TILE_IDS = { 109, 110, 111, 112, 127, 128, 129, 130, 145, 146, 147, 148, 163, 164,

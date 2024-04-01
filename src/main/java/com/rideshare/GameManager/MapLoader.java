@@ -5,7 +5,11 @@ import com.rideshare.City;
 import com.rideshare.Route;
 import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationType;
+import com.rideshare.TileManager.TileManager;
+import com.rideshare.TileManager.TiledMapLayer;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,21 +24,30 @@ import java.util.ArrayList;
 
 public class MapLoader {
     private AnchorPane root;
-    MapLoader(AnchorPane root) {
+    private TileManager _tileManager;
+    private City _city;
+    MapLoader(Scene scene) {
         // IDK
-        this.root = root;
+        this.root = (AnchorPane)scene.getRoot();
     }
 
     public void load(String mapName) {
         // TODO: validate map
-        Image image = new Image(App.class.getResource(String.format("/images/maps/%s.png", mapName)).toString()); 
-        ImageView imageView = new ImageView(image);
-        root.getChildren().add(imageView);
+        try {
+            MapJson map = getMapDataFromFile(mapName);
+            _city = createCityFromMapData(map);
+            _tileManager = new TileManager(this.root, map.layers);
+            _tileManager.draw();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public City getCity(String mapName) throws Exception {
-        MapJson map = getMapDataFromFile(mapName);
+    public City getCity() {
+        return _city;
+    }
 
+    public City createCityFromMapData(MapJson map) throws Exception {
         ArrayList<Route> routes = new ArrayList<Route>();
         Route walkingRoute = getRoute(map, "Walking", TransportationType.WALKING, "");
         Route drivingRoute = getRoute(map, "Roads", TransportationType.CAR, "Toyota Prius");
@@ -49,8 +62,8 @@ public class MapLoader {
     }
 
     static public Route getRoute(MapJson map, String layerName, TransportationType transportationType, String name) {
-        Layer layer = new Layer();
-        for (Layer l : map.layers) {
+        TiledMapLayer layer = new TiledMapLayer();
+        for (TiledMapLayer l : map.layers) {
             if(l.name.equals(layerName)) {
                 layer = l;
             }
@@ -97,24 +110,10 @@ public class MapLoader {
     }
 }
 
-class Layer {
-    public int[] data;
-    public int height;
-    public int id;
-    public String name;
-    public float opacity;
-    public String type;
-    public boolean visible;
-    public int width;
-    public int x;
-    public int y;
-}
-
-
 class MapJson {
     public int height;
     public int tileheight;
     public int width;
     public int tilewidth;
-    public Layer[] layers;
+    public TiledMapLayer[] layers;
 }

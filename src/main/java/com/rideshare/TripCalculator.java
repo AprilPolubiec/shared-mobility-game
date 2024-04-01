@@ -21,14 +21,14 @@ public class TripCalculator {
     int endX;
     int endY;
 
+    int cityHeight;
+    int cityWidth;
+
     boolean goalReached = false;
     GameController gameController;
     Scene scene;
     City city;
-    GridPane gridPane = new GridPane();
 
-    // NODE
-    // TransportationNode[][] node = new TransportationNode[maxCol][maxRow];
     TransportationNode startNode, goalNode, currentNode;
     RouteNodeMatrix currentRouteMatrix;
     ArrayList<TransportationNode> openList = new ArrayList<>();
@@ -37,64 +37,9 @@ public class TripCalculator {
     public TripCalculator(City city, GameController gameController) {
         this.gameController = gameController;
         this.city = city;
-        drawCity();
-    }
-
-    private void drawCity() {
-        int gridSize = 8; // Size of the grid
-        double cellSize = 60; // Size of each cell in the grid
-
-        // Create the grid of rectangles
-        for (int row = 0; row < gridSize; row++) {
-            for (int col = 0; col < gridSize; col++) {
-                Rectangle rectangle = new Rectangle(cellSize, cellSize, Color.WHITE);
-                rectangle.setStroke(Color.BLACK);
-                gridPane.add(rectangle, col, row);
-            }
-        }
-
-        for (RouteNodeMatrix route : this.city.routes) {
-            TransportationNode[][] matrix = route.get();
-            for (int i = 0; i < matrix.length; i++) {
-                TransportationNode[] row = matrix[i];
-                for (int j = 0; j < row.length; j++) {
-                    TransportationNode n = matrix[i][j];
-
-                    if (n.solid == false) {
-                        Text text = new Text(Integer.toString(route.getTransportationType().ordinal()));
-                        // Check if a Text node already exists at this position
-                        Text existingText = getTextFromGridPane(gridPane, j, i);
-
-                        if (n.modeOfTransport.hasStops() && n.canStop) {
-                            text.setFill(Color.RED);
-                        }
-
-                        // If a Text node exists, append text to it; otherwise, add a new Text node
-                        if (existingText != null) {
-                            existingText.setText(existingText.getText() + " " + text.getText());
-                        } else {
-                            gridPane.add(text, j, i);
-                            text.setTranslateX(10);
-                        }
-                    }
-                }
-            }
-        }
-
-        this.gameController.get_root().getChildren().add(gridPane);
-
-    }
-
-    private Text getTextFromGridPane(GridPane gridPane, int col, int row) {
-        for (javafx.scene.Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                if (node instanceof Text) {
-                    return (Text) node;
-                }
-                // If the node is not a Text, skip it
-            }
-        }
-        return null; // No Text node found at the specified position
+        this.cityHeight = this.city.size;
+        this.cityWidth = this.city.size;
+        // drawCity();
     }
 
     public ArrayList<Trip> calculateTrips(int startX, int startY, int endX, int endY) {
@@ -136,8 +81,8 @@ public class TripCalculator {
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 // Check all of the surrounding route options!
-                for (RouteNodeMatrix route : this.city.routes) {
-                    openNode(route.getNode(row - 1, col));
+                for (Route route : this.city.routes) {
+                    openNode(route.getRouteNodeMatrix().getNode(row - 1, col));
                 }
             }
         }
@@ -147,30 +92,30 @@ public class TripCalculator {
             openNode(this.currentRouteMatrix.getNode(row, col - 1));
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
-                for (RouteNodeMatrix route : this.city.routes) {
-                    openNode(route.getNode(row, col - 1));
+                for (Route route : this.city.routes) {
+                    openNode(route.getRouteNodeMatrix().getNode(row, col - 1));
                 }
             }
         }
 
-        if (row + 1 < 8) { // Node below
+        if (row + 1 < this.cityHeight) { // Node below
             // print(String.format("Opening nodes at [%s, %s]", row + 1, col));
             openNode(this.currentRouteMatrix.getNode(row + 1, col));
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
-                for (RouteNodeMatrix route : this.city.routes) {
-                    openNode(route.getNode(row + 1, col));
+                for (Route route : this.city.routes) {
+                    openNode(route.getRouteNodeMatrix().getNode(row + 1, col));
                 }
             }
         }
 
-        if (col + 1 < 8) { // Node to the right
+        if (col + 1 < this.cityWidth) { // Node to the right
             // print(String.format("Opening nodes at [%s, %s]", row, col + 1));
             openNode(this.currentRouteMatrix.getNode(row, col + 1));
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
-                for (RouteNodeMatrix route : this.city.routes) {
-                    openNode(route.getNode(row, col + 1));
+                for (Route route : this.city.routes) {
+                    openNode(route.getRouteNodeMatrix().getNode(row, col + 1));
                 }
             }
         }
@@ -182,8 +127,8 @@ public class TripCalculator {
         currentNode.setAsChecked();
         checkedList.add(currentNode);
         openList.remove(currentNode);
-        for (RouteNodeMatrix route : this.city.routes) {
-            TransportationNode node = route.getNode(row, col);
+        for (Route route : this.city.routes) {
+            TransportationNode node = route.getRouteNodeMatrix().getNode(row, col);
             node.setAsChecked();
             checkedList.add(node);
             openList.remove(node);
@@ -250,6 +195,7 @@ public class TripCalculator {
         }
     }
 
+    // TODO: highlight a line
     private void trackThePath() {
         // Backtrack and draw the best path
         TransportationNode current = goalNode;
@@ -257,40 +203,26 @@ public class TripCalculator {
         while (current != startNode) {
             current = current.parent;
             if (current != startNode) {
-                for (Node node : gridPane.getChildren()) {
-                    if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == current.row &&
-                            GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == current.col &&
-                            node instanceof Rectangle) {
-                        if (current.transportationType == TransportationType.BUS) {
-                            ((Rectangle) node).setFill(Color.YELLOW);
-                        }
-                        if (current.transportationType == TransportationType.WALKING) {
-                            ((Rectangle) node).setFill(Color.GRAY);
-                        }
-                        if (current.transportationType == TransportationType.TRAIN) {
-                            ((Rectangle) node).setFill(Color.BLUE);
-                        }
-                        if (current.transportationType == TransportationType.CAR) {
-                            ((Rectangle) node).setFill(Color.ORANGE);
-                        }
-                    }
-                }
+                // for (Node node : gridPane.getChildren()) {
+                //     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == current.row &&
+                //             GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == current.col &&
+                //             node instanceof Rectangle) {
+                //         if (current.transportationType == TransportationType.BUS) {
+                //             ((Rectangle) node).setFill(Color.YELLOW);
+                //         }
+                //         if (current.transportationType == TransportationType.WALKING) {
+                //             ((Rectangle) node).setFill(Color.GRAY);
+                //         }
+                //         if (current.transportationType == TransportationType.TRAIN) {
+                //             ((Rectangle) node).setFill(Color.BLUE);
+                //         }
+                //         if (current.transportationType == TransportationType.CAR) {
+                //             ((Rectangle) node).setFill(Color.ORANGE);
+                //         }
+                //     }
+                // }
             }
         }
     }
 
 }
-
-/**
- * Sample input:
- * 
- * Bus:
- * [0, 1, 0]
- * [0, 1, 0]
- * [0, 1, 0]
- * 
- * Train:
- * [1, 1, 1]
- * [1, 0, 0]
- * [1, 1, 1]
- */
