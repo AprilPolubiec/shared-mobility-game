@@ -14,10 +14,9 @@ public class Route {
     private City city;
     public String name;
     
-    public Route(int[][] routeMatrix, int[][] stopMatrix, TransportationType transportationType, City city, String name) {
-        nodeMatrix = new RouteNodeMatrix(routeMatrix, stopMatrix, transportationType);
+    public Route(int[][] routeMatrix, TransportationType transportationType, String name) {
+        nodeMatrix = new RouteNodeMatrix(routeMatrix, transportationType);
         this.transportationType = transportationType;
-        this.city = city;
         this.name = name;
     }
 

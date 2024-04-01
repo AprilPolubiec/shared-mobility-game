@@ -21,15 +21,15 @@ import javafx.geometry.Point2D;
  */
 
 public class City {
-  ArrayList<RouteNodeMatrix> routes;
+  ArrayList<Route> routes;
   int size;
   
-  public City(int size, ArrayList<RouteNodeMatrix> routes) {
+  public City(int size, ArrayList<Route> routes) {
     this.routes = routes;
     this.size = size;
   }
 
-  public ArrayList<RouteNodeMatrix> getRoutes() {
+  public ArrayList<Route> getRoutes() {
     return routes;
   }
 
@@ -41,7 +41,8 @@ public class City {
    */
   public ArrayList<TransportationNode> getRouteNodes(int rowIdx, int colIdx) {
     ArrayList<TransportationNode> nodes = new ArrayList<TransportationNode>();
-    for (RouteNodeMatrix routeNodeMatrix : routes) {
+    for (Route route : routes) {
+      RouteNodeMatrix routeNodeMatrix = route.getRouteNodes();
       TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
       nodes.add(node);
     }

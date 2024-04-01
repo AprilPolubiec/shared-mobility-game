@@ -60,6 +60,14 @@ public class TransportationNode {
         // renderNode();
     }
 
+    public boolean canStop() {
+        return this.canStop;
+    }
+
+    public boolean isSolid() {
+        return this.solid;
+    }
+
     public void setAsStart() {
         start = true;
     }

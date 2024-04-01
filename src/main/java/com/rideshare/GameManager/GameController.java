@@ -3,6 +3,7 @@ package com.rideshare.GameManager;
 import java.io.IOException;
 
 import com.rideshare.App;
+import com.rideshare.City;
 import com.rideshare.Trip;
 
 import javafx.fxml.FXML;
@@ -85,7 +86,8 @@ public class GameController {
             // Load image
             MapLoader loader = new MapLoader(_root);
             loader.load("test-map");
-            loader.getCity("test-map");
+            City city = loader.getCity("test-map");
+            System.out.println("Got the city!");
         } catch (Exception e) {
             e.printStackTrace();
         }
