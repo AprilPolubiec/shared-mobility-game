@@ -54,6 +54,7 @@ public class TransportationNode {
             
         }
         co2EmissionRate = modeOfTransport.getEmissionRate();
+        speed = modeOfTransport.getSpeed();
 
         // Check if it is a stop or what
         // renderNode();
@@ -88,7 +89,7 @@ public class TransportationNode {
     // TODO: do something
     }
 
-    public void getCost(TransportationNode startNode, TransportationNode endNode) {
+    public void getCost(TransportationNode startNode, TransportationNode endNode, String weight) {
         // GET G COST
         int xDistance = Math.abs(this.col - startNode.col);
         int yDistance = Math.abs(this.row - startNode.row);
@@ -97,7 +98,18 @@ public class TransportationNode {
         // GET HCOST
         xDistance = Math.abs(this.col - endNode.col);
         yDistance = Math.abs(this.row - endNode.row);
-        this.hCost = xDistance + yDistance + this.co2EmissionRate; // Weighted by emission for now
+        this.hCost = xDistance + yDistance;
+        switch (weight) {
+            case "emission":
+                this.hCost += this.co2EmissionRate; // Weighted by emission for now
+                break;
+            case "speed":
+                this.hCost -= this.speed; // Weighted by emission for now
+                break;
+            default:
+                break;
+        }
+        
 
         // GET FCOST
         this.fCost = this.gCost + this.hCost;

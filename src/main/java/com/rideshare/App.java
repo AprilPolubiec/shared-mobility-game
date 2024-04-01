@@ -39,8 +39,8 @@ public class App extends Application {
         // Sprite s = new Sprite("girl-1", this.gameController);
         // s.render();
         City city = createCity();
-        TripCalculator tc = new TripCalculator(city, this.gameController);
-        tc.calculateTrips(0, 0, 7, 7);
+        // TripCalculator tc = new TripCalculator(city, this.gameController);
+        // tc.calculateTrips(4, 0, 4, 7);
     }
 
     private City createCity() {
@@ -63,7 +63,7 @@ public class App extends Application {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0},
           };
         RouteNodeMatrix busRoute = new RouteNodeMatrix(busMatrix, busStopMatrix, TransportationType.BUS);
         routes.add(busRoute);

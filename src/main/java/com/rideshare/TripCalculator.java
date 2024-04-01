@@ -212,7 +212,7 @@ public class TripCalculator {
             for (int i = 0; i < openList.size(); i++) {
                 // Check if the F cost is better than current best
                 TransportationNode nodeToCheck = openList.get(i);
-                nodeToCheck.getCost(startNode, goalNode);
+                nodeToCheck.getCost(startNode, goalNode, "emission");
                 print(String.format("[%s, %s] %s: %s", nodeToCheck.row, nodeToCheck.col, nodeToCheck.transportationType.name(), nodeToCheck.fCost));
                 if (nodeToCheck.fCost < bestNodeFCost) {
                     bestNodeIdx = i;
@@ -274,7 +274,6 @@ public class TripCalculator {
                             ((Rectangle) node).setFill(Color.ORANGE);
                         }
                     }
-                    System.out.println(String.format("%s %s", current.row, current.col));
                 }
             }
         }
