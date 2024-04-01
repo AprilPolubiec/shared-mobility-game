@@ -19,88 +19,13 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         this.gameController = new GameController();
         gameController.initialize(stage);
-        gameController.loadGameScreen();
+        gameController.loadHomeScreen();
 
         // Sprite s = new Sprite("girl-1", this.gameController);
         // s.render();
         // City city = createCity();
         // TripCalculator tc = new TripCalculator(city, this.gameController);
         // tc.calculateTrips(4, 0, 4, 7);
-    }
-
-    private City createCity() {
-        ArrayList<RouteNodeMatrix> routes = new ArrayList<RouteNodeMatrix>();
-        int[][] busMatrix = {
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-          };
-        int[][] busStopMatrix = {
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 0, 0, 0, 1, 0, 0, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-          };
-        RouteNodeMatrix busRoute = new RouteNodeMatrix(busMatrix, busStopMatrix, TransportationType.BUS);
-        routes.add(busRoute);
-        int[][] trainMatrix = {
-            {0, 0, 0, 0, 0, 0, 0, 1},
-            {0, 0, 0, 0, 0, 0, 1, 0},
-            {0, 0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 1, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0, 0},
-            {0, 1, 0, 0, 0, 0, 0, 0},
-            {1, 0, 0, 0, 0, 0, 0, 0},
-          };
-          int[][] trainStopMatrix = {
-            {0, 0, 0, 0, 0, 0, 0, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 0, 0, 0, 0, 0, 0, 0},
-          };
-          RouteNodeMatrix trainRoute = new RouteNodeMatrix(trainMatrix, trainStopMatrix, TransportationType.TRAIN);
-          routes.add(trainRoute);
-        int[][] carMatrix = {
-            {1, 0, 1, 0, 1, 0, 1, 1},
-            {1, 0, 1, 0, 1, 0, 1, 0},
-            {1, 0, 1, 0, 1, 1, 1, 0},
-            {1, 0, 1, 0, 1, 0, 1, 0},
-            {1, 0, 1, 1, 1, 0, 1, 0},
-            {1, 0, 1, 0, 1, 0, 1, 0},
-            {1, 1, 1, 0, 1, 0, 1, 0},
-            {1, 0, 1, 0, 1, 0, 1, 0},
-          };
-          RouteNodeMatrix carRoute = new RouteNodeMatrix(carMatrix, carMatrix, TransportationType.CAR);
-          routes.add(carRoute);
-
-        int[][] walkingMatrix = {
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-        };
-        RouteNodeMatrix walkingRoute = new RouteNodeMatrix(walkingMatrix, walkingMatrix, TransportationType.WALKING);
-        routes.add(walkingRoute);
-        City city = new City(8, routes);
-        return city;
     }
 
     public static void main(String[] args) {

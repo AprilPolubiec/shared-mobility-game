@@ -78,7 +78,7 @@ public class GameController {
     public void loadHomeScreen(){
         try {
             setScene("home");
-            _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
+            // _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
         } catch (Exception e) {
            e.printStackTrace();
         }
@@ -92,9 +92,9 @@ public class GameController {
             MapLoader loader = new MapLoader(_scene);
             loader.load("test-map");
             City city = loader.getCity();
-            TripCalculator tc = new TripCalculator(city);
-            tc.calculateTrips(0, 15, 3, 15);
-            System.out.println("Got the city!");
+            // TripCalculator tc = new TripCalculator(city);
+            // tc.calculateTrips(0, 15, 3, 15);
+            // System.out.println("Got the city!");
         } catch (Exception e) {
             e.printStackTrace();
         }
