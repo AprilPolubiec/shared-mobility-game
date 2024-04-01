@@ -22,11 +22,13 @@ import javafx.geometry.Point2D;
 
 public class City {
   ArrayList<Route> routes;
+  ArrayList<Mailbox> mailboxes;
   int size;
   
-  public City(int size, ArrayList<Route> routes) {
+  public City(int size, ArrayList<Route> routes, ArrayList<Mailbox> mailboxes) {
     this.routes = routes;
     this.size = size;
+    this.mailboxes = mailboxes;
   }
 
   public ArrayList<Route> getRoutes() {

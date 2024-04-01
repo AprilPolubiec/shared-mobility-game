@@ -2,6 +2,7 @@ package com.rideshare.GameManager;
 
 import com.rideshare.App;
 import com.rideshare.City;
+import com.rideshare.Mailbox;
 import com.rideshare.Route;
 import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationType;
@@ -57,8 +58,32 @@ public class MapLoader {
         routes.add(drivingRoute);
         routes.add(busRoute);
         routes.add(trainRoute);
-        City city = new City(map.height, routes);
+
+        ArrayList<Mailbox> mailboxes = getMailboxes(map);
+        City city = new City(map.height, routes, mailboxes);
         return city;
+    }
+
+    private ArrayList<Mailbox> getMailboxes(MapJson map) throws IOException {
+        ArrayList<Mailbox> mailboxes = new ArrayList<Mailbox>();
+        int[][] mailboxMatrix = null;
+        for (TiledMapLayer layer : map.layers) {
+            if (layer.name.equals("Houses")) {
+                mailboxMatrix = arrayToMatrix(layer.data, layer.height, layer.height);   
+            }
+        }
+        if (mailboxMatrix == null) {
+            throw new IOException("No mailboxes found in map");
+        }
+        for (int i = 0; i < mailboxMatrix.length; i++) {
+            int rowIdx = i;
+            for (int j = 0; j < mailboxMatrix[rowIdx].length; j++) {
+                int colIdx = j;
+                Mailbox mailbox = new Mailbox(rowIdx, colIdx);
+                mailboxes.add(mailbox);
+            }
+        }
+        return mailboxes;
     }
 
     static public Route getRoute(MapJson map, String layerName, TransportationType transportationType, String name) {

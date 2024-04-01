@@ -17,5 +17,15 @@ package com.rideshare;
 
  */
 public class Mailbox {
+   private int _row;
+   private int _col;
+   MailboxStatus status;
+   boolean isVisible;
+   // int duration; // Maybe
+   // DateTime startTime; // Maybe
 
+   public Mailbox(int row, int col){
+      _row = row;
+      _col = col;
+   }
 }
