@@ -16,6 +16,7 @@ package com.rideshare;
         incrementCO2Saved(int): This method updates the ‘CO2 Saved attribute by adding a specified amount to its current value.
         incrementCO2Used (int): This method decreased the CO2Used by the specified amount
        */
+
 public class ScoreKeeper {
 
     // All relevant attributes initialised
@@ -29,56 +30,55 @@ public class ScoreKeeper {
     int totalMailboxes;
     double mailboxesMultiplier;
     int score;
-    int Level;
+    int level;
     boolean exceededBudgetFlag;
     int amountOverBudget;
 
     // The ScoreKeeper constructor
     public ScoreKeeper() {
-        CO2Saved = 0;
-        CO2Used = 0;
-        mailboxesCompleted = 0;
-        totalMailboxes = 0;
-        Level = 1;
-        exceededBudgetFlag = false;
-        amountOverBudget = 0;
+        this.CO2Saved = 0;
+        this.CO2Used = 0;
+        this.mailboxesCompleted = 0;
+        this.totalMailboxes = 0;
+        this.level = 1;
+        this.exceededBudgetFlag = false;
+        this.amountOverBudget = 0;
     }
 
     // getters
     public int getMailboxesCompleted() {
-        return mailboxesCompleted;
+        return this.mailboxesCompleted;
     }
 
     public int getTotalMailboxes() {
-        return totalMailboxes;
+        return this.totalMailboxes;
     }
 
     public int getCO2Saved() {
-        return CO2Saved;
+        return this.CO2Saved;
     }
 
     public int getCO2Used() {
-        return CO2Used;
+        return this.CO2Used;
     }
 
-    
     // setters
     public int incrementCO2Saved(int valueIncremented) {
         if (valueIncremented <= 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
-        CO2Saved += valueIncremented;
-        return CO2Saved;
+        this.CO2Saved += valueIncremented;
+        return this.CO2Saved;
     }
 
     public int incrementCO2Used(int valueIncremented) {
         if (valueIncremented <= 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
-        hasExceededBudget(); 
+        this.hasExceededBudget(); 
 
-        CO2Used += valueIncremented;
-        return CO2Used;
+        this.CO2Used += valueIncremented;
+        return this.CO2Used;
     }
 
     // Don't know if we need this so I'll just leave it here. I imagine level incrementer
@@ -87,62 +87,54 @@ public class ScoreKeeper {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
 
-        Level = newLevel;
-        return Level;
+        this.level = newLevel;
+        return this.level;
     }
-    
 
     // budget checkers
     public boolean hasExceededBudget() {
-        if (CO2Used > co2Budget) {
-            exceededBudgetFlag = true;
+        if (this.CO2Used > this.co2Budget) {
+            this.exceededBudgetFlag = true;
             // CO2Used = co2Budget;
         }
-        return exceededBudgetFlag;
+        return this.exceededBudgetFlag;
     }
 
     public int getAmountOverBudget() {
-        if (hasExceededBudget()) {
-            return CO2Used - co2Budget;
+        if (this.hasExceededBudget()) {
+            return this.CO2Used - this.co2Budget;
         } else {
             return 0;
         }
-
     }
 
     public int resetOverBudget() {
-        if (hasExceededBudget()) {
-            CO2Used = co2Budget;
-            exceededBudgetFlag = false;
-            return co2Budget;
+        if (this.hasExceededBudget()) {
+            this.CO2Used = this.co2Budget;
+            this.exceededBudgetFlag = false;
+            return this.co2Budget;
         } 
-        return CO2Used;
+        return this.CO2Used;
     }
 
     public int calculateScore() {
-        mailboxesCompleted = getMailboxesCompleted();
-        totalMailboxes = getTotalMailboxes();
-        int CO2score = CO2Saved;
+        this.mailboxesCompleted = this.getMailboxesCompleted();
+        this.totalMailboxes = this.getTotalMailboxes();
+        int CO2score = this.CO2Saved;
 
-        double mailboxesRatio = (double) mailboxesCompleted / totalMailboxes;
+        double mailboxesRatio = (double) this.mailboxesCompleted / this.totalMailboxes;
         // mailboxesMultiplier = mailboxesRatio + 1;
-        mailboxesMultiplier = mailboxesRatio;
+        this.mailboxesMultiplier = mailboxesRatio;
 
-        double scoreDouble = CO2score * mailboxesMultiplier;
-        score = (int) Math.ceil(scoreDouble);
+        double scoreDouble = CO2score * this.mailboxesMultiplier;
+        this.score = (int) Math.ceil(scoreDouble);
 
-        exceededBudgetFlag = hasExceededBudget();
-        if (exceededBudgetFlag == true) {
-            score = 0;
-            return score;
+        this.exceededBudgetFlag = this.hasExceededBudget();
+        if (this.exceededBudgetFlag == true) {
+            this.score = 0;
+            return this.score;
         }
 
-        return score;
+        return this.score;
     }
-
-
-
-
-
-
 }
