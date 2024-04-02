@@ -84,7 +84,8 @@ public class MapLoader {
                 int colIdx = j;
                 int value = mailboxMatrix[rowIdx][colIdx];
                 if (Arrays.asList(TileUtils.HOUSE_TILE_IDS).contains(value)) {
-                    Mailbox mailbox = new Mailbox(rowIdx, colIdx, _tileManager);
+                    Mailbox mailbox = new Mailbox(rowIdx, colIdx, value, _tileManager);
+                    // mailbox.setDuration(5); // TODO!
                     mailboxes.add(mailbox);
                 }
             }

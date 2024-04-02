@@ -3,6 +3,7 @@ package com.rideshare.TileManager;
 import com.rideshare.App;
 import com.rideshare.GameManager.MapLoader;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -60,6 +61,12 @@ public class TileManager {
         ImageView tileImage = new ImageView(tileUrl);
         _tileGrid.add(tileImage, colIdx, rowIdx);
         return tileImage;
+    }
+
+    public ImageView replaceTileImage(ImageView tile, int tileId) {
+        String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();
+        tile.setImage(new Image(tileUrl));
+        return tile;
     }
 
     public void removeTile(ImageView tile, int rowIdx, int colIdx) {
