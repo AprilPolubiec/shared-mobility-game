@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.rideshare.App;
 import com.rideshare.City;
 import com.rideshare.Player;
+import com.rideshare.Timer;
 import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
 
@@ -37,6 +38,7 @@ public class GameController {
     private static AnchorPane _root = new AnchorPane();
     private static Boolean isPaused;
     private Font _clockFont;
+    private Text _clockText;
     MediaPlayer _bgMusic;
     City _city;
 
@@ -125,7 +127,7 @@ public class GameController {
             loadTimeModal();
             loadProgressModal();
             // _city.showAllMailboxes();
-            
+            start();
             // TripCalculator tc = new TripCalculator(city);
             // tc.calculateTrips(0, 15, 3, 15);
             // System.out.println("Got the city!");
@@ -144,10 +146,10 @@ public class GameController {
         panelImageView.setFitHeight(150);
         panelImageView.setFitWidth(300);
 
-        Text clock = new Text("00:00AM");
-        clock.setFont(_clockFont);
-        clock.setFill(javafx.scene.paint.Color.BLACK); 
-        timeModalRoot.getChildren().add(clock);
+        _clockText = new Text("00:00AM");
+        _clockText.setFont(_clockFont);
+        _clockText.setFill(javafx.scene.paint.Color.BLACK); 
+        timeModalRoot.getChildren().add(_clockText);
     
         _root.getChildren().add(timeModalRoot);
     }
@@ -176,9 +178,11 @@ public class GameController {
 
     public void start() {
         System.out.println("Starting");
-        //
-        // Sprite player = new Sprite("April", this);
-        // player.render();
+
+        Sprite player = new Sprite("girl-1", this);
+        player.render();
+        Timer t = new Timer(_clockText);
+        t.start();
         // Load city (using City class)
         // Generate mailboxes (using City class)
         // Create ScoreKeeper (using ScoreKeeper class)
