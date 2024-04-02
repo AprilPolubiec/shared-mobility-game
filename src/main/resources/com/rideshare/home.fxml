@@ -32,21 +32,11 @@
             <Font name="Futura Bold" size="57.0" />
          </font>
       </Text>
-      <Button fx:id="newGameButton" defaultButton="true" layoutX="148.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleNewGameButtonPressed" style="-fx-background-color: #ec7113; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="New Game">
-         <font>
-            <Font name="Lucida Grande" size="13.0" />
-         </font>
-      </Button>
       <Text fill="WHITE" layoutX="181.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sustainable Delivery Adventure">
          <font>
             <Font name="Lucida Grande" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="loadGameButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleLoadButtonPressed" style="-fx-background-color: #118CEE; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="Load Game">
-         <font>
-            <Font name="Lucida Grande" size="13.0" />
-         </font>
-      </Button>
       <AnchorPane layoutX="658.0" layoutY="349.0">
          <children>
             <ImageView fitHeight="56.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">

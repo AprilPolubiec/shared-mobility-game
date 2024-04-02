@@ -1,6 +1,7 @@
 module com.rideshare {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
     requires com.google.gson;
 
     opens com.rideshare to javafx.fxml;

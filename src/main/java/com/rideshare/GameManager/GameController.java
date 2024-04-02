@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -24,15 +26,16 @@ public class GameController {
     private static Stage _stage;
     private static AnchorPane _root = new AnchorPane();
     private static Boolean isPaused;
+    MediaPlayer _bgMusic;
 
     @FXML
-    public javafx.scene.control.Button loadGameButton; 
+    public javafx.scene.control.Button loadGameButton;
     @FXML
-    public javafx.scene.control.Button newGameButton; 
+    public javafx.scene.control.Button newGameButton;
     @FXML
-    public javafx.scene.control.Button startGameButton; 
+    public javafx.scene.control.Button startGameButton;
     @FXML
-    public javafx.scene.control.Button instructionsButton; 
+    public javafx.scene.control.Button instructionsButton;
 
     public Scene get_scene() {
         return _scene;
@@ -42,9 +45,10 @@ public class GameController {
         return _root;
     }
 
-    /** 
+    /**
      * @param stage
-     * Sets up the general configuration for the game window (heigh, width, etc) and renders
+     *              Sets up the general configuration for the game window (heigh,
+     *              width, etc) and renders
      */
     private void renderStage(Stage stage) {
         _stage = stage;
@@ -58,8 +62,8 @@ public class GameController {
     public void initialize(Stage stage) {
         this.renderStage(stage);
     }
-  
-    //region Screen loading functions
+
+    // region Screen loading functions
     private static void setScene(String fxml, boolean isFullScreen) throws IOException {
         _root = loadFXML(fxml);
         _scene.setRoot(_root);
@@ -72,8 +76,15 @@ public class GameController {
         return fxmlLoader.load();
     }
 
-    public void loadHomeScreen(){
+    public void loadHomeScreen() {
         try {
+            Media media = new Media(App.class.getResource("/images/audio/bg-slow.mp3").toString()); // replace
+                                                                                                    // /Movies/test.mp3
+                                                                                                    // with your file
+            _bgMusic = new MediaPlayer(media);
+            // TODO: add mute button
+            // _bgMusic.play();
+
             _stage.setWidth(720);
             _stage.setHeight(439);
             _stage.centerOnScreen();
@@ -81,7 +92,7 @@ public class GameController {
             setScene("home", false);
             // _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -100,7 +111,7 @@ public class GameController {
             e.printStackTrace();
         }
     }
-    
+
     public void loadInstructionsScreen() {
         try {
             setScene("instructions", false);
@@ -109,24 +120,25 @@ public class GameController {
         }
     }
 
-    //endregion
+    // endregion
 
     public void start() {
         System.out.println("Starting");
-        // 
+        //
         // Sprite player = new Sprite("April", this);
         // player.render();
         // Load city (using City class)
         // Generate mailboxes (using City class)
         // Create ScoreKeeper (using ScoreKeeper class)
         // Start timer (using Timer class)
-        // Randomly show x mailboxes (eg: 1 if user is on level 1) - should loop through the mailboxes on our City instance that are not completed or unavailable
+        // Randomly show x mailboxes (eg: 1 if user is on level 1) - should loop through
+        // the mailboxes on our City instance that are not completed or unavailable
         // Calculate trips (using TripCalculator)
         // Show trips in popup (Using ChooseTripPopup)
         // on trip selection, "do" the trip - TBD?
     }
 
-    //region button press handlers
+    // region button press handlers
     @FXML
     public void handleStartButtonPressed() {
         this.loadGameScreen();
@@ -156,7 +168,7 @@ public class GameController {
         this.loadInstructionsScreen();
     }
 
-    //endregion
+    // endregion
 
     public void loadGame() {
         // TODO: find file
@@ -166,41 +178,41 @@ public class GameController {
 
     public void loadCity(int difficulty) {
         // this.addMailboxes(...);
-       return;
+        return;
     }
 
     public void addMailboxes(int amount) {
-       return;
+        return;
     }
 
     public void createScoreKeeper(int budget) {
-       return;
+        return;
     }
 
     public void startTimer() {
-       return;
+        return;
     }
 
     public void showMailboxes(int count) {
-       return;
+        return;
     }
 
     public void calculateTrips(int count) {
-       return;
+        return;
     }
 
     public void renderEducationalPopup(Trip[] trips) {
-       return;
+        return;
     }
 
     @FXML
     public void takeTrip(Trip trip) {
-       // Character should visually move along the trip route
+        // Character should visually move along the trip route
         // On arrival, educational popup should show
     }
 
     public void showEducationalPopup(Trip[] trips) {
-       // EducationalPopup.show(trips)
+        // EducationalPopup.show(trips)
     }
 
     @FXML
@@ -210,7 +222,7 @@ public class GameController {
 
     @FXML
     public void save() {
-       
+
     }
 
     @FXML
