@@ -50,9 +50,6 @@ public class GameController {
         _stage = stage;
         _scene = new Scene(_root);
         stage.setTitle("Shared Mobility App");
-        stage.setWidth(1920);
-        stage.setHeight(1080);
-        stage.setFullScreen(true);
         stage.setScene(_scene);
         stage.show();
     }
@@ -63,12 +60,11 @@ public class GameController {
     }
   
     //region Screen loading functions
-    private static void setScene(String fxml) throws IOException {
+    private static void setScene(String fxml, boolean isFullScreen) throws IOException {
         _root = loadFXML(fxml);
-        Scene scene = new Scene(_root);
-        _stage.setScene(scene);
-        _stage.setFullScreen(true);
-        _scene = scene;
+        _scene.setRoot(_root);
+        _stage.setScene(_scene);
+        _stage.setFullScreen(isFullScreen);
     }
 
     private static AnchorPane loadFXML(String fxml) throws IOException {
@@ -78,7 +74,11 @@ public class GameController {
 
     public void loadHomeScreen(){
         try {
-            setScene("home");
+            _stage.setWidth(720);
+            _stage.setHeight(439);
+            _stage.centerOnScreen();
+            // _stage.setFullScreen(false);
+            setScene("home", false);
             // _scene.getStylesheets().add(App.class.getResource("/styles/homeScreen.css").toString());
         } catch (Exception e) {
            e.printStackTrace();
@@ -87,7 +87,7 @@ public class GameController {
 
     public void loadGameScreen() {
         try {
-            setScene("game");
+            setScene("game", true);
             // Load player's game
             // Load image
             MapLoader loader = new MapLoader(_scene);
@@ -103,7 +103,7 @@ public class GameController {
     
     public void loadInstructionsScreen() {
         try {
-            setScene("instructions");
+            setScene("instructions", false);
         } catch (Exception e) {
             e.printStackTrace();
         }

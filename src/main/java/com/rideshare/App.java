@@ -19,11 +19,11 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         this.gameController = new GameController();
         gameController.initialize(stage);
-        gameController.loadGameScreen();
+        gameController.loadHomeScreen();
 
-        Sprite s = new Sprite("girl-1", this.gameController);
-        s.render();
-        s.enableWASD(true);
+        // Sprite s = new Sprite("girl-1", this.gameController);
+        // s.render();
+        // s.enableWASD(true);
         // City city = createCity();
         // TripCalculator tc = new TripCalculator(city, this.gameController);
         // tc.calculateTrips(4, 0, 4, 7);
