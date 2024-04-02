@@ -104,6 +104,8 @@ public class GameController {
             MapLoader loader = new MapLoader(_scene);
             loader.load("test-map-large");
             City city = loader.getCity();
+            city.showAllMailboxes();
+            
             // TripCalculator tc = new TripCalculator(city);
             // tc.calculateTrips(0, 15, 3, 15);
             // System.out.println("Got the city!");

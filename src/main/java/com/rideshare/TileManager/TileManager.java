@@ -12,6 +12,7 @@ public class TileManager {
     AnchorPane _root;
     int _height;
     int _width;
+    GridPane _tileGrid;
 
     public TileManager(AnchorPane root, TiledMapLayer[] layers, int height, int width) {
         _layers = layers;
@@ -31,7 +32,7 @@ public class TileManager {
     }
 
     public void draw() {
-        GridPane tileGrid = new GridPane();
+        _tileGrid = new GridPane();
         // TODO: maybe change
         // AnchorPane.setTopAnchor(tileGrid, 0.0);
         // AnchorPane.setLeftAnchor(tileGrid, 0.0);
@@ -47,13 +48,21 @@ public class TileManager {
                     if (tileId == 0) {
                         continue;
                     }
-                    String tileUrl = App.class
-                            .getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();
-                    ImageView tileImage = new ImageView(tileUrl);
-                    tileGrid.add(tileImage, colIdx, rowIdx);
+                    drawTile(tileId, rowIdx, colIdx);
                 }
             }
         }
-        _root.getChildren().add(tileGrid);
+        _root.getChildren().add(_tileGrid);
+    }
+
+    public ImageView drawTile(int tileId, int rowIdx, int colIdx) {
+        String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();
+        ImageView tileImage = new ImageView(tileUrl);
+        _tileGrid.add(tileImage, colIdx, rowIdx);
+        return tileImage;
+    }
+
+    public void removeTile(ImageView tile, int rowIdx, int colIdx) {
+        _tileGrid.getChildren().remove(tile);
     }
 }

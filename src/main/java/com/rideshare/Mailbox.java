@@ -1,4 +1,9 @@
 package com.rideshare;
+
+import com.rideshare.TileManager.TileManager;
+
+import javafx.scene.image.ImageView;
+
 /**
  * Description: TODO
  * Attributes:
@@ -19,13 +24,37 @@ package com.rideshare;
 public class Mailbox {
    private int _row;
    private int _col;
-   MailboxStatus status;
-   boolean isVisible;
+   MailboxStatus status = MailboxStatus.UNINITIALIZED;
+   boolean _isVisible = false;
+   TileManager _tileManager;
+   ImageView _mailboxTile;
    // int duration; // Maybe
    // DateTime startTime; // Maybe
 
-   public Mailbox(int row, int col){
+   public Mailbox(int row, int col, TileManager tileManager){
       _row = row;
-      _col = col;
+      _col = col + 1; // Render a mailbox to the right of the house
+      _tileManager = tileManager;
+   }
+   
+   public void render() {
+      this._mailboxTile = _tileManager.drawTile(17, _row, _col);
+      this.status = MailboxStatus.READY;
+   }
+
+   public void show() {
+      this._isVisible = true;
+      this._mailboxTile.setOpacity(1);
+   }
+   public void hide() {
+      this._isVisible = false;
+      this._mailboxTile.setOpacity(0);
+   }
+   public void markComplete() {
+      this.status = MailboxStatus.COMPLETED;
+   }
+
+   public void markWaiting() {
+      this.status = MailboxStatus.WAITING;
    }
 }

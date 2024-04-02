@@ -31,6 +31,19 @@ public class City {
     this.mailboxes = mailboxes;
   }
 
+  public ArrayList<Mailbox> getMailboxes() {
+    return this.mailboxes;
+  }
+
+  public void showAllMailboxes() {
+    for (Mailbox mailbox : mailboxes) {
+      if (mailbox.status == MailboxStatus.UNINITIALIZED) {
+        mailbox.render();
+      }
+      mailbox.show();
+    }
+  }
+
   public ArrayList<Route> getRoutes() {
     return routes;
   }

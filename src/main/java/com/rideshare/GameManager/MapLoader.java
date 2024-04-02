@@ -7,6 +7,7 @@ import com.rideshare.Route;
 import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationType;
 import com.rideshare.TileManager.TileManager;
+import com.rideshare.TileManager.TileUtils;
 import com.rideshare.TileManager.TiledMapLayer;
 
 import javafx.scene.Parent;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MapLoader {
     private AnchorPane root;
@@ -36,9 +38,10 @@ public class MapLoader {
         // TODO: validate map
         try {
             MapJson map = getMapDataFromFile(mapName);
-            _city = createCityFromMapData(map);
             _tileManager = new TileManager(this.root, map.layers, map.height, map.width);
+            _city = createCityFromMapData(map);
             _tileManager.draw();
+            _city.showAllMailboxes();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,8 +82,11 @@ public class MapLoader {
             int rowIdx = i;
             for (int j = 0; j < mailboxMatrix[rowIdx].length; j++) {
                 int colIdx = j;
-                Mailbox mailbox = new Mailbox(rowIdx, colIdx);
-                mailboxes.add(mailbox);
+                int value = mailboxMatrix[rowIdx][colIdx];
+                if (Arrays.asList(TileUtils.HOUSE_TILE_IDS).contains(value)) {
+                    Mailbox mailbox = new Mailbox(rowIdx, colIdx, _tileManager);
+                    mailboxes.add(mailbox);
+                }
             }
         }
         return mailboxes;

@@ -8,4 +8,5 @@ public class TileUtils {
     public static final Integer[] TRAIN_TILE_IDS = { 59, 43, 60, 61, 78, 79 };
     public static final Integer[] HOUSE_TILE_IDS = { 10, 28, 46, 64, 82 };
     public static final Integer[] WALKING_TILE_IDS = { 2 }; // TODO: may change this
+    public static final Integer[] FLAG_TILE_IDS = { 17, 18, 35, 36, 53, 54, 71, 72, 89, 90 }; // TODO: separate out by color/level
 }
