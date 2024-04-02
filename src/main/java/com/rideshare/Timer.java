@@ -10,9 +10,11 @@ public class Timer {
     private TimerState state = TimerState.UNINITIALIZED;
 
     public Timer() {
-        currentInGameTime = LocalTime.MIDNIGHT);
+        currentInGameTime = LocalTime.MIDNIGHT;
         currentIRLTime = LocalTime.MIDNIGHT;
+        initialize();
     }
+
     public void initialize() {
         state = TimerState.INITIALIZED;
     }
@@ -34,12 +36,12 @@ public class Timer {
                 // Check if it's the end of the day
                 if (isEndOfDay()) {
                     System.out.println("End of day reached.");
-                    stop(); // Or stopTimer(), depending on your requirement
+                    stop(); 
                     break;
                 }
             } else {
                 System.out.println("Timer paused.");
-                break; // Exit the loop once paused
+                break; 
             }
         }
     }
@@ -53,12 +55,11 @@ public class Timer {
     public void resume() {
         state = TimerState.RUNNING;
         isPaused = false;
-        // LocalTime elapsedTime = LocalTime.now().minusNanos(pauseTime.toNanoOfDay());
+        
         long elapsedTimeSeconds = LocalTime.now().toSecondOfDay() - pauseTime.toSecondOfDay();
     
         // Add the elapsed time to the current in-game time
         currentInGameTime = currentInGameTime.plusSeconds(elapsedTimeSeconds);
-        // currentInGameTime = currentInGameTime.plusNanos(elapsedTime.toNanoOfDay());
         currentIRLTime = LocalTime.now();
         System.out.println("Timer resumed.");
 
@@ -109,16 +110,14 @@ public class Timer {
     }
 
     public LocalTime getTime() {
-        System.out.println(currentInGameTime);
-        return currentInGameTime;
+        return this.currentInGameTime;
     }
         
     public TimerState getState() {
-        System.out.println(state);
-        return state;
+        return this.state;
     }
-        
-
+   
+}
     // TO TEST TIMER uncomment below
     // For consistent behaviour, the timer must run within a seperate thread i.e. the "main" code block
     // seen below. I've tried many times to start it simply by doing timer.start but it seems that the
