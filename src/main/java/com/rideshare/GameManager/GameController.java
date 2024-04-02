@@ -13,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -22,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -116,6 +118,7 @@ public class GameController {
             loader.load("test-map-large");
             _city = loader.getCity();
             loadTimeModal();
+            loadProgressModal();
             // _city.showAllMailboxes();
             
             // TripCalculator tc = new TripCalculator(city);
@@ -126,12 +129,13 @@ public class GameController {
         }
     }
 
+    // TODO: timer class should do this!
     public void loadTimeModal() {
         StackPane timeModalRoot = new StackPane();
         ImageView panelImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/ui/grey_panel.png")));
         timeModalRoot.getChildren().add(panelImageView);
-        timeModalRoot.setLayoutX(0);
-        timeModalRoot.setLayoutY(0);
+        AnchorPane.setBottomAnchor(timeModalRoot, 0.0);
+        AnchorPane.setRightAnchor(timeModalRoot, 0.0);
         panelImageView.setFitHeight(150);
         panelImageView.setFitWidth(300);
 
@@ -141,6 +145,20 @@ public class GameController {
         timeModalRoot.getChildren().add(clock);
     
         _root.getChildren().add(timeModalRoot);
+    }
+
+    public void loadProgressModal() {
+        double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+
+        ProgressBar progressBar = new ProgressBar(0);
+        progressBar.setProgress(0.5);
+
+        VBox vBox = new VBox(progressBar);
+        progressBar.setPrefWidth(screenWidth - 100);
+        progressBar.setPrefHeight(50);
+
+        progressBar.setStyle("-fx-accent: #fa8132;");
+        _root.getChildren().add(vBox);
     }
 
     public void loadInstructionsScreen() {
