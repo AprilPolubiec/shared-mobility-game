@@ -18,11 +18,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Font customFont = Font.loadFont(getClass().getResourceAsStream("/fonts/kenvector_future.ttf"), 12);
-
         this.gameController = new GameController();
         gameController.initialize(stage);
-        gameController.loadGameScreen();
+        gameController.loadHomeScreen();
 
         // Sprite s = new Sprite("girl-1", this.gameController);
         // s.render();

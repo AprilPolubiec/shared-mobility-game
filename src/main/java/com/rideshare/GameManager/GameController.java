@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.rideshare.App;
 import com.rideshare.City;
+import com.rideshare.Player;
 import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
 
@@ -96,7 +97,7 @@ public class GameController {
                                                                                                     // with your file
             _bgMusic = new MediaPlayer(media);
             // TODO: add mute button
-            // _bgMusic.play();
+            _bgMusic.play();
 
             _stage.setWidth(720);
             _stage.setHeight(439);
@@ -112,11 +113,15 @@ public class GameController {
     public void loadGameScreen() {
         try {
             setScene("game", true);
+            _clockFont = Font.loadFont(getClass().getResourceAsStream("/fonts/digital-7.ttf"), 48);
             // Load player's game
             // Load image
             MapLoader loader = new MapLoader(_scene);
-            loader.load("test-map-large");
+            loader.load("level-1");
             _city = loader.getCity();
+            // Sprite s = new Sprite("girl-1", this);
+            // s.render();
+            // s.enableWASD(true);
             loadTimeModal();
             loadProgressModal();
             // _city.showAllMailboxes();
@@ -148,13 +153,11 @@ public class GameController {
     }
 
     public void loadProgressModal() {
-        double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
-
         ProgressBar progressBar = new ProgressBar(0);
         progressBar.setProgress(0.5);
 
         VBox vBox = new VBox(progressBar);
-        progressBar.setPrefWidth(screenWidth - 100);
+        progressBar.setPrefWidth(960);
         progressBar.setPrefHeight(50);
 
         progressBar.setStyle("-fx-accent: #fa8132;");
