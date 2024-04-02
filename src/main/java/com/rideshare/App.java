@@ -1,6 +1,7 @@
 package com.rideshare;
 
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        Font customFont = Font.loadFont(getClass().getResourceAsStream("/fonts/kenvector_future.ttf"), 12);
+
         this.gameController = new GameController();
         gameController.initialize(stage);
         gameController.loadGameScreen();

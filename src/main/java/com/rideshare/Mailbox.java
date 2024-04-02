@@ -68,7 +68,7 @@ public class Mailbox {
       }, _duration * 1000); // Convert seconds to milliseconds
    }
 
-
+   // TODO: actually just deduce from the house id
    public void setDuration(int duration) {
       _duration = duration;
    }

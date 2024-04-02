@@ -53,7 +53,7 @@ public class TileManager {
                 }
             }
         }
-        _root.getChildren().add(_tileGrid);
+        _root.getChildren().add(0, _tileGrid);
     }
 
     public ImageView drawTile(int tileId, int rowIdx, int colIdx) {
