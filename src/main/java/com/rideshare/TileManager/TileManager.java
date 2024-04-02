@@ -19,11 +19,11 @@ public class TileManager {
     private String getTileImageFileName(int tileId) {
         String tileIdString = Integer.toString(tileId - 1);
 
-        while (tileIdString.length() < 4) {
+        while (tileIdString.length() < 3) {
             tileIdString = String.format("0%s", tileIdString);
         }
 
-        return String.format("tile_%s.png", tileIdString);
+        return String.format("tile%s.png", tileIdString);
     }
 
     public void draw() {

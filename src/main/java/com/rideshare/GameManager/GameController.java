@@ -51,8 +51,8 @@ public class GameController {
         _scene = new Scene(_root);
         stage.setTitle("Shared Mobility App");
         // stage.setFullScreen(true);
-        stage.setWidth(480);
-        stage.setHeight(480);
+        stage.setWidth(960);
+        stage.setHeight(960);
         stage.setScene(_scene);
         stage.show();
     }
@@ -90,7 +90,7 @@ public class GameController {
             // Load player's game
             // Load image
             MapLoader loader = new MapLoader(_scene);
-            loader.load("test-map");
+            loader.load("test-map-large");
             City city = loader.getCity();
             // TripCalculator tc = new TripCalculator(city);
             // tc.calculateTrips(0, 15, 3, 15);
