@@ -50,9 +50,9 @@ public class GameController {
         _stage = stage;
         _scene = new Scene(_root);
         stage.setTitle("Shared Mobility App");
-        // stage.setFullScreen(true);
-        stage.setWidth(960);
-        stage.setHeight(960);
+        stage.setWidth(1920);
+        stage.setHeight(1080);
+        stage.setFullScreen(true);
         stage.setScene(_scene);
         stage.show();
     }
@@ -67,6 +67,7 @@ public class GameController {
         _root = loadFXML(fxml);
         Scene scene = new Scene(_root);
         _stage.setScene(scene);
+        _stage.setFullScreen(true);
         _scene = scene;
     }
 

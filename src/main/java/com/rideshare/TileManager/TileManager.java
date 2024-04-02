@@ -10,9 +10,13 @@ import javafx.scene.layout.GridPane;
 public class TileManager {
     private TiledMapLayer[] _layers;
     AnchorPane _root;
+    int _height;
+    int _width;
 
-    public TileManager(AnchorPane root, TiledMapLayer[] layers) {
+    public TileManager(AnchorPane root, TiledMapLayer[] layers, int height, int width) {
         _layers = layers;
+        _height = height;
+        _width = width;
         _root = root;
     }
 
@@ -34,7 +38,7 @@ public class TileManager {
 
         // Add the GridPane to the AnchorPane
         for (TiledMapLayer layer : _layers) {
-            int[][] matrix = MapLoader.arrayToMatrix(layer.data, layer.height, layer.width);
+            int[][] matrix = MapLoader.arrayToMatrix(layer.data, _height, _width);
             for (int i = 0; i < matrix.length; i++) {
                 int rowIdx = i;
                 for (int j = 0; j < matrix[rowIdx].length; j++) {

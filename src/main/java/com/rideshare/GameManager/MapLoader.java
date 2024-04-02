@@ -37,7 +37,7 @@ public class MapLoader {
         try {
             MapJson map = getMapDataFromFile(mapName);
             _city = createCityFromMapData(map);
-            _tileManager = new TileManager(this.root, map.layers);
+            _tileManager = new TileManager(this.root, map.layers, map.height, map.width);
             _tileManager.draw();
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class MapLoader {
         int[][] mailboxMatrix = null;
         for (TiledMapLayer layer : map.layers) {
             if (layer.name.equals("Houses")) {
-                mailboxMatrix = arrayToMatrix(layer.data, layer.height, layer.height);   
+                mailboxMatrix = arrayToMatrix(layer.data, map.height, map.width);   
             }
         }
         if (mailboxMatrix == null) {
@@ -93,8 +93,8 @@ public class MapLoader {
                 layer = l;
             }
         }
-        int height = layer.height;
-        int width = layer.width;
+        int height = map.height;
+        int width = map.width;
         int[][] matrix = arrayToMatrix(layer.data, height, width);
     
         Route route = new Route(matrix, transportationType, name);
