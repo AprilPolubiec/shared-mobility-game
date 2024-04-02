@@ -33,7 +33,9 @@ public class GameController {
     private static Stage _stage;
     private static AnchorPane _root = new AnchorPane();
     private static Boolean isPaused;
+    private Font _clockFont;
     MediaPlayer _bgMusic;
+    City _city;
 
     @FXML
     public javafx.scene.control.Button loadGameButton;
@@ -63,6 +65,8 @@ public class GameController {
         stage.setTitle("Shared Mobility App");
         stage.setScene(_scene);
         stage.show();
+
+        _clockFont = Font.loadFont(getClass().getResourceAsStream("/fonts/digital-7.ttf"), 48);
     }
 
     // Function which sets up the initial variables and elements for the game.
@@ -110,8 +114,9 @@ public class GameController {
             // Load image
             MapLoader loader = new MapLoader(_scene);
             loader.load("test-map-large");
-            City city = loader.getCity();
-            city.showAllMailboxes();
+            _city = loader.getCity();
+            loadTimeModal();
+            // _city.showAllMailboxes();
             
             // TripCalculator tc = new TripCalculator(city);
             // tc.calculateTrips(0, 15, 3, 15);
@@ -119,6 +124,23 @@ public class GameController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadTimeModal() {
+        StackPane timeModalRoot = new StackPane();
+        ImageView panelImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/ui/grey_panel.png")));
+        timeModalRoot.getChildren().add(panelImageView);
+        timeModalRoot.setLayoutX(0);
+        timeModalRoot.setLayoutY(0);
+        panelImageView.setFitHeight(150);
+        panelImageView.setFitWidth(300);
+
+        Text clock = new Text("00:00AM");
+        clock.setFont(_clockFont);
+        clock.setFill(javafx.scene.paint.Color.BLACK); 
+        timeModalRoot.getChildren().add(clock);
+    
+        _root.getChildren().add(timeModalRoot);
     }
 
     public void loadInstructionsScreen() {
