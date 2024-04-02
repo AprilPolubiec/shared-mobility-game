@@ -2,61 +2,169 @@ package com.rideshare;
 
 import java.time.LocalTime;
 
-/**
- * Description: a timer is an object which keeps track of time within the game. 
- * It is not a reflection of the "real-world" time. This is important because, for example,
- * we want a mailbox to last 15 minutes in the fictional world, but not 15 minutes in real life.
- * This class should abstract out the logic of mapping the game's time of day to whatever is using this.
- * TODO: should be generalizable across the code
- */
 public class Timer {
+    private LocalTime currentInGameTime;
+    private LocalTime currentIRLTime;
+    private volatile boolean isPaused = false;
+    private LocalTime pauseTime;
     private TimerState state = TimerState.UNINITIALIZED;
-    private LocalTime currentTime;
 
     public Timer() {
-        // Initialize timer
-        throw new UnsupportedOperationException("Timer() not implemented yet");
+        currentInGameTime = LocalTime.MIDNIGHT;
+        currentIRLTime = LocalTime.MIDNIGHT;
+        initialize();
     }
 
     public void initialize() {
-        // Should set the state to initialized
-        // Should set current time to 00:00
-        throw new UnsupportedOperationException("initialize() not implemented yet");
+        state = TimerState.INITIALIZED;
     }
-   
+
     public void start() {
-        // TODO:
-        // Start a while loop, that runs until it is end of the day
-        // The loop should check if one second has passed since it last ran
-        // If one second has passed, it should increment the currentTime by one second
-        // If the currentTime reaches the EOD, call stop()
-        while (!isEndOfDay()) {
-            // Do things!
-            if (isEndOfDay()) {
-                stop();
+        currentIRLTime = LocalTime.now();
+
+        while (true) { // Infinite loop to keep the timer running until the conditions isEndOfDay() or Pause()
+            if (!isPaused) {
+                LocalTime counterTime = LocalTime.now();
+
+                if (LocalTime.now().isAfter(currentIRLTime.plusNanos(3472200))) {
+                    currentInGameTime = currentInGameTime.plusSeconds(1);
+                    currentIRLTime = counterTime;
+                    System.out.println("Current in-game time: " + currentInGameTime);
+                    System.out.println("Current IRL Time: " + currentIRLTime);
+                }
+
+                // Check if it's the end of the day
+                if (isEndOfDay()) {
+                    System.out.println("End of day reached.");
+                    stop(); 
+                    break;
+                }
+            } else {
+                System.out.println("Timer paused.");
+                break; 
             }
         }
-        throw new UnsupportedOperationException("start() not implemented yet");
     }
 
     public void pause() {
-        throw new UnsupportedOperationException("pause() not implemented yet");
+        state = TimerState.PAUSED;
+        isPaused = true;
+        pauseTime = LocalTime.now();
     }
 
-    public void stop() {
-        throw new UnsupportedOperationException("stop() not implemented yet");
-    }
+    public void resume() {
+        state = TimerState.RUNNING;
+        isPaused = false;
+        
+        long elapsedTimeSeconds = LocalTime.now().toSecondOfDay() - pauseTime.toSecondOfDay();
+    
+        // Add the elapsed time to the current in-game time
+        currentInGameTime = currentInGameTime.plusSeconds(elapsedTimeSeconds);
+        currentIRLTime = LocalTime.now();
+        System.out.println("Timer resumed.");
 
+        while (!isEndOfDay()) { // Infinite loop to keep the timer running until the conditions isEndOfDay() or Pause()
+            if (!isPaused) {
+                LocalTime counterTime = LocalTime.now();
+
+                if (isEndOfDay()) {
+                    System.out.println("End of day reached.");
+                    stop(); 
+                    break;
+                }
+
+                if (LocalTime.now().isAfter(currentIRLTime.plusNanos(3472200))) {
+                    currentInGameTime = currentInGameTime.plusSeconds(1);
+                    currentIRLTime = counterTime;
+                    System.out.println("Current in-game time: " + currentInGameTime);
+                    System.out.println("Current IRL Time: " + currentIRLTime);
+                }
+
+                // Check if it's the end of the day
+            } else {
+                System.out.println("Timer paused.");
+                break; // Exit the loop once paused
+            }
+        }
+
+
+    }
+    
     private boolean isEndOfDay() {
-        // Note: this is looking for an EXACT timestamp, in the loop above make sure we set the clock to MAX appropriately
-        return currentTime.compareTo(LocalTime.MAX) == 0;
+        return currentInGameTime.equals(LocalTime.of(23, 59, 59));
+    }
+
+    private void resetTimer() {
+        currentInGameTime = LocalTime.MIDNIGHT;
+        currentIRLTime = LocalTime.now();
+        isPaused = false;
+        System.out.println("Timer reset.");
+    }
+
+    
+    private void stop() {
+        currentInGameTime = LocalTime.MIDNIGHT;
+        state = TimerState.STOPPED;
+        isPaused = false;
+        System.out.println("Timer has been stopped.");
     }
 
     public LocalTime getTime() {
-        throw new UnsupportedOperationException("getTime() not implemented yet");
+        return this.currentInGameTime;
     }
-
+        
     public TimerState getState() {
-        throw new UnsupportedOperationException("getState() not implemented yet");
+        return this.state;
     }
+   
 }
+    // TO TEST TIMER uncomment below
+    // For consistent behaviour, the timer must run within a seperate thread i.e. the "main" code block
+    // seen below. I've tried many times to start it simply by doing timer.start but it seems that the
+    // LocalTime object is thread dependent, and attempting to just "run" it within the current/ press play so to speak
+    // results in unexpected behaviour (just doesn't really work so to speak). If linking with mailboxes
+
+
+//     public static void main(String[] args) {
+//         Timer timer = new Timer();
+//         Thread timerThread = new Thread(timer::start);
+//         timerThread.start();
+
+//         // testing pause function
+//         try {
+//             Thread.sleep(1000); // Sleep for 10 seconds
+//             timer.pause(); // Pause the timer after 10 seconds
+//             timerThread.join(); // Wait for the timer thread to finish
+//         } catch (InterruptedException e) {
+//             e.printStackTrace();
+//         }
+
+//         // testing pause and resume functions
+//         try {
+//             Thread.sleep(1000); // Sleep for 10 seconds
+//             timer.pause(); // Pause the timer after 10 seconds
+//             timer.getState();
+//             timer.getTime();
+
+//             Thread.sleep(1000); // Sleep for 5 seconds to simulate some time passing
+//             timer.resume(); // Resume the timer after 5 seconds
+//             timerThread.join(); // Wait for the timer thread to finish
+//         } catch (InterruptedException e) {
+//             e.printStackTrace();
+//         }
+
+//         // testing resetTimer function + checking getState getTime
+//         try {
+//                 Thread.sleep(1000); // Sleep for 10 seconds
+//                 timer.pause(); // Pause the timer after 10 seconds
+//                 Thread.sleep(1000); // Sleep for 5 seconds to simulate some time passing
+//                 timer.resetTimer(); // Resume the timer after 5 seconds
+//                 timer.getState();
+//                 timer.getTime();
+//                 timerThread.join(); // Wait for the timer thread to finish
+//             } catch (InterruptedException e) {
+//                 e.printStackTrace();
+//             }
+
+//     }
+// }
