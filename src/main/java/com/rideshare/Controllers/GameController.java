@@ -12,6 +12,7 @@ import com.rideshare.TimerState;
 import com.rideshare.GameManager.MapLoader;
 import com.rideshare.GameManager.Sprite;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -121,27 +122,22 @@ public class GameController {
         player.render();
         Timer t = new Timer(_clockText);
         t.start();
-        Mailbox currentMailbox = _city.getMailboxes().get(0);
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> showRandomMailbox()));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.playFromStart();
+        
+    }
+
+    private void showRandomMailbox() {
+        int numMailboxes = _city.getUninitializedMailboxes().size();
+        int randomMailboxIndex = new Random().nextInt(numMailboxes);
+        Mailbox currentMailbox = _city.getUninitializedMailboxes().get(randomMailboxIndex);
+        
         currentMailbox.setDuration(5);
         currentMailbox.render();
-        currentMailbox.show();
         currentMailbox.markWaiting();
-        // while (t.getState() == TimerState.RUNNING) {
-        //     // Show the mailbox
-        //     if (currentMailbox.getStatus() == MailboxStatus.UNINITIALIZED ) {
-        //         currentMailbox.setDuration(5);
-        //         currentMailbox.render();
-        //         currentMailbox.markWaiting();
-        //         currentMailbox.show();
-        //     }
-        //     if (currentMailbox.getStatus() == MailboxStatus.COMPLETED) {
-        //         int numMailboxes = _city.getUninitializedMailboxes().size();
-        //         int randomMailboxIndex = new Random().nextInt(numMailboxes);
-        //         currentMailbox = _city.getUninitializedMailboxes().get(randomMailboxIndex);
-        //     }
-        // }
-        // _city.showAllMailboxes();
-        
+        currentMailbox.show();
     }
 
 }

@@ -27,6 +27,7 @@ public class Mailbox {
    int _duration; // In seconds
    // DateTime startTime; // Maybe
    MediaPlayer mailboxWaitingAudio;
+   MediaPlayer mailboxCompletedAudio;
 
    public Mailbox(int row, int col, int houseTileId, TileManager tileManager) {
       _row = row;
@@ -36,8 +37,12 @@ public class Mailbox {
    }
 
    public void render() {
-      Media media = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
-      mailboxWaitingAudio = new MediaPlayer(media);
+      Media waitingMedia = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
+      mailboxWaitingAudio = new MediaPlayer(waitingMedia);
+      
+      Media completedMedia = new Media(App.class.getResource("/images/audio/confirmation_001.mp3").toString());
+      mailboxCompletedAudio = new MediaPlayer(completedMedia);
+   
       _mailboxTileImageIdx = 0;
       this._mailboxTile = _tileManager.drawTile(_houseTileId + TileUtils.FLAG_HOUSE_OFFSET + _mailboxTileImageIdx, _row,
             _col);
@@ -50,9 +55,8 @@ public class Mailbox {
       timer.schedule(new TimerTask() {
          @Override
          public void run() {
-            hide();
+            markFailed();
             timer.cancel();
-            markComplete();
          }
       }, _duration * 1000); // Convert seconds to milliseconds
    }
@@ -77,8 +81,15 @@ public class Mailbox {
    }
 
    public void markComplete() {
+      _tileManager.drawTile(202, _row - 1, _col);
       _tileManager.replaceTileImage(_mailboxTile, TileUtils.COMPLETED_FLAG_IDS[0]);
       this.status = MailboxStatus.COMPLETED;
+      mailboxCompletedAudio.play();
+   }
+
+   public void markFailed() {
+      _tileManager.drawTile(201, _row - 1, _col);
+      this.status = MailboxStatus.FAILED;
    }
 
    public void markWaiting() {

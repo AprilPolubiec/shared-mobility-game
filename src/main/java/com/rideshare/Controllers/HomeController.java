@@ -35,11 +35,11 @@ public class HomeController {
         try {
             _root = root;
             _stage = stage;
-            // Media media = new
-            // Media(App.class.getResource(String.format("/images/audio/%s.mp3",
-            // "bg-slow")).toString()); // replace
-            // _mediaPlayer = new MediaPlayer(media);
-            // _mediaPlayer.play();
+            Media media = new
+            Media(App.class.getResource(String.format("/images/audio/%s.mp3",
+            "bg-slow")).toString()); // replace
+            MediaPlayer _mediaPlayer = new MediaPlayer(media);
+            _mediaPlayer.play();
 
             _stage.setWidth(720);
             _stage.setHeight(439);
