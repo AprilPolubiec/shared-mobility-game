@@ -10,6 +10,7 @@ import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.Animation;
 import javafx.animation.Transition;
+import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -44,17 +45,17 @@ public class Mailbox {
    public void render() {
       Media waitingMedia = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
       mailboxWaitingAudio = new MediaPlayer(waitingMedia);
-      
+
       Media completedMedia = new Media(App.class.getResource("/images/audio/confirmation_001.mp3").toString());
       mailboxCompletedAudio = new MediaPlayer(completedMedia);
-   
+
       _mailboxTileImageIdx = 0;
       this._mailboxTile = _tileManager.drawTile(_houseTileId + TileUtils.FLAG_HOUSE_OFFSET + _mailboxTileImageIdx, _row,
             _col);
       _mailboxTile.setOnMouseClicked(event -> {
          markComplete();
          // Path finder eek
-         _tripCalculator.calculateTrips(13, 13, 15, 1);
+         _tripCalculator.calculateTrips(13, 13, _row, _col);
       });
       this.status = MailboxStatus.READY;
 
@@ -62,7 +63,12 @@ public class Mailbox {
       timer.schedule(new TimerTask() {
          @Override
          public void run() {
-            markFailed();
+            if (status != MailboxStatus.COMPLETED) {
+               Platform.runLater(() -> {
+                  // Code to update the UI goes here
+                  markFailed();
+               });
+            }
             timer.cancel();
          }
       }, _duration * 1000); // Convert seconds to milliseconds
