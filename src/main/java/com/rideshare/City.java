@@ -35,6 +35,41 @@ public class City {
     return this.mailboxes;
   }
 
+  // public void markAllMailboxesReady() {
+  //   for (Mailbox mailbox : this.mailboxes) {
+  //     mailbox.
+  //   }
+  // }
+
+  public ArrayList<Mailbox> getWaitingMailboxes() {
+    ArrayList<Mailbox> waitingMailboxes = new ArrayList<>();
+    for (Mailbox mailbox : this.mailboxes) {
+      if (mailbox.getStatus() == MailboxStatus.WAITING) {
+        waitingMailboxes.add(mailbox);
+      }
+    }
+    return waitingMailboxes;
+  }
+
+  public ArrayList<Mailbox> getReadyMailboxes() {
+    ArrayList<Mailbox> readyMailboxes = new ArrayList<>();
+    for (Mailbox mailbox : this.mailboxes) {
+      if (mailbox.getStatus() == MailboxStatus.READY) {
+        readyMailboxes.add(mailbox);
+      }
+    }
+    return readyMailboxes;
+  }
+  public ArrayList<Mailbox> getUninitializedMailboxes() {
+    ArrayList<Mailbox> uninitializedMailboxes = new ArrayList<>();
+    for (Mailbox mailbox : this.mailboxes) {
+      if (mailbox.getStatus() == MailboxStatus.UNINITIALIZED) {
+        uninitializedMailboxes.add(mailbox);
+      }
+    }
+    return uninitializedMailboxes;
+  }
+
   public void showAllMailboxes() {
     for (Mailbox mailbox : mailboxes) {
       if (mailbox.status == MailboxStatus.UNINITIALIZED) {

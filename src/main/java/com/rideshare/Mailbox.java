@@ -11,28 +11,10 @@ import com.rideshare.TileManager.TileUtils;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-/**
- * Description: TODO
- * Attributes:
- * PositionX (int): Mailboxes’ position on the x-axis
- * PositionY (int): Mailboxes’ position on the y-axis
- * Status (Waiting | Complete): Indicates the current status of the mailbox
- * IsVisible (boolean): Indicates whether the user can see the mailbox or not
- * Duration (int): Number of seconds that the mailbox should stay on the screen
- * StartTime (DateTime): When the mailbox started showing - this is the time of
- * day within the game as defined by “Clock”
- * 
- * Methods:
- * show(): updates mailbox to make it visible
- * hide(): updates mailbox to make it invisible
- * markComplete(): marks the mailbox complete
- * startTimer(): starts an infinite loop which constantly checks what “time” is
- * on the Clock, and if the amount indicated by the Duration attribute is hit,
- * it sets the mailbox to invisible
- * 
- */
 public class Mailbox {
    private int _row;
    private int _col;
@@ -44,6 +26,7 @@ public class Mailbox {
    int _houseTileId;
    int _duration; // In seconds
    // DateTime startTime; // Maybe
+   MediaPlayer mailboxWaitingAudio;
 
    public Mailbox(int row, int col, int houseTileId, TileManager tileManager) {
       _row = row;
@@ -53,9 +36,14 @@ public class Mailbox {
    }
 
    public void render() {
+      Media media = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
+      mailboxWaitingAudio = new MediaPlayer(media);
       _mailboxTileImageIdx = 0;
       this._mailboxTile = _tileManager.drawTile(_houseTileId + TileUtils.FLAG_HOUSE_OFFSET + _mailboxTileImageIdx, _row,
             _col);
+      _mailboxTile.setOnMouseClicked(event -> {
+         markComplete();
+      });
       this.status = MailboxStatus.READY;
 
       java.util.Timer timer = new java.util.Timer();
@@ -64,6 +52,7 @@ public class Mailbox {
          public void run() {
             hide();
             timer.cancel();
+            markComplete();
          }
       }, _duration * 1000); // Convert seconds to milliseconds
    }
@@ -71,6 +60,10 @@ public class Mailbox {
    // TODO: actually just deduce from the house id
    public void setDuration(int duration) {
       _duration = duration;
+   }
+
+   public MailboxStatus getStatus() {
+      return this.status;
    }
 
    public void show() {
@@ -90,6 +83,7 @@ public class Mailbox {
 
    public void markWaiting() {
       this.status = MailboxStatus.WAITING;
+      mailboxWaitingAudio.play();
    }
 
 }

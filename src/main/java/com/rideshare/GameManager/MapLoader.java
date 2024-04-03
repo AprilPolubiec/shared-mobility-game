@@ -42,7 +42,7 @@ public class MapLoader {
             _tileManager = new TileManager(this.root, map.layers, map.height, map.width);
             _city = createCityFromMapData(map);
             _tileManager.draw();
-            _city.showAllMailboxes();
+            // _city.showAllMailboxes();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,16 +1,4 @@
 package com.rideshare;
-// import java.awt.Color;
-// import java.awt.event.ActionEvent;
-// import java.awt.event.ActionListener;
-
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
-// import javax.swing.JButton;
 
 public class TransportationNode {
     TransportationNode parent;

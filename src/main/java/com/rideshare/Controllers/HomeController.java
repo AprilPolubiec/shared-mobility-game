@@ -23,9 +23,9 @@ public class HomeController {
     public javafx.scene.control.Button instructionsButton;
 
     private AnchorPane _root;
-    Stage _stage;
+    private Stage _stage;
 
-    protected void setScene(boolean isFullScreen) throws IOException {
+    private void setScene(boolean isFullScreen) throws IOException {
         Scene scene = new Scene(_root);
         _stage.setScene(scene);
         _stage.setFullScreen(isFullScreen);
