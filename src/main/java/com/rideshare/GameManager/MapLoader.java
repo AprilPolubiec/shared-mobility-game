@@ -29,7 +29,8 @@ public class MapLoader {
     private AnchorPane root;
     private TileManager _tileManager;
     private City _city;
-    MapLoader(Scene scene) {
+
+    public MapLoader(Scene scene) {
         // IDK
         this.root = (AnchorPane)scene.getRoot();
     }

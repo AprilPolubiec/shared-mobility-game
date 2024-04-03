@@ -10,4 +10,5 @@ module com.rideshare {
     exports com.rideshare;
     exports com.rideshare.GameManager;
     exports com.rideshare.TileManager;
+    exports com.rideshare.Controllers;
 }

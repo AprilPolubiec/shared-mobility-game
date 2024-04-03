@@ -144,7 +144,6 @@ public class Sprite {
     }
 
     public void move() {
-        System.out.println(spriteTimer);
         if (spriteTimer > 12) {
             if (spriteIdx < 1) {
                 spriteIdx += 1;

@@ -31,7 +31,9 @@ public class Timer {
         if(state == TimerState.RUNNING) {
             currentInGameTime = currentInGameTime.plusMinutes(1);
             // Update clock text
-            _clockText.setText(currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
+            if(_clockText != null) {
+                _clockText.setText(currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
+            }
             if (isEndOfDay()) {
                 System.out.println("End of day reached.");
                 stop(); 
