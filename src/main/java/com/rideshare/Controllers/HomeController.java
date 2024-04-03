@@ -1,14 +1,18 @@
 package com.rideshare.Controllers;
 
+import java.io.IOException;
+
 import com.rideshare.App;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
-public class HomeController extends Controller {
+public class HomeController {
     @FXML
     public javafx.scene.control.Button loadGameButton;
     @FXML
@@ -19,24 +23,29 @@ public class HomeController extends Controller {
     public javafx.scene.control.Button instructionsButton;
 
     private AnchorPane _root;
+    Stage _stage;
 
-    public HomeController() {
-        this(_stage);
+    protected void setScene(boolean isFullScreen) throws IOException {
+        Scene scene = new Scene(_root);
+        _stage.setScene(scene);
+        _stage.setFullScreen(isFullScreen);
     }
 
-    public HomeController(Stage stage) {
-        super(stage);
-        Controller.homeController = this;
-    }
-
-    @Override
-    public void load() {
+    public void load(Stage stage, AnchorPane root) {
         try {
-            playAudio("bg-slow");
+            _root = root;
+            _stage = stage;
+            // Media media = new
+            // Media(App.class.getResource(String.format("/images/audio/%s.mp3",
+            // "bg-slow")).toString()); // replace
+            // _mediaPlayer = new MediaPlayer(media);
+            // _mediaPlayer.play();
+
             _stage.setWidth(720);
             _stage.setHeight(439);
             _stage.centerOnScreen();
-            _root = setScene("home", false);
+            setScene( false);
+            _stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,7 +54,10 @@ public class HomeController extends Controller {
     @FXML
     public void handleStartButtonPressed() {
         try {
-            loadScreen("game", true);
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
+            AnchorPane root = loader.load();
+            GameController gc = loader.getController();
+            gc.load(root, _stage);
         } catch (Exception e) {
             e.printStackTrace();
         }

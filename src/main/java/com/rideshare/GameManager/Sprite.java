@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.rideshare.App;
+import com.rideshare.Controllers.Controller;
 
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
@@ -19,13 +20,15 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Sprite {
     private String resource_directory;
     HashMap<String, List<Image>> icons = new HashMap<String, List<Image>>();
     Scene scene;
-    GameController gameController;
+    Stage _stage;
     ImageView imageView;
     private double xPos;
     private double yPos;
@@ -35,9 +38,9 @@ public class Sprite {
     private boolean isMoving;
     private boolean isWASDEnabled;
 
-    public Sprite(String name, GameController gameController) {
-        this.gameController = gameController;
-        this.scene = gameController.get_scene();
+    public Sprite(String name, Stage stage) {
+        this._stage = stage;
+        this.scene = stage.getScene();
         this.enableWASD(true);
         // Get sprite files
         this.load(name);
@@ -122,7 +125,7 @@ public class Sprite {
         imageView.setX(xPos);
         imageView.setY(yPos);
 
-        this.gameController.get_root().getChildren().add(imageView);
+        ((AnchorPane)_stage.getScene().getRoot()).getChildren().add(imageView);
         spriteLoop().playFromStart();
     }
 

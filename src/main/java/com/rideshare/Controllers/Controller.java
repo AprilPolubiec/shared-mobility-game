@@ -21,7 +21,7 @@ abstract public class Controller {
     protected static GameController gameController;
     protected static HomeController homeController;
 
-    Controller(Stage stage) {
+    public void initialize(Stage stage) {
         if (Controller._stage == null) {
             Controller._stage = stage;
             renderStage();
