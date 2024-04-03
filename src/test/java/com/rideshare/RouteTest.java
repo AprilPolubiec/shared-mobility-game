@@ -33,7 +33,7 @@ public class RouteTest {
         // TODO: these asserts are most likely checking that the address is the same.
         // If it is failing unexpectedly, that could be why.
         assertEquals(city, r.getCity());
-        assertEquals(transportationMode, r.getTransportationMode());
+        assertEquals(transportationMode, r.getTransportationType());
         assertEquals(name, r.getName());
         // TODO: check paths
     }

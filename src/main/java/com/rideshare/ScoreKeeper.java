@@ -1,6 +1,6 @@
 package com.rideshare;
 
-/**
+/** 
  * Description: A ScoreKeeper is an object whose main function is to store information about a player’s score.
     Attributes:
         CO2Budget (int, constant): Represents the maximum allowable carbon emissions within the game environment

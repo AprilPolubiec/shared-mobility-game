@@ -1,5 +1,9 @@
 package com.rideshare;
 
+import java.util.ArrayList;
+
+import javafx.geometry.Point2D;
+
 /**
  * Description: A city represents a location which can be visualized as a map. It contains various modes of transportation which can navigate on various routes to take people from one place to another.
     Attributes:
@@ -17,5 +21,47 @@ package com.rideshare;
  */
 
 public class City {
-    
+  ArrayList<Route> routes;
+  ArrayList<Mailbox> mailboxes;
+  int size;
+  
+  public City(int size, ArrayList<Route> routes, ArrayList<Mailbox> mailboxes) {
+    this.routes = routes;
+    this.size = size;
+    this.mailboxes = mailboxes;
+  }
+
+  public ArrayList<Mailbox> getMailboxes() {
+    return this.mailboxes;
+  }
+
+  public void showAllMailboxes() {
+    for (Mailbox mailbox : mailboxes) {
+      if (mailbox.status == MailboxStatus.UNINITIALIZED) {
+        mailbox.render();
+      }
+      mailbox.show();
+    }
+  }
+
+  public ArrayList<Route> getRoutes() {
+    return routes;
+  }
+
+  
+  /** 
+   * @param rowIdx Row/y to get node at
+   * @param colIdx Column/x to get node at
+   * @return ArrayList<TransportationNode> list of transportation nodes which exist at these coordinates in the city
+   */
+  public ArrayList<TransportationNode> getRouteNodes(int rowIdx, int colIdx) {
+    ArrayList<TransportationNode> nodes = new ArrayList<TransportationNode>();
+    for (Route route : routes) {
+      RouteNodeMatrix routeNodeMatrix = route.getRouteNodeMatrix();
+      TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+      nodes.add(node);
+    }
+    return nodes;
+  }
+
 }

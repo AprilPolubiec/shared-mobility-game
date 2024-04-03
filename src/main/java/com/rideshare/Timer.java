@@ -1,62 +1,91 @@
 package com.rideshare;
 
+import javafx.util.Duration;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
-/**
- * Description: a timer is an object which keeps track of time within the game. 
- * It is not a reflection of the "real-world" time. This is important because, for example,
- * we want a mailbox to last 15 minutes in the fictional world, but not 15 minutes in real life.
- * This class should abstract out the logic of mapping the game's time of day to whatever is using this.
- * TODO: should be generalizable across the code
- */
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.text.Text;
+
 public class Timer {
+    private final LocalTime DAY_START = LocalTime.of(5,0,0);
+    private final LocalTime DAY_END = LocalTime.of(0, 0, 0);
+    boolean isPaused = false;
+    private LocalTime currentInGameTime;
     private TimerState state = TimerState.UNINITIALIZED;
-    private LocalTime currentTime;
+    private Timeline _timeline;
+    Text _clockText;
 
-    public Timer() {
-        // Initialize timer
-        throw new UnsupportedOperationException("Timer() not implemented yet");
+    public Timer(Text clockText) {
+        this._clockText = clockText;
+        initialize();
     }
 
     public void initialize() {
-        // Should set the state to initialized
-        // Should set current time to 00:00
-        throw new UnsupportedOperationException("initialize() not implemented yet");
+        currentInGameTime = DAY_START;
+        state = TimerState.INITIALIZED;
     }
-   
-    public void start() {
-        // TODO:
-        // Start a while loop, that runs until it is end of the day
-        // The loop should check if one second has passed since it last ran
-        // If one second has passed, it should increment the currentTime by one second
-        // If the currentTime reaches the EOD, call stop()
-        while (!isEndOfDay()) {
-            // Do things!
+
+    private void updateInGameTime() {
+        if(state == TimerState.RUNNING) {
+            currentInGameTime = currentInGameTime.plusMinutes(1);
+            // Update clock text
+            if(_clockText != null) {
+                _clockText.setText(currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
+            }
             if (isEndOfDay()) {
-                stop();
+                System.out.println("End of day reached.");
+                stop(); 
             }
         }
-        throw new UnsupportedOperationException("start() not implemented yet");
+    }
+
+    public void start() {
+        currentInGameTime = DAY_START;
+        state = TimerState.RUNNING;
+        _timeline = new Timeline(new KeyFrame(Duration.seconds(1.0 / 6), event -> updateInGameTime()));
+        _timeline.setCycleCount(Timeline.INDEFINITE);
+        _timeline.play();
     }
 
     public void pause() {
-        throw new UnsupportedOperationException("pause() not implemented yet");
+        state = TimerState.PAUSED;
+        _timeline.pause();
+        isPaused = true;
     }
 
-    public void stop() {
-        throw new UnsupportedOperationException("stop() not implemented yet");
+    public void resume() {
+        _timeline.play();
+        state = TimerState.RUNNING;
+        isPaused = false;
     }
-
+    
     private boolean isEndOfDay() {
-        // Note: this is looking for an EXACT timestamp, in the loop above make sure we set the clock to MAX appropriately
-        return currentTime.compareTo(LocalTime.MAX) == 0;
+        return currentInGameTime.equals(DAY_END);
+    }
+
+    private void resetTimer() {
+        currentInGameTime = DAY_START;
+        isPaused = false;
+        _timeline.stop();
+        System.out.println("Timer reset.");
+    }
+
+    
+    private void stop() {
+        state = TimerState.STOPPED;
+        isPaused = false;
+        _timeline.stop();
+        System.out.println("Timer has been stopped.");
     }
 
     public LocalTime getTime() {
-        throw new UnsupportedOperationException("getTime() not implemented yet");
+        return this.currentInGameTime;
     }
-
+        
     public TimerState getState() {
-        throw new UnsupportedOperationException("getState() not implemented yet");
+        return this.state;
     }
+   
 }

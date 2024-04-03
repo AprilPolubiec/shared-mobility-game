@@ -144,7 +144,6 @@ public class Sprite {
     }
 
     public void move() {
-        System.out.println(spriteTimer);
         if (spriteTimer > 12) {
             if (spriteIdx < 1) {
                 spriteIdx += 1;
@@ -176,22 +175,18 @@ public class Sprite {
     }
 
     public void up() {
-        System.out.println("UP");
         yPos -= 2;
         imageView.setY(yPos);
     }
     public void down() {
-        System.out.println("down");
         yPos += 2;
         imageView.setY(yPos);
     }
     public void left() {
-        System.out.println("left");
         xPos -= 2;
         imageView.setX(xPos);
     }
     public void right() {
-        System.out.println("right");
         xPos += 2;
         imageView.setX(xPos);
     }

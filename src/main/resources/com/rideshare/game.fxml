@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="mainGameAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rideshare.Controllers.GameController">
    <children>
-      <Circle fill="DODGERBLUE" layoutX="300.0" layoutY="200.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+      <AnchorPane fx:id="introModal" layoutX="464.0" layoutY="342.0" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="175.0" fitWidth="456.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/red_panel.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="275.0" fitWidth="456.0" layoutY="38.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/grey_panel.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="129.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/ui/red_button00.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="33.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ring, ring! Mrs.Greenway here from EarthFriendly Express! So, here's the scoop: our trusty eco-car decided to take a little break today. But hey, no need to panic! We're all about rolling with the punches, right? You're our delivery hero now, and we know you've got what it takes to get those packages delivered, even without our wheels! Let's make it happen, champ!" textAlignment="CENTER" wrappingWidth="391.0">
+               <font>
+                  <Font name="Futura Bold" size="15.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="194.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+               <font>
+                  <Font name="Futura Bold" size="27.0" />
+               </font>
+            </Text>
+            <Button fx:id="startButton" layoutX="129.0" layoutY="245.0" mnemonicParsing="false" onAction="#start" opacity="0.0" prefHeight="52.0" prefWidth="200.0" text="Button" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

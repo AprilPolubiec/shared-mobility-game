@@ -1,48 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="906.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rideshare.GameManager.GameController">
+<AnchorPane prefHeight="404.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rideshare.Controllers.HomeController">
    <children>
-      <ImageView fitHeight="674.0" fitWidth="915.0" layoutX="-5.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="414.0" fitWidth="732.0" layoutX="-10.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../images/bg/home.png" />
+            <Image url="@../../images/bg/home-2.png" />
          </image>
       </ImageView>
-      <Text layoutX="270.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pedal &amp; Post">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="182.0" layoutX="147.0" layoutY="92.0" stroke="WHITE" strokeWidth="6.0" width="428.0">
+         <effect>
+            <Shadow>
+               <color>
+                  <Color red="0.009999999776482582" green="0.009999999776482582" blue="0.009999999776482582" opacity="0.5564053654670715" />
+               </color>
+            </Shadow>
+         </effect>
+      </Rectangle>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="176.0" layoutX="153.0" layoutY="89.0" stroke="WHITE" strokeWidth="6.0" width="416.0" />
+      <Text fill="WHITE" layoutX="166.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pedal &amp; Post">
          <font>
-            <Font name="Lucida Grande Bold" size="57.0" />
+            <Font name="Futura Bold" size="57.0" />
          </font>
       </Text>
-      <Text layoutX="274.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sustainable Delivery Adventure">
+      <Text fill="WHITE" layoutX="181.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sustainable Delivery Adventure">
          <font>
             <Font name="Lucida Grande" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="newGameButton" defaultButton="true" layoutX="387.0" layoutY="249.0" mnemonicParsing="false" onAction="#start" style="-fx-background-color: #ec7113; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="New Game">
-         <font>
-            <Font name="Lucida Grande" size="13.0" />
-         </font>
-      </Button>
-      <Button fx:id="loadGameButton" layoutX="387.0" layoutY="320.0" mnemonicParsing="false" style="-fx-background-color: #118CEE; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="Load Game">
-         <font>
-            <Font name="Lucida Grande" size="13.0" />
-         </font>
-      </Button>
-      <Button fx:id="instructionsButton" layoutX="385.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #118CEE; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="Instructions">
-         <font>
-            <Font name="Lucida Grande" size="13.0" />
-         </font>
-      </Button>
-      <Button fx:id="startGameButton" layoutX="385.0" layoutY="475.0" mnemonicParsing="false" style="-fx-background-color: #118CEE; -fx-padding: 14px; -fx-font-size: 20px; -fx-border-color: #138EEC; -fx-border-width: 2px;" text="Start Game">
-         <font>
-            <Font name="Lucida Grande" size="13.0" />
-         </font>
-      </Button>
+      <AnchorPane layoutX="658.0" layoutY="349.0">
+         <children>
+            <ImageView fitHeight="56.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/ui/green_circle.png" />
+               </image>
+            </ImageView>
+            <Text fill="WHITE" layoutX="19.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="?">
+               <font>
+                  <Font name="Futura Bold" size="29.0" />
+               </font>
+            </Text>
+            <Button fx:id="instructionsButton" layoutX="1.0" layoutY="3.0" mnemonicParsing="false" onAction="#handleInstructionsButtonPressed" prefHeight="56.0" prefWidth="56.0" style="-fx-background-color: transparent;" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="261.0" layoutY="284.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleStartButtonPressed" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/ui/green_button04.png" />
+               </image>
+            </ImageView>
+            <Text fill="WHITE" layoutX="63.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+               <font>
+                  <Font name="Futura Bold" size="29.0" />
+               </font>
+            </Text>
+            <Button fx:id="startGameButton" layoutY="2.0" mnemonicParsing="false" onAction="#handleStartButtonPressed" prefHeight="52.0" prefWidth="200.0" style="-fx-background-color: transparent;" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
