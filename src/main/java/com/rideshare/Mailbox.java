@@ -28,12 +28,17 @@ public class Mailbox {
    // DateTime startTime; // Maybe
    MediaPlayer mailboxWaitingAudio;
    MediaPlayer mailboxCompletedAudio;
+   TripCalculator _tripCalculator;
 
    public Mailbox(int row, int col, int houseTileId, TileManager tileManager) {
       _row = row;
       _col = col + 1; // Render a mailbox to the right of the house
       _tileManager = tileManager;
       _houseTileId = houseTileId;
+   }
+
+   public void setTripCalculator(City city) {
+      _tripCalculator = new TripCalculator(city);
    }
 
    public void render() {
@@ -48,6 +53,8 @@ public class Mailbox {
             _col);
       _mailboxTile.setOnMouseClicked(event -> {
          markComplete();
+         // Path finder eek
+         _tripCalculator.calculateTrips(13, 13, 15, 1);
       });
       this.status = MailboxStatus.READY;
 

@@ -2,8 +2,6 @@ package com.rideshare;
 
 import java.util.ArrayList;
 
-import com.rideshare.GameManager.GameController;
-
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -25,7 +23,6 @@ public class TripCalculator {
     int cityWidth;
 
     boolean goalReached = false;
-    GameController gameController;
     Scene scene;
     City city;
 
@@ -35,7 +32,6 @@ public class TripCalculator {
     ArrayList<TransportationNode> checkedList = new ArrayList<>();
 
     public TripCalculator(City city) {
-        this.gameController = gameController;
         this.city = city;
         this.cityHeight = this.city.size;
         this.cityWidth = this.city.size;
@@ -60,15 +56,32 @@ public class TripCalculator {
         this.currentNode = startNode;
         this.currentRouteMatrix = this.currentNode.routeMatrix;
 
-        // Always use the walking node because its guaranteed to be there
-        for (TransportationNode transportationNode : city.getRouteNodes(endRow, endCol)) {
-            if(transportationNode.transportationType == TransportationType.WALKING) {
-                this.goalNode = transportationNode;
-                break;
-            }
-        }
+        this.goalNode = getGoalNode(endRow, endCol);
         autoSearch();
         return trips;
+    }
+
+    private TransportationNode getGoalNode(int row, int col) {
+        // The goal node is the street which is either in front, to the left or to the right
+        ArrayList<TransportationNode> belowNodes = city.getRouteNodes(row, col - 1);
+        for (TransportationNode node : belowNodes) {
+            if (node.transportationType == TransportationType.WALKING && !node.solid) {
+                return node;
+            }
+        }
+        ArrayList<TransportationNode> leftNodes = city.getRouteNodes(row - 1, col);
+        for (TransportationNode node : leftNodes) {
+            if (node.transportationType == TransportationType.WALKING && !node.solid) {
+                return node;
+            }
+        }
+        ArrayList<TransportationNode> rightNodes = city.getRouteNodes(row, col + 1);
+        for (TransportationNode node : rightNodes) {
+            if (node.transportationType == TransportationType.WALKING && !node.solid) {
+                return node;
+            }
+        }
+        return city.getRouteNodes(row, col - 1).get(0); // Not good
     }
 
     private void openNeighbors(int row, int col) {
@@ -156,7 +169,7 @@ public class TripCalculator {
             for (int i = 0; i < openList.size(); i++) {
                 // Check if the F cost is better than current best
                 TransportationNode nodeToCheck = openList.get(i);
-                nodeToCheck.getCost(startNode, goalNode, "emission");
+                nodeToCheck.getCost(startNode, goalNode, "speed");
                 print(String.format("[%s, %s] %s: %s", nodeToCheck.row, nodeToCheck.col, nodeToCheck.transportationType.name(), nodeToCheck.fCost));
                 if (nodeToCheck.fCost < bestNodeFCost) {
                     bestNodeIdx = i;
@@ -168,6 +181,11 @@ public class TripCalculator {
                         bestNodeIdx = i;
                     }
                 }
+            }
+
+            if (openList.size() == 0) {
+                print("NO OPRTIONS");
+                trackThePath();
             }
 
             currentNode = openList.get(bestNodeIdx);

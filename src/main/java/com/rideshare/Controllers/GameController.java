@@ -126,7 +126,6 @@ public class GameController {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> showRandomMailbox()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.playFromStart();
-        
     }
 
     private void showRandomMailbox() {
