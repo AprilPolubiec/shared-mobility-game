@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.rideshare.App;
-import com.rideshare.Controllers.Controller;
 
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;

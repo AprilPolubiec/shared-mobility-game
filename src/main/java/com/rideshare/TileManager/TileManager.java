@@ -56,6 +56,7 @@ public class TileManager {
         _root.getChildren().add(0, _tileGrid);
     }
 
+
     public ImageView drawTile(int tileId, int rowIdx, int colIdx) {
         String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();
         ImageView tileImage = new ImageView(tileUrl);

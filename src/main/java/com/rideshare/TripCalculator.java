@@ -107,66 +107,66 @@ public class TripCalculator {
         return city.getRouteNodes(row, col - 1).get(0); // Not good
     }
 
-    private void openNeighbors(int row, int col) {
+    private void openNeighbors(int row, int col, TransportationNode currentNode) {
         // print(String.format("Opening all neighbors to [%s, %s]", row, col));
         // OPEN NODES
         if (row - 1 >= 0) { // Node above
             // print(String.format("Opening nodes at [%s, %s]", row - 1, col));
-            openNode(this.currentRouteMatrix.getNode(row - 1, col));
-            if (_currentNode.canStop) {
+            openNode(this.currentRouteMatrix.getNode(row - 1, col), currentNode);
+            if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 // Check all of the surrounding route options!
                 for (Route route : this.city.routes) {
-                    openNode(route.getRouteNodeMatrix().getNode(row - 1, col));
+                    openNode(route.getRouteNodeMatrix().getNode(row - 1, col), currentNode);
                 }
             }
         }
 
         if (col - 1 >= 0) { // Node to the left
             // print(String.format("Opening nodes at [%s, %s]", row, col - 1));
-            openNode(this.currentRouteMatrix.getNode(row, col - 1));
-            if (_currentNode.canStop) {
+            openNode(this.currentRouteMatrix.getNode(row, col - 1), currentNode);
+            if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.routes) {
-                    openNode(route.getRouteNodeMatrix().getNode(row, col - 1));
+                    openNode(route.getRouteNodeMatrix().getNode(row, col - 1), currentNode);
                 }
             }
         }
 
         if (row + 1 < this.cityHeight) { // Node below
             // print(String.format("Opening nodes at [%s, %s]", row + 1, col));
-            openNode(this.currentRouteMatrix.getNode(row + 1, col));
-            if (_currentNode.canStop) {
+            openNode(this.currentRouteMatrix.getNode(row + 1, col), currentNode);
+            if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.routes) {
-                    openNode(route.getRouteNodeMatrix().getNode(row + 1, col));
+                    openNode(route.getRouteNodeMatrix().getNode(row + 1, col), currentNode);
                 }
             }
         }
 
         if (col + 1 < this.cityWidth) { // Node to the right
             // print(String.format("Opening nodes at [%s, %s]", row, col + 1));
-            openNode(this.currentRouteMatrix.getNode(row, col + 1));
-            if (_currentNode.canStop) {
+            openNode(this.currentRouteMatrix.getNode(row, col + 1), currentNode);
+            if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.routes) {
-                    openNode(route.getRouteNodeMatrix().getNode(row, col + 1));
+                    openNode(route.getRouteNodeMatrix().getNode(row, col + 1), currentNode);
                 }
             }
         }
     }
 
     // Sets all transportation nodes to closed at row/col
-    private void closeAllNodes(int row, int col) {
+    private void closeAllNodes(int row, int col, TransportationNode node) {
         // print(String.format("Closing all nodes at [%s, %s]", row, col));
-        _currentNode.setAsChecked();
-        checkedList.add(_currentNode);
-        openList.remove(_currentNode);
+        node.setAsChecked();
+        checkedList.add(node);
+        openList.remove(node);
         for (Route route : this.city.routes) {
-            TransportationNode node = route.getRouteNodeMatrix().getNode(row, col);
-            node.setAsChecked();
-            checkedList.add(node);
-            openList.remove(node);
+            TransportationNode n = route.getRouteNodeMatrix().getNode(row, col);
+            n.setAsChecked();
+            checkedList.add(n);
+            openList.remove(n);
             // print(String.format("[%s, %s] %s IS CLOSED", node.row, node.col,
             // node.transportationType.name()));
         }
@@ -229,8 +229,8 @@ public class TripCalculator {
             int row = currentNode.row;
             // print(String.format("CURRENT NODE: [%s, %s] %s", row, col, currentNode.transportationType.name()));
 
-            closeAllNodes(row, col);
-            openNeighbors(row, col);
+            closeAllNodes(row, col, currentNode);
+            openNeighbors(row, col, currentNode);
 
             // FIND BEST NODE
             int bestNodeIdx = 0;
@@ -282,14 +282,14 @@ public class TripCalculator {
         return null;
     }
 
-    private void openNode(TransportationNode node) {
-        if (_currentNode.canStop() && !node.canStop()) {
+    private void openNode(TransportationNode node, TransportationNode currentNode) {
+        if (currentNode.canStop() && !node.canStop()) {
             // Can only get off at a stop
             return;
         }
         if (node.open == false && node.checked == false && node.solid == false) {
             node.setAsOpen();
-            node.parent = _currentNode;
+            node.parent = currentNode;
             openList.add(node);
         } 
     }

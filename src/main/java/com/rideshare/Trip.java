@@ -33,9 +33,9 @@ package com.rideshare;
  */
 
 public class Trip {
-    private int tripDuration; // In game time minutes
-    private int tripDistance; // In km
-    private int tripEmission; // In /km (gallons?)
+    private float tripDuration; // In game time minutes
+    private float tripDistance; // In km
+    private float tripEmission; // In /km (gallons?)
     private TransportationNode startNode;
     private TransportationNode endNode;
 
@@ -46,24 +46,27 @@ public class Trip {
         this.endNode = endNode;
         this.startNode = startNode;
         TransportationNode current = endNode;
-        int currentLegDistance = 0;
-        int currentLegDuration = 0;
-        int currentLegEmission = 0;
-        while (current != startNode) {
-            if (current.parent != null) {
-                System.out.println(String.format("[%s, %s] %s", current.row, current.col, current.transportationType.name()));
-                if (current.transportationType != current.parent.transportationType) {
-                    this.tripDuration += currentLegDuration;
-                    this.tripDistance += currentLegDistance;
-                    this.tripEmission += currentLegEmission;
-                    currentLegDistance = 0;
-                    currentLegEmission = 0;
-                }
-                current = current.parent;
-                currentLegDistance += 1; // Each node = 1km
-                currentLegDuration += current.modeOfTransport.getSpeed() / 60;
-                currentLegEmission += current.modeOfTransport.getEmissionRate() / 60; // Emission rate is in km/hr
+        float currentLegDistance = 0;
+        float currentLegDuration = 0;
+        float currentLegEmission = 0;
+        int iterations = 0;
+        while (current != null & iterations <= 20) {
+            System.out
+                    .println(String.format("[%s, %s] %s", current.row, current.col, current.transportationType.name()));
+            currentLegDistance += 1; // Each node = 1km
+            currentLegDuration += (1.0 / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go one km
+            currentLegEmission += (float) current.modeOfTransport.getEmissionRate(); // Emission rate is in km/hr
+
+            if (current.parent == null || current.transportationType != current.parent.transportationType) {
+                this.tripDuration += currentLegDuration;
+                this.tripDistance += currentLegDistance;
+                this.tripEmission += currentLegEmission;
+                currentLegDistance = 0;
+                currentLegEmission = 0;
+                currentLegDuration = 0;
             }
+            current = current.parent;
+            iterations++;
         }
 
         System.out.println(String.format("%s Trip\n Duration: %s Distance: %s Emission: %s", tripType.name(),
@@ -74,16 +77,16 @@ public class Trip {
         return this._score;
     }
 
-    public int getDuration() {
-        return this.tripDuration;
+    public double getDuration() {
+        return Math.floor(this.tripDuration);
     }
 
-    public int getDistance() {
-        return this.tripDistance;
+    public double getDistance() {
+        return Math.floor(this.tripDistance);
     }
 
-    public int getEmission() {
-        return this.tripEmission;
+    public double getEmission() {
+        return Math.floor(this.tripEmission);
     }
 
     // Merges two trips into one

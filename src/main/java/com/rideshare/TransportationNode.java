@@ -107,7 +107,7 @@ public class TransportationNode {
                 this.hCost += this.co2EmissionRate; // Weighted by emission for now
                 break;
             case FAST:
-                this.hCost -= this.speed; // Weighted by emission for now
+                this.hCost -= this.speed; // Weighted by speed
                 break;
             case TRANSIT_ONLY:
                 if(!modeOfTransport.hasStops() && transportationType != TransportationType.WALKING) {
