@@ -1,16 +1,4 @@
 package com.rideshare;
-// import java.awt.Color;
-// import java.awt.event.ActionEvent;
-// import java.awt.event.ActionListener;
-
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
-// import javax.swing.JButton;
 
 public class TransportationNode {
     TransportationNode parent;
@@ -38,16 +26,16 @@ public class TransportationNode {
         this.transportationType = transportationType;
         switch (transportationType) {
             case BUS:
-                modeOfTransport = new BusTransportationMode("39A", 12, true);
+                modeOfTransport = new BusTransportationMode("39A");
                 break;
             case CAR:
-                modeOfTransport = new CarTransportationMode("Honda Civic", 12, false);
+                modeOfTransport = new CarTransportationMode("Honda Civic");
                 break;
             case TRAIN:
-                modeOfTransport = new TrainTransportationMode("B", 15, true);  
+                modeOfTransport = new TrainTransportationMode("B");  
                 break;
             case WALKING:
-                modeOfTransport = new WalkingTransportationMode("", 1, false);
+                modeOfTransport = new WalkingTransportationMode("");
                 break;
             default:
                 break;
@@ -58,6 +46,13 @@ public class TransportationNode {
 
         // Check if it is a stop or what
         // renderNode();
+    }
+
+    public void reset() {
+        start = false;
+        goal = false;
+        open = false;
+        checked = false;
     }
 
     public boolean canStop() {
@@ -97,7 +92,7 @@ public class TransportationNode {
     // TODO: do something
     }
 
-    public void getCost(TransportationNode startNode, TransportationNode endNode, String weight) {
+    public void getCost(TransportationNode startNode, TransportationNode endNode, TripType tripType) {
         // GET G COST
         int xDistance = Math.abs(this.col - startNode.col);
         int yDistance = Math.abs(this.row - startNode.row);
@@ -107,12 +102,20 @@ public class TransportationNode {
         xDistance = Math.abs(this.col - endNode.col);
         yDistance = Math.abs(this.row - endNode.row);
         this.hCost = xDistance + yDistance;
-        switch (weight) {
-            case "emission":
+        switch (tripType) {
+            case EFFICIENT:
                 this.hCost += this.co2EmissionRate; // Weighted by emission for now
                 break;
-            case "speed":
-                this.hCost -= this.speed; // Weighted by emission for now
+            case FAST:
+                this.hCost -= this.speed; // Weighted by speed
+                break;
+            case TRANSIT_ONLY:
+                if(!modeOfTransport.hasStops() && transportationType != TransportationType.WALKING) {
+                    setAsSolid(); // Prioritize train
+                }
+                if (transportationType == TransportationType.TRAIN) {
+                    this.hCost -= 1000;
+                }
                 break;
             default:
                 break;

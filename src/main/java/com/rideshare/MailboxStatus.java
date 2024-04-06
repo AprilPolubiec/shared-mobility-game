@@ -4,5 +4,6 @@ public enum MailboxStatus {
     UNINITIALIZED,
     READY,
     WAITING,
-    COMPLETED
+    COMPLETED,
+    FAILED
 }

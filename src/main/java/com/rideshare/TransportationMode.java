@@ -14,10 +14,16 @@ public class TransportationMode {
     // - decide how to represent emission rate (per km? per sec?)
     // - decide how to represent speed (km/hr? pixels/ns?)
     private final String name;
-    private final int co2EmissionRate;
-    private final int speed;
-    private final boolean hasStops;
+    protected final int co2EmissionRate;
+    protected final int speed;
+    protected final boolean hasStops;
+    public TransportationMode(String name, int co2eEmissionRate, int speed, boolean hasStops) {
+        this.name = name;
+        this.co2EmissionRate = co2eEmissionRate;
+        this.speed = speed;
+        this.hasStops = hasStops;
 
+    }
     public String getName() {
         return this.name;
     }
@@ -35,13 +41,4 @@ public class TransportationMode {
         return this.hasStops;
     }
 
-    public TransportationMode(String name, int co2eEmissionRate, int speed, boolean hasStops) {
-        this.name = name;
-        this.co2EmissionRate = co2eEmissionRate;
-        this.speed = speed;
-        this.hasStops = hasStops;
-
-    }
-
-    public static void main(String[] args) {}
 }
