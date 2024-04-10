@@ -49,21 +49,18 @@ public class TripCalculator {
 
         // // Option 1: The fastest path
         Trip fastestTrip = runPathFinding(TripType.FAST, this._startNode,
-        this._currentNode, this._goalNode);
+                this._currentNode, this._goalNode);
         fastestTrip.print();
         trips.add(fastestTrip);
         // // Option 2: Get most CO2 efficient
         Trip mostEfficientTrip = runPathFinding(TripType.EFFICIENT, this._startNode,
-        this._currentNode, this._goalNode);
+                this._currentNode, this._goalNode);
         mostEfficientTrip.print();
         trips.add(mostEfficientTrip);
         // Option 3: Get public transit path
-        try {
-            Trip publicTransitTrip = runTransitPathFinding(this._startNode, this._goalNode);
+        Trip publicTransitTrip = runTransitPathFinding(this._startNode, this._goalNode);
+        if (publicTransitTrip != null) {
             trips.add(publicTransitTrip);
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
         }
         return trips;
     }
@@ -192,7 +189,7 @@ public class TripCalculator {
     private void print(String txt) {
         System.out.println(txt);
     }
-
+    // TODO: get train OR bus
     public TransportationNode getClosestStation(TransportationNode goalNode) {
         RouteNodeMatrix trainNodeMatrix = null;
 
@@ -226,27 +223,21 @@ public class TripCalculator {
         return closestStation;
     }
 
-    public Trip runTransitPathFinding(TransportationNode startNode, TransportationNode goalNode) throws Exception {
-        try {
-            TransportationNode startStation = getClosestStation(startNode);
-            TransportationNode endStation = getClosestStation(goalNode);
-            // TODO: handle if start and end are the same, we can just skip this path finder
-            if (startStation == endStation) {
-                throw new Exception("Start station and end station are the same - need to handle!");
-            }
+    public Trip runTransitPathFinding(TransportationNode startNode, TransportationNode goalNode) {
+        TransportationNode startStation = getClosestStation(startNode);
+        TransportationNode endStation = getClosestStation(goalNode);
 
-            Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStation);
-            Trip middleLeg = runPathFinding(TripType.TRANSIT_ONLY, startStation, startStation, endStation);
-            Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStation, endStation, goalNode);
-            firstLeg.appendTrip(middleLeg);
-            firstLeg.appendTrip(lastLeg);
-            firstLeg.print();
-            return firstLeg;
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        // TODO: handle if start and end are the same, we can just skip this path finder
+        if (startStation == endStation) {
+            return null;
         }
-        return null;
+        Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStation);
+        Trip middleLeg = runPathFinding(TripType.TRANSIT_ONLY, startStation, startStation, endStation);
+        Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStation, endStation, goalNode);
+        firstLeg.appendTrip(middleLeg);
+        firstLeg.appendTrip(lastLeg);
+        firstLeg.print();
+        return firstLeg;
     }
 
     private void closeNonTransitNodes() {
