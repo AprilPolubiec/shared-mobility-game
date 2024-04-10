@@ -1,6 +1,7 @@
 package com.rideshare.Controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -129,14 +130,21 @@ public class GameController {
     }
 
     private void showRandomMailbox() {
-        int numMailboxes = _city.getUninitializedMailboxes().size();
-        int randomMailboxIndex = new Random().nextInt(numMailboxes);
-        Mailbox currentMailbox = _city.getUninitializedMailboxes().get(randomMailboxIndex);
-        
-        currentMailbox.setDuration(5);
-        currentMailbox.render();
-        currentMailbox.markWaiting();
-        currentMailbox.show();
+        ArrayList<Mailbox> unintializedMailboxes = _city.getUninitializedMailboxes();
+        int numMailboxes = unintializedMailboxes.size();
+
+        if (numMailboxes > 0) {
+            int randomMailboxIndex = new Random().nextInt(Math.max(1, Math.abs(numMailboxes)));
+
+            Mailbox currentMailbox = _city.getUninitializedMailboxes().get(randomMailboxIndex);
+            
+            currentMailbox.setDuration(5);
+            currentMailbox.render();
+            currentMailbox.markWaiting();
+            currentMailbox.show();
+        } else {
+            System.out.println("no uninitialized mailboxes");
+        }
     }
 
 }

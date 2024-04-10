@@ -224,7 +224,11 @@ public class TripCalculator {
 
     public Trip runPathFinding(TripType tripType, TransportationNode startNode, TransportationNode currentNode,
             TransportationNode goalNode) {
-        while (goalReached == false) {
+        
+        int maxIterations = 1000;
+        int iterations = 0;
+        
+        while (goalReached == false && iterations < maxIterations) {
             int col = currentNode.col;
             int row = currentNode.row;
             // print(String.format("CURRENT NODE: [%s, %s] %s", row, col, currentNode.transportationType.name()));
@@ -277,6 +281,12 @@ public class TripCalculator {
                 Trip trip = createTrip(tripType, goalNode, startNode);
                 resetNodes();
                 return trip;
+            }
+            iterations++;
+
+            if (iterations >= maxIterations) {
+                System.out.println("Max iterations reached, no route found");
+                return null;
             }
         }
         return null;

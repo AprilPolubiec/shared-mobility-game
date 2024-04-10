@@ -83,6 +83,18 @@ public class HomeController {
 
     @FXML
     public void handleInstructionsButtonPressed() {
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("instructions.fxml"));
+            AnchorPane root = loader.load();
+            
+            Stage instructionsStage = new Stage();
+            instructionsStage.setTitle("Instructions");
+            instructionsStage.setScene(new Scene(root));
+    
+            instructionsStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // this.loadInstructionsScreen();
     }
 
