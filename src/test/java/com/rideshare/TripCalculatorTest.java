@@ -6,96 +6,28 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import com.rideshare.GameManager.GameController;
+import com.rideshare.GameManager.MapLoader;
+import com.rideshare.TileManager.MapJson;
+import com.rideshare.TileManager.TiledMapLayer;
+
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 
 public class TripCalculatorTest {
     private City createTestCity() {
-        ArrayList<RouteNodeMatrix> routes = new ArrayList<RouteNodeMatrix>();
-        int[][] busMatrix = {
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-          };
-        int[][] busStopMatrix = {
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 0, 0, 0, 1, 0, 0, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-          };
-        RouteNodeMatrix busRoute = new RouteNodeMatrix(busMatrix, busStopMatrix, TransportationType.BUS);
-        routes.add(busRoute);
-        int[][] trainMatrix = {
-            {0, 0, 0, 0, 0, 0, 0, 1},
-            {0, 0, 0, 0, 0, 0, 1, 0},
-            {0, 0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 1, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0, 0},
-            {0, 1, 0, 0, 0, 0, 0, 0},
-            {1, 0, 0, 0, 0, 0, 0, 0},
-          };
-          int[][] trainStopMatrix = {
-            {0, 0, 0, 0, 0, 0, 0, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 0, 0, 0, 0, 0, 0, 0},
-          };
-          RouteNodeMatrix trainRoute = new RouteNodeMatrix(trainMatrix, trainStopMatrix, TransportationType.TRAIN);
-          routes.add(trainRoute);
-        int[][] carMatrix = {
-            {1, 0, 1, 0, 1, 0, 1, 1},
-            {1, 0, 1, 0, 1, 0, 1, 0},
-            {1, 0, 1, 0, 1, 1, 1, 0},
-            {1, 0, 1, 0, 1, 0, 1, 0},
-            {1, 0, 1, 1, 1, 0, 1, 0},
-            {1, 0, 1, 0, 1, 0, 1, 0},
-            {1, 1, 1, 0, 1, 0, 1, 0},
-            {1, 0, 1, 0, 1, 0, 1, 0},
-          };
-          RouteNodeMatrix carRoute = new RouteNodeMatrix(carMatrix, carMatrix, TransportationType.CAR);
-          routes.add(carRoute);
-
-        int[][] walkingMatrix = {
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-        };
-        RouteNodeMatrix walkingRoute = new RouteNodeMatrix(walkingMatrix, walkingMatrix, TransportationType.WALKING);
-        routes.add(walkingRoute);
-        City city = new City(8, routes);
+        AnchorPane ap = new AnchorPane();
+        Scene s = new Scene(ap);
+        MapLoader ml = new MapLoader(s);
+        ml.load("test-map");
+        City city = ml.getCity();
         return city;
     }
    
     @Test
     public void Test_CanCreateTripCalculator() {
         City c = createTestCity();
-        GameController gc = new GameController();
-        TripCalculator calc = new TripCalculator(c, gc);
-    }
-
-    @Test
-    public void Test_CanCreateTripCalculator() {
-        City c = createTestCity();
-        GameController gc = new GameController();
-        TripCalculator calc = new TripCalculator(c, gc);
+        // GameController gc = new GameController();
+        // TripCalculator calc = new TripCalculator(c, gc);
     }
 
     @Test

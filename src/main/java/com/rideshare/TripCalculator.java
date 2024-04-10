@@ -2,6 +2,8 @@ package com.rideshare;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
 import javafx.scene.Scene;
 
 // https://www.youtube.com/watch?v=2JNEme00ZFA&list=RDCMUCS94AD0gxLakurK-6jnqV1w&index=6
@@ -36,33 +38,46 @@ public class TripCalculator {
         this.endRow = endRow;
         this.endCol = endCol;
 
-        // Start at the node with the lowest CO2 emissions
-        ArrayList<TransportationNode> startNodeOptions = city.getRouteNodes(startRow, startCol);
-        int minEmissions = Integer.MAX_VALUE;
-        for (TransportationNode transportationNode : startNodeOptions) {
-            if (transportationNode.co2EmissionRate < minEmissions) {
-                this._startNode = transportationNode;
-                minEmissions = transportationNode.co2EmissionRate;
-            }
-        }
+        this._startNode = getStartNode(startRow, startCol);
         this._currentNode = _startNode;
         this.currentRouteMatrix = this._currentNode.routeMatrix;
 
         print(String.format("Mailbox at [%s, %s]", endRow, endCol));
-        this._goalNode = getGoalNode(endRow, endCol - 1);
+        this._goalNode = getGoalNode(endRow, endCol - 1); // Col - 1 b/c that is where the house is
         print(String.format("Starting search from [%s, %s] to [%s, %s]", startRow, startCol, _goalNode.row,
                 _goalNode.col));
 
-        // Option 1: The fastest path
-        Trip fastestTrip = runPathFinding(TripType.FAST, this._startNode, this._currentNode, this._goalNode);
-        trips.add(fastestTrip);
-        // Option 2: Get most CO2 efficient
-        Trip mostEfficientTrip = runPathFinding(TripType.EFFICIENT, this._startNode, this._currentNode, this._goalNode);
-        trips.add(mostEfficientTrip);
+        // // Option 1: The fastest path
+        // Trip fastestTrip = runPathFinding(TripType.FAST, this._startNode,
+        // this._currentNode, this._goalNode);
+        // trips.add(fastestTrip);
+        // // Option 2: Get most CO2 efficient
+        // Trip mostEfficientTrip = runPathFinding(TripType.EFFICIENT, this._startNode,
+        // this._currentNode, this._goalNode);
+        // trips.add(mostEfficientTrip);
         // Option 3: Get public transit path
-        // Trip publicTransitTrip = runTransitPathFinding();
-        // trips.add(publicTransitTrip);
+        try {
+            Trip publicTransitTrip = runTransitPathFinding(this._startNode, this._goalNode);
+            trips.add(publicTransitTrip);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
         return trips;
+    }
+
+    public TransportationNode getStartNode(int startRow, int startCol) {
+        // Start at the node with the lowest CO2 emissions
+        TransportationNode startNode = null;
+        ArrayList<TransportationNode> startNodeOptions = city.getRouteNodes(startRow, startCol);
+        int minEmissions = Integer.MAX_VALUE;
+        for (TransportationNode transportationNode : startNodeOptions) {
+            if (transportationNode.co2EmissionRate < minEmissions) {
+                startNode = transportationNode;
+                minEmissions = transportationNode.co2EmissionRate;
+            }
+        }
+        return startNode;
     }
 
     private TransportationNode getGoalNode(int row, int col) {
@@ -176,10 +191,11 @@ public class TripCalculator {
         System.out.println(txt);
     }
 
-    public Trip runTransitPathFinding() {
+    public TransportationNode getClosestStation(TransportationNode goalNode) {
         RouteNodeMatrix trainNodeMatrix = null;
 
         // First - find the closest train to our starting nodes and ending nodes
+        // TODO: this assumes on train route
         for (Route route : city.routes) {
             if (route.getTransportationType() == TransportationType.TRAIN) {
                 trainNodeMatrix = route.getRouteNodeMatrix();
@@ -187,47 +203,76 @@ public class TripCalculator {
             }
         }
 
-        TransportationNode startStation = trainNodeMatrix.getNode(0, 0);
-        TransportationNode endStation = trainNodeMatrix.getNode(0, 0);
-
+        TransportationNode closestStation = trainNodeMatrix.getNode(0, 0);
         TransportationNode[][] matrix = trainNodeMatrix.get();
         for (int i = 0; i < matrix.length; i++) {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {
                 int colIdx = j;
                 if (matrix[i][j].canStop()) {
-                    int xDistance = Math.abs(colIdx - _startNode.col);
-                    int yDistance = Math.abs(rowIdx - _startNode.row);
+                    int xDistance = Math.abs(colIdx - goalNode.col);
+                    int yDistance = Math.abs(rowIdx - goalNode.row);
                     int distance = xDistance + yDistance;
 
-                    if (distance < Math.abs(startStation.col - _startNode.col)
-                            + Math.abs(startStation.row - _startNode.row)) {
-                        startStation = matrix[rowIdx][colIdx];
-                    }
-
-                    if (distance < Math.abs(endStation.col - this._goalNode.col)
-                            + Math.abs(endStation.row - this._goalNode.row)) {
-                        endStation = matrix[rowIdx][colIdx];
+                    if (distance < Math.abs(closestStation.col - goalNode.col)
+                            + Math.abs(closestStation.row - goalNode.row)) {
+                        closestStation = matrix[rowIdx][colIdx];
                     }
                 }
             }
         }
+        return closestStation;
+    }
 
-        Trip firstLeg = runPathFinding(TripType.EFFICIENT, this._startNode, this._startNode, startStation);
-        Trip middleLeg = runPathFinding(TripType.TRANSIT_ONLY, startStation, startStation, endStation);
-        firstLeg.append(middleLeg);
-        Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStation, endStation, this._goalNode);
-        firstLeg.append(lastLeg);
+    public Trip runTransitPathFinding(TransportationNode startNode, TransportationNode goalNode) throws Exception {
+        try {
+            TransportationNode startStation = getClosestStation(startNode);
+            TransportationNode endStation = getClosestStation(goalNode);
+            // TODO: handle if start and end are the same, we can just skip this path finder
+            if (startStation == endStation) {
+                throw new Exception("Start station and end station are the same - need to handle!");
+            }
 
-        return firstLeg;
+            Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStation);
+            Trip middleLeg = runPathFinding(TripType.TRANSIT_ONLY, startStation, startStation, endStation);
+            Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStation, endStation, goalNode);
+            firstLeg.appendTrip(middleLeg);
+            firstLeg.appendTrip(lastLeg);
+            firstLeg.print();
+            return firstLeg;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void closeNonTransitNodes() {
+        for (Route route : this.city.routes) {
+            TransportationNode[][] nodeMatrix = route.getRouteNodeMatrix().get();
+
+            for (int i = 0; i < nodeMatrix.length; i++) {
+                int rowIdx = i;
+                for (int j = 0; j < nodeMatrix[rowIdx].length; j++) {
+                    TransportationNode n = nodeMatrix[i][j];
+                    if (route.getTransportationType() != TransportationType.TRAIN
+                            && route.getTransportationType() != TransportationType.BUS) {
+                        n.setAsChecked();
+                        checkedList.add(n);
+                    }
+                }
+            }
+        }
     }
 
     public Trip runPathFinding(TripType tripType, TransportationNode startNode, TransportationNode currentNode,
             TransportationNode goalNode) {
+        if (tripType == TripType.TRANSIT_ONLY) {
+            closeNonTransitNodes();
+        }
         while (goalReached == false) {
             int col = currentNode.col;
             int row = currentNode.row;
-            // print(String.format("CURRENT NODE: [%s, %s] %s", row, col, currentNode.transportationType.name()));
 
             closeAllNodes(row, col, currentNode);
             openNeighbors(row, col, currentNode);
@@ -239,10 +284,6 @@ public class TripCalculator {
             for (int i = 0; i < openList.size(); i++) {
                 // Check if the F cost is better than current best
                 TransportationNode nodeToCheck = openList.get(i);
-
-                if (tripType == TripType.TRANSIT_ONLY && nodeToCheck.transportationType != TransportationType.TRAIN) {
-                    continue;
-                }
 
                 nodeToCheck.getCost(startNode, goalNode, tripType);
 
@@ -261,15 +302,16 @@ public class TripCalculator {
             if (openList.size() == 0) {
                 print("NO OPRTIONS");
                 goalNode.parent = currentNode.parent;
-                Trip trip =  createTrip(tripType, goalNode, startNode);
+                Trip trip = createTrip(tripType, goalNode, startNode);
                 resetNodes();
                 return trip;
             }
 
             currentNode = openList.get(bestNodeIdx);
             currentRouteMatrix = currentNode.routeMatrix; // Switch our route mat
-            // print(String.format("BEST NODE: [%s, %s] %s", currentNode.row, currentNode.col,
-            //         currentNode.transportationType.name()));
+            // print(String.format("BEST NODE: [%s, %s] %s", currentNode.row,
+            // currentNode.col,
+            // currentNode.transportationType.name()));
             if (currentNode.row == goalNode.row && currentNode.col == goalNode.col) {
                 goalNode.parent = currentNode.parent;
                 goalReached = true;
@@ -283,15 +325,11 @@ public class TripCalculator {
     }
 
     private void openNode(TransportationNode node, TransportationNode currentNode) {
-        if (currentNode.canStop() && !node.canStop()) {
-            // Can only get off at a stop
-            return;
-        }
         if (node.open == false && node.checked == false && node.solid == false) {
             node.setAsOpen();
             node.parent = currentNode;
             openList.add(node);
-        } 
+        }
     }
 
     private void resetNodes() {
@@ -306,6 +344,8 @@ public class TripCalculator {
             }
         }
         goalReached = false;
+        checkedList = new ArrayList<>();
+        openList = new ArrayList<>();
     }
 
     private Trip createTrip(TripType tripType, TransportationNode endNode, TransportationNode startNode) {

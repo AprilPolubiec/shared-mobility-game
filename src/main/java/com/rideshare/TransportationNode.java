@@ -53,6 +53,7 @@ public class TransportationNode {
         goal = false;
         open = false;
         checked = false;
+        parent = null;
     }
 
     public boolean canStop() {
