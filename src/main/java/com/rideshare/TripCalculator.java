@@ -48,13 +48,15 @@ public class TripCalculator {
                 _goalNode.col));
 
         // // Option 1: The fastest path
-        // Trip fastestTrip = runPathFinding(TripType.FAST, this._startNode,
-        // this._currentNode, this._goalNode);
-        // trips.add(fastestTrip);
+        Trip fastestTrip = runPathFinding(TripType.FAST, this._startNode,
+        this._currentNode, this._goalNode);
+        fastestTrip.print();
+        trips.add(fastestTrip);
         // // Option 2: Get most CO2 efficient
-        // Trip mostEfficientTrip = runPathFinding(TripType.EFFICIENT, this._startNode,
-        // this._currentNode, this._goalNode);
-        // trips.add(mostEfficientTrip);
+        Trip mostEfficientTrip = runPathFinding(TripType.EFFICIENT, this._startNode,
+        this._currentNode, this._goalNode);
+        mostEfficientTrip.print();
+        trips.add(mostEfficientTrip);
         // Option 3: Get public transit path
         try {
             Trip publicTransitTrip = runTransitPathFinding(this._startNode, this._goalNode);

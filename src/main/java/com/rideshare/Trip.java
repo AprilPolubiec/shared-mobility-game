@@ -35,7 +35,7 @@ import java.util.Collections;
  * 
  */
 
-public class Trip {
+ public class Trip {
     private float tripDuration; // In game time minutes
     private float tripDistance; // In km
     private float tripEmission; // In /km (gallons?)
@@ -56,9 +56,9 @@ public class Trip {
         while (current != null & iterations <= 40) {
             this._nodeList.add(current);
 
-            currentLegDistance += 1; // Each node = 1km
-            currentLegDuration += (1.0 / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go one km
-            currentLegEmission += (float) current.modeOfTransport.getEmissionRate(); // Emission rate is in km/hr
+            currentLegDistance += .5; // Each node = .5km
+            currentLegDuration += (0.5 / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go one km
+            currentLegEmission += (float) current.modeOfTransport.getEmissionRate() * 0.5; // Emission rate is in km/hr
 
             if (current.parent == null || current.transportationType != current.parent.transportationType) {
                 this.tripDuration += currentLegDuration;
