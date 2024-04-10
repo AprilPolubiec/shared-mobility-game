@@ -313,6 +313,12 @@ public class TripCalculator {
                 resetNodes();
                 return trip;
             }
+            iterations++;
+
+            if (iterations >= maxIterations) {
+                System.out.println("Max iterations reached, no route found");
+                return null;
+            }
         }
         return null;
     }
