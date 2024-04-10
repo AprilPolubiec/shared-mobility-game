@@ -19,3 +19,5 @@ package com.rideshare;
 public class ScoreKeeper {
 
 }
+
+// NOTE: budget - average driver does about 160km per day, electric vehicle emits 53 per km. budget = 160*53 = 8480
