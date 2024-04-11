@@ -14,15 +14,15 @@ public class Timer {
     boolean isPaused = false;
     private LocalTime currentInGameTime;
     private TimerStatus status = TimerStatus.UNINITIALISED;
-    private Timeline _timeline;
-    Text _clockText;
+    private Timeline timeline;
+    Text clockText;
 
     public Timer(Text clockText) {
-        this._clockText = clockText;
-        initialize();
+        this.clockText = clockText;
+        initialise();
     }
 
-    public void initialize() {
+    public void initialise() {
         currentInGameTime = DAY_START;
         status = TimerStatus.INITIALISED;
     }
@@ -31,8 +31,8 @@ public class Timer {
         if(status == TimerStatus.RUNNING) {
             currentInGameTime = currentInGameTime.plusMinutes(1);
             // Update clock text
-            if(_clockText != null) {
-                _clockText.setText(currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
+            if(clockText != null) {
+                clockText.setText(currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
             }
             if (isEndOfDay()) {
                 System.out.println("End of day reached.");
@@ -44,19 +44,19 @@ public class Timer {
     public void start() {
         currentInGameTime = DAY_START;
         status = TimerStatus.RUNNING;
-        _timeline = new Timeline(new KeyFrame(Duration.seconds(1.0 / 6), event -> updateInGameTime()));
-        _timeline.setCycleCount(Timeline.INDEFINITE);
-        _timeline.play();
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1.0 / 6), event -> updateInGameTime()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     public void pause() {
         status = TimerStatus.PAUSED;
-        _timeline.pause();
+        timeline.pause();
         isPaused = true;
     }
 
     public void resume() {
-        _timeline.play();
+        timeline.play();
         status = TimerStatus.RUNNING;
         isPaused = false;
     }
@@ -68,7 +68,7 @@ public class Timer {
     private void resetTimer() {
         currentInGameTime = DAY_START;
         isPaused = false;
-        _timeline.stop();
+        timeline.stop();
         System.out.println("Timer reset.");
     }
 
@@ -76,7 +76,7 @@ public class Timer {
     private void stop() {
         status = TimerStatus.STOPPED;
         isPaused = false;
-        _timeline.stop();
+        timeline.stop();
         System.out.println("Timer has been stopped.");
     }
 
