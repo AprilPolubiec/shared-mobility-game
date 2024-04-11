@@ -9,7 +9,7 @@ import javafx.animation.Timeline;
 import javafx.scene.text.Text;
 
 public class Timer {
-    private final LocalTime DAY_START = LocalTime.of(5,0,0);
+    private final LocalTime DAY_START = LocalTime.of(5, 0, 0);
     private final LocalTime DAY_END = LocalTime.of(0, 0, 0);
     boolean isPaused = false;
     private LocalTime currentInGameTime;
@@ -28,15 +28,15 @@ public class Timer {
     }
 
     private void updateInGameTime() {
-        if(state == TimerState.RUNNING) {
+        if (state == TimerState.RUNNING) {
             currentInGameTime = currentInGameTime.plusMinutes(1);
             // Update clock text
-            if(_clockText != null) {
+            if (_clockText != null) {
                 _clockText.setText(currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
             }
             if (isEndOfDay()) {
                 System.out.println("End of day reached.");
-                stop(); 
+                stop();
             }
         }
     }
@@ -60,7 +60,7 @@ public class Timer {
         state = TimerState.RUNNING;
         isPaused = false;
     }
-    
+
     private boolean isEndOfDay() {
         return currentInGameTime.equals(DAY_END);
     }
@@ -72,7 +72,6 @@ public class Timer {
         System.out.println("Timer reset.");
     }
 
-    
     private void stop() {
         state = TimerState.STOPPED;
         isPaused = false;
@@ -83,9 +82,13 @@ public class Timer {
     public LocalTime getTime() {
         return this.currentInGameTime;
     }
-        
+
     public TimerState getState() {
         return this.state;
     }
-   
+
+    public static int secondsToGameMinutes(int seconds) {
+        return seconds * 6;
+    }
+
 }

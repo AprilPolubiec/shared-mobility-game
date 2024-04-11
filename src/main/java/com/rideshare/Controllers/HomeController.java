@@ -39,7 +39,7 @@ public class HomeController {
             Media(App.class.getResource(String.format("/images/audio/%s.mp3",
             "bg-slow")).toString()); // replace
             MediaPlayer _mediaPlayer = new MediaPlayer(media);
-            _mediaPlayer.play();
+            // _mediaPlayer.play();
 
             _stage.setWidth(720);
             _stage.setHeight(439);

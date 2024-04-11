@@ -14,6 +14,7 @@ import com.rideshare.Route;
 import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationNode;
 import com.rideshare.TransportationType;
+import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileUtils;
 
 public class MapLoaderTest {

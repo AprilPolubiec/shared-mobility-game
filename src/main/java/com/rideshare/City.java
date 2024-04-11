@@ -103,4 +103,23 @@ public class City {
     return nodes;
   }
 
+  /** 
+   * @param rowIdx Row/y to get node at
+   * @param colIdx Column/x to get node at
+   * @param transportationType
+   * @return ArrayList<TransportationNode> list of transportation nodes which exist at these coordinates in the city
+   */
+  public TransportationNode getRouteNode(int rowIdx, int colIdx, TransportationType transportationType) {
+    for (Route route : routes) {
+      if(route.getTransportationType() != transportationType) {
+        continue;
+      }
+    
+      RouteNodeMatrix routeNodeMatrix = route.getRouteNodeMatrix();
+      TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+      return node;
+    }
+    return null;
+  }
+
 }

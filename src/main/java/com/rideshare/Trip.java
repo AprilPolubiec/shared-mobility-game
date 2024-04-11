@@ -1,5 +1,8 @@
 package com.rideshare;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Description: A trip is a series of Routes that can be taken to get from point
  * A
@@ -32,30 +35,30 @@ package com.rideshare;
  * 
  */
 
-public class Trip {
+ public class Trip {
     private float tripDuration; // In game time minutes
     private float tripDistance; // In km
     private float tripEmission; // In /km (gallons?)
-    private TransportationNode startNode;
-    private TransportationNode endNode;
+    private ArrayList<TransportationNode> _nodeList = new ArrayList<>();
+    private TripType tripType;
 
     private int _score;
+    private ArrayList<Trip> legs = new ArrayList<>();
 
     public Trip(TransportationNode endNode, TransportationNode startNode, TripType tripType) {
+        this.tripType = tripType;
         System.out.println(String.format("Creating %s trip", tripType.name()));
-        this.endNode = endNode;
-        this.startNode = startNode;
         TransportationNode current = endNode;
         float currentLegDistance = 0;
         float currentLegDuration = 0;
         float currentLegEmission = 0;
         int iterations = 0;
-        while (current != null & iterations <= 20) {
-            System.out
-                    .println(String.format("[%s, %s] %s", current.row, current.col, current.transportationType.name()));
-            currentLegDistance += 1; // Each node = 1km
-            currentLegDuration += (1.0 / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go one km
-            currentLegEmission += (float) current.modeOfTransport.getEmissionRate(); // Emission rate is in km/hr
+        while (current != null & iterations <= 40) {
+            this._nodeList.add(current);
+
+            currentLegDistance += .5; // Each node = .5km
+            currentLegDuration += (0.5 / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go one km
+            currentLegEmission += (float) current.modeOfTransport.getEmissionRate() * 0.5; // Emission rate is in km/hr
 
             if (current.parent == null || current.transportationType != current.parent.transportationType) {
                 this.tripDuration += currentLegDuration;
@@ -65,12 +68,16 @@ public class Trip {
                 currentLegEmission = 0;
                 currentLegDuration = 0;
             }
+
             current = current.parent;
             iterations++;
         }
+        Collections.reverse(_nodeList); // Reverse list so its from start to end
+        legs.add(this);
+    }
 
-        System.out.println(String.format("%s Trip\n Duration: %s Distance: %s Emission: %s", tripType.name(),
-                tripDuration, tripDistance, tripEmission));
+    public ArrayList<TransportationNode> getNodeList() {
+        return _nodeList;
     }
 
     public int getScore() {
@@ -89,16 +96,23 @@ public class Trip {
         return Math.floor(this.tripEmission);
     }
 
-    // Merges two trips into one
-    // TODO - there is no validation that these trips are mergable - PROCEED W
-    // CAUTION!
-    public void append(Trip trip) {
-        trip.startNode.parent = endNode;
-        endNode = trip.endNode;
-
-        tripDistance += trip.tripDistance;
-        tripDuration += trip.tripDuration;
-        tripEmission += trip.tripEmission;
+    public Trip appendTrip(Trip trip) {
+        legs.add(trip);
+        this._nodeList.addAll(trip.getNodeList());
+        this.tripDistance += trip.tripDistance;
+        this.tripDuration += trip.tripDuration;
+        this.tripEmission += trip.tripEmission;
+        return this;
     }
 
+    public void print() {
+        System.out.println(String.format("%s Trip (%s legs)\n Duration: %s Distance: %s Emission: %s", tripType.name(),
+                legs.size(),
+                tripDuration, tripDistance, tripEmission));
+        System.out.println("Trip node list: ");
+        for (TransportationNode transportationNode : _nodeList) {
+            System.out.println(String.format("[%s, %s] %s", transportationNode.row, transportationNode.col,
+                    transportationNode.transportationType.name()));
+        }
+    }
 }
