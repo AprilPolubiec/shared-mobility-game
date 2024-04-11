@@ -2,8 +2,8 @@ package com.rideshare;
 
 public class TransportationNode {
     TransportationNode parent;
-    int col;
-    int row;
+    public int col;
+    public int row;
     int gCost; // Distance between start node and current node
     int hCost; // Distance between current node and goal node
     int fCost; // Sum of gCost and hCost

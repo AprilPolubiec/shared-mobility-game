@@ -20,8 +20,13 @@ public class App extends Application {
         AnchorPane root = fxmlLoader.load();
         HomeController hc = fxmlLoader.getController();
         hc.load(stage, root);
-        Sprite s = new Sprite("girl-1", stage);
-        s.enableWASD(true);
+        // try {
+        //     Sprite s = new Sprite("girl-1", stage);
+        //     s.enableWASD(true);
+        // } catch (Exception e) {
+        //     // TODO: handle exception
+        //     e.printStackTrace();
+        // }
     }
 
     public static void main(String[] args) {

@@ -42,7 +42,7 @@ public class GameController {
     public GameController() {
         return;
     }
-    
+
     protected AnchorPane setScene(boolean isFullScreen) throws IOException {
         Scene scene = _stage.getScene();
         scene.setRoot(_root);
@@ -117,24 +117,31 @@ public class GameController {
         } else {
             System.out.println("AnchorPane not found!");
         }
+        try {
+            Sprite player = new Sprite("girl-1", _stage);
+            player.render();
+            Timer t = new Timer(_clockText);
+            t.start();
 
-        Sprite player = new Sprite("girl-1", _stage);
-        player.render();
-        Timer t = new Timer(_clockText);
-        t.start();
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+                showRandomMailbox(player);
+            }));
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.playFromStart();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> showRandomMailbox()));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.playFromStart();
     }
 
-    private void showRandomMailbox() {
+    private void showRandomMailbox(Sprite player) {
         int numMailboxes = _city.getUninitializedMailboxes().size();
         int randomMailboxIndex = new Random().nextInt(numMailboxes);
         Mailbox currentMailbox = _city.getUninitializedMailboxes().get(randomMailboxIndex);
-        
+
         currentMailbox.setDuration(5);
-        currentMailbox.render();
+        currentMailbox.render(player);
         currentMailbox.markWaiting();
         currentMailbox.show();
     }
