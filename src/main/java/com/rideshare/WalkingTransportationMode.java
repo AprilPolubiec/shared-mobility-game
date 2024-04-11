@@ -5,10 +5,10 @@ package com.rideshare;
  * 50-260 CO2e per KM. However, this metric is based on GHG emissions associated with food intake required to fuel a kilometre of walking range.
  * Thus, for clarity, it is being treated as CO2e neutral in this class.*/
 public class WalkingTransportationMode extends TransportationMode {
-    private static final int walkingSpeed = 5;
-    private static final int walkingEmissionRate = 0;
+    private static final int WALKING_SPEED = 5;
+    private static final int WALKING_EMISSION_RATE = 0;
 
     public WalkingTransportationMode(String name) {
-        super(name, walkingEmissionRate, walkingSpeed, false);
+        super(name, WALKING_EMISSION_RATE, WALKING_SPEED, false);
     }
 }
