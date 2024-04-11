@@ -21,7 +21,7 @@ public class ScoreKeeper {
 
     // All relevant attributes initialised
     // The CO2 budget is just a random value here.
-    static final int maxCo2Budget = 10;
+    static final int MAX_CO2_BUDGET = 10;
     // co2Budget here is a 'more local variable' allowed to go into the negatives in order to check if the budget has been exceeded
     int co2Budget;
     int CO2Saved;
@@ -122,7 +122,8 @@ public class ScoreKeeper {
         this.totalMailboxes = this.getTotalMailboxes();
         int CO2score = this.CO2Saved;
 
-        double mailboxesRatio = (double) this.mailboxesCompleted / this.totalMailboxes;
+        double mailboxesRatio;
+        mailboxesRatio = (double) this.mailboxesCompleted / this.totalMailboxes;
         // mailboxesMultiplier = mailboxesRatio + 1;
         this.mailboxesMultiplier = mailboxesRatio;
 
@@ -130,7 +131,7 @@ public class ScoreKeeper {
         this.score = (int) Math.ceil(scoreDouble);
 
         this.exceededBudgetFlag = this.hasExceededBudget();
-        if (this.exceededBudgetFlag == true) {
+        if (this.exceededBudgetFlag) {
             this.score = 0;
             return this.score;
         }

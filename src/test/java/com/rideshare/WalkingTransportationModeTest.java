@@ -1,6 +1,7 @@
 package com.rideshare;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,6 @@ public class WalkingTransportationModeTest {
         assertEquals(0, tm.getEmissionRate());
         assertEquals(5, tm.getSpeed()); // TODO: decide how to measure speed
         assertEquals(displayName, tm.getName());
-        assertEquals(false, tm.hasStops());
+        assertFalse(tm.hasStops());
     }
 }

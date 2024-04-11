@@ -73,7 +73,7 @@ public class Timer {
     }
 
     
-    private void stop() {
+    void stop() {
         status = TimerStatus.STOPPED;
         isPaused = false;
         timeline.stop();
