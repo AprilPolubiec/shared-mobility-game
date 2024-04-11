@@ -12,6 +12,9 @@ import com.rideshare.TileManager.TileUtils;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -20,7 +23,7 @@ import javafx.util.Duration;
 public class Mailbox {
    private int _row;
    private int _col;
-   MailboxStatus status = MailboxStatus.UNINITIALIZED;
+   ObjectProperty<MailboxStatus> status = new SimpleObjectProperty<>();
    boolean _isVisible = false;
    TileManager _tileManager;
    ImageView _mailboxTile;
@@ -37,6 +40,7 @@ public class Mailbox {
       _col = col + 1; // Render a mailbox to the right of the house
       _tileManager = tileManager;
       _houseTileId = houseTileId;
+      status.set(MailboxStatus.UNINITIALIZED);
    }
 
    public void setTripCalculator(City city) {
@@ -44,7 +48,7 @@ public class Mailbox {
    }
 
    // TODO: pass sprite in constructor, not here
-   public void render(Sprite sprite) { // TODO: this should be Player not Sprite
+   public void render() {
       Media waitingMedia = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
       mailboxWaitingAudio = new MediaPlayer(waitingMedia);
 
@@ -56,27 +60,13 @@ public class Mailbox {
             _col);
       
       _mailboxTile.setOnMouseClicked(event -> {
-         markComplete();
+         markInProgress();
          // Path finder eek
          // ArrayList<Trip> trips = _tripCalculator.calculateTrips(13, 13, _row, _col);
-         ArrayList<Trip> trips = _tripCalculator.calculateTrips(sprite.getGridPanePosition().row, sprite.getGridPanePosition().col, _row, _col);
-         sprite.moveOnRoute(trips.get(0).getNodeList());
+         // ArrayList<Trip> trips = _tripCalculator.calculateTrips(sprite.getGridPanePosition().row, sprite.getGridPanePosition().col, _row, _col);
+         // sprite.moveOnRoute(trips.get(0).getNodeList());
       });
-      this.status = MailboxStatus.READY;
-
-      java.util.Timer timer = new java.util.Timer();
-      timer.schedule(new TimerTask() {
-         @Override
-         public void run() {
-            if (status != MailboxStatus.COMPLETED) {
-               Platform.runLater(() -> {
-                  // Code to update the UI goes here
-                  markFailed();
-               });
-            }
-            timer.cancel();
-         }
-      }, _duration * 1000); // Convert seconds to milliseconds
+      status.set(MailboxStatus.READY);
    }
 
    // TODO: actually just deduce from the house id
@@ -85,10 +75,30 @@ public class Mailbox {
    }
 
    public MailboxStatus getStatus() {
-      return this.status;
+      return this.status.get();
+   }
+   public void addStatusListener(ChangeListener<? super MailboxStatus> listener) {
+      this.status.addListener(listener);
    }
 
    public void show() {
+      if (this.status.get() != MailboxStatus.WAITING) {
+         markWaiting();
+         java.util.Timer timer = new java.util.Timer();
+         timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+               if (status.get() != MailboxStatus.COMPLETED) {
+                  Platform.runLater(() -> {
+                     // Code to update the UI goes here
+                     markFailed();
+                  });
+               }
+               timer.cancel();
+            }
+         }, _duration * 1000); // Convert seconds to milliseconds
+      }
+
       this._isVisible = true;
       this._mailboxTile.setOpacity(1);
    }
@@ -101,17 +111,21 @@ public class Mailbox {
    public void markComplete() {
       _tileManager.drawTile(202, _row - 1, _col);
       _tileManager.replaceTileImage(_mailboxTile, TileUtils.COMPLETED_FLAG_IDS[0]);
-      this.status = MailboxStatus.COMPLETED;
+      this.status.set(MailboxStatus.COMPLETED);
       // mailboxCompletedAudio.play();
+   }
+
+   public void markInProgress() {
+      this.status.set(MailboxStatus.IN_PROGRESS);
    }
 
    public void markFailed() {
       _tileManager.drawTile(201, _row - 1, _col);
-      this.status = MailboxStatus.FAILED;
+      this.status.set(MailboxStatus.FAILED);
    }
 
    public void markWaiting() {
-      this.status = MailboxStatus.WAITING;
+      this.status.set(MailboxStatus.WAITING);
       // mailboxWaitingAudio.play();
    }
 

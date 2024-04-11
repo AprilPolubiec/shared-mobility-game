@@ -9,6 +9,7 @@ import com.rideshare.Mailbox;
 import com.rideshare.MailboxStatus;
 import com.rideshare.Timer;
 import com.rideshare.TimerState;
+import com.rideshare.GameManager.Game;
 import com.rideshare.GameManager.MapLoader;
 import com.rideshare.GameManager.Sprite;
 
@@ -35,8 +36,7 @@ public class GameController {
 
     private City _city;
     private AnchorPane _root;
-    private HashMap<String, Font> fonts = new HashMap<String, Font>();
-    private Text _clockText;
+    private Timer _timer;
     private Stage _stage;
 
     public GameController() {
@@ -54,20 +54,19 @@ public class GameController {
         try {
             _stage = stage;
             _root = root;
-            loadFonts();
             setScene(true);
             loadMap("level-1");
-            loadTimeModal();
+            // loadTimer();
             loadProgressModal();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void loadFonts() {
-        Font clockFont = Font.loadFont(getClass().getResourceAsStream("/fonts/digital-7.ttf"), 48);
-        fonts.put("clock", clockFont);
-    }
+    // public void loadTimer() {
+    //     _timer = new Timer();
+    //     _timer.render(_root);
+    // }
 
     private void loadMap(String mapName) {
         // TODO: should be able to load different maps eventually
@@ -76,25 +75,7 @@ public class GameController {
         _city = loader.getCity();
     }
 
-    private void loadTimeModal() {
-        StackPane timeModalRoot = new StackPane();
-        ImageView panelImageView = new ImageView(
-                new Image(getClass().getResourceAsStream("/images/ui/grey_panel.png")));
-        timeModalRoot.getChildren().add(panelImageView);
-        AnchorPane.setBottomAnchor(timeModalRoot, 0.0);
-        AnchorPane.setRightAnchor(timeModalRoot, 0.0);
-        panelImageView.setFitHeight(150);
-        panelImageView.setFitWidth(300);
-
-        Text clockText = new Text("00:00AM");
-        clockText.setFont(fonts.get("clock"));
-        clockText.setFill(javafx.scene.paint.Color.BLACK);
-        timeModalRoot.getChildren().add(clockText);
-        _clockText = clockText;
-
-        _root.getChildren().add(timeModalRoot);
-    }
-
+    // TODO: create a ProgressBar class!
     private void loadProgressModal() {
         ProgressBar progressBar = new ProgressBar(0);
         progressBar.setProgress(0.5);
@@ -117,21 +98,24 @@ public class GameController {
         } else {
             System.out.println("AnchorPane not found!");
         }
-        try {
-            Sprite player = new Sprite("girl-1", _stage);
-            player.render();
-            Timer t = new Timer(_clockText);
-            t.start();
+        Sprite player = new Sprite("girl-1", _stage);
+        Game game = new Game(_root, _city, player);
+        game.start();
+        // try {
+        //     Sprite player = new Sprite("girl-1", _stage);
+        //     player.render();
+        //     Timer t = new Timer(_clockText);
+        //     t.start();
 
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
-                showRandomMailbox(player);
-            }));
-            timeline.setCycleCount(Animation.INDEFINITE);
-            timeline.playFromStart();
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
+        //     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+        //         showRandomMailbox(player);
+        //     }));
+        //     timeline.setCycleCount(Animation.INDEFINITE);
+        //     timeline.playFromStart();
+        // } catch (Exception e) {
+        //     // TODO: handle exception
+        //     e.printStackTrace();
+        // }
 
     }
 
