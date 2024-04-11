@@ -67,7 +67,7 @@ public class City {
   public ArrayList<Mailbox> getUninitializedMailboxes() {
     ArrayList<Mailbox> uninitializedMailboxes = new ArrayList<>();
     for (Mailbox mailbox : this.mailboxes) {
-      if (mailbox.getStatus() == MailboxStatus.UNINITIALIZED) {
+      if (mailbox.getStatus() == MailboxStatus.UNINITIALISED) {
         uninitializedMailboxes.add(mailbox);
       }
     }
@@ -76,7 +76,7 @@ public class City {
 
   public void showAllMailboxes() {
     for (Mailbox mailbox : mailboxes) {
-      if (mailbox.status == MailboxStatus.UNINITIALIZED) {
+      if (mailbox.status == MailboxStatus.UNINITIALISED) {
         mailbox.render();
       }
       mailbox.show();

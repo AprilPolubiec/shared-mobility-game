@@ -19,7 +19,7 @@ import javafx.util.Duration;
 public class Mailbox {
    private final int row;
    private final int col;
-   MailboxStatus status = MailboxStatus.UNINITIALIZED;
+   MailboxStatus status = MailboxStatus.UNINITIALISED;
    boolean isVisible = false;
    TileManager tileManager;
    ImageView mailboxTile;

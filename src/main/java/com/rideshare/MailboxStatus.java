@@ -1,7 +1,7 @@
 package com.rideshare;
 
 public enum MailboxStatus {
-    UNINITIALIZED,
+    UNINITIALISED,
     READY,
     WAITING,
     COMPLETED,
