@@ -8,12 +8,11 @@ import org.junit.jupiter.api.Test;
 public class ScoreKeeperTest {
     @Test
     public void Test_CanCreateScoreKeeper() {
-        int co2Budget = 10;
-        int totalMailboxes = 10;
-        // TODO: this doesn't have to be what the constructor looks like, tbd!
         ScoreKeeper scoreKeeper = new ScoreKeeper();
+        scoreKeeper.totalMailboxes = 10;
+        // scoreKeeper.co2Budget = 10; - it's a constant variable
         assertEquals(0, scoreKeeper.getMailboxesCompleted());
-        assertEquals(totalMailboxes, scoreKeeper.getTotalMailboxes());
+        assertEquals(10, scoreKeeper.getTotalMailboxes());
         assertEquals(0, scoreKeeper.getCO2Used());
         assertEquals(0, scoreKeeper.getCO2Saved());
     }
@@ -43,17 +42,49 @@ public class ScoreKeeperTest {
     public void Test_CannotExceedCO2Budget() {
         int co2Budget = 10;
         ScoreKeeper scoreKeeper = new ScoreKeeper();
+        scoreKeeper.co2Budget= 10;
         int newCO2 = scoreKeeper.incrementCO2Used(co2Budget + 1);
         boolean hasExceededBudget = scoreKeeper.hasExceededBudget();
-        boolean amountOverBudget = scoreKeeper.getAmountOverBudget();
+        int amountOverBudget = scoreKeeper.getAmountOverBudget();
         
-        assertEquals(co2Budget, newCO2);
         assertEquals(true, hasExceededBudget);
         assertEquals(1, amountOverBudget);
+
+        newCO2 = scoreKeeper.resetOverBudget();
+    
+        assertEquals(co2Budget, newCO2);
     }
 
+
+    // Note: This is my version of calculating the score in other words not generalised
+    // If we move with a different implementation this will have to be changed.
+
+    @Test
     public void Test_CanCalculateScore() {
-        // Leave this TODO for whoever implements the class
-        throw new UnsupportedOperationException("Not implemented");
+        ScoreKeeper scoreKeeper = new ScoreKeeper();
+        scoreKeeper.totalMailboxes = 10;
+        scoreKeeper.mailboxesCompleted = 5;
+        scoreKeeper.incrementCO2Saved(25);
+        int result = scoreKeeper.calculateScore();
+
+        assertEquals(25, scoreKeeper.CO2Saved);
+        assertEquals(10, scoreKeeper.getTotalMailboxes());
+        assertEquals(5, scoreKeeper.getMailboxesCompleted());
+        assertEquals(1.5, scoreKeeper.mailboxesMultiplier);
+        assertEquals(38, result);
+    }
+
+    @Test
+    public void Test_CanCalculateScoreWhenBudgetExceeds() {
+        ScoreKeeper scoreKeeper = new ScoreKeeper();
+        int co2Budget = 20;
+        scoreKeeper.totalMailboxes = 10;
+        scoreKeeper.mailboxesCompleted = 5;
+
+        scoreKeeper.incrementCO2Used(co2Budget + 1);
+        scoreKeeper.incrementCO2Saved(20);
+        
+        assertEquals(0, scoreKeeper.calculateScore());
+
     }
 }

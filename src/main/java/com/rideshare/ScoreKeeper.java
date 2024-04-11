@@ -16,8 +16,124 @@ package com.rideshare;
         incrementCO2Saved(int): This method updates the ‘CO2 Saved attribute by adding a specified amount to its current value.
         incrementCO2Used (int): This method decreased the CO2Used by the specified amount
        */
+
 public class ScoreKeeper {
+    // All relevant attributes initialised
+    // The CO2 budget is just a random value here.
+    static final int maxCo2Budget = 10; // NOTE: budget - average driver does about 160km per day, electric vehicle emits 53 per km. budget = 160*53 = 8480
+    // co2Budget here is a 'more local variable' allowed to go into the negatives in order to check if the budget has been exceeded
+    int co2Budget;
+    int CO2Saved;
+    int CO2Used;
+    int mailboxesCompleted;
+    int totalMailboxes;
+    double mailboxesMultiplier;
+    int score;
+    int level;
+    boolean exceededBudgetFlag;
+    int amountOverBudget;
 
+    // The ScoreKeeper constructor
+    public ScoreKeeper() {
+        this.CO2Saved = 0;
+        this.CO2Used = 0;
+        this.mailboxesCompleted = 0;
+        this.totalMailboxes = 0;
+        this.level = 1;
+        this.exceededBudgetFlag = false;
+        this.amountOverBudget = 0;
+    }
+
+    // getters
+    public int getMailboxesCompleted() {
+        return this.mailboxesCompleted;
+    }
+
+    public int getTotalMailboxes() {
+        return this.totalMailboxes;
+    }
+
+    public int getCO2Saved() {
+        return this.CO2Saved;
+    }
+
+    public int getCO2Used() {
+        return this.CO2Used;
+    }
+
+    // setters
+    public int incrementCO2Saved(int valueIncremented) {
+        if (valueIncremented <= 0) {
+            throw new IllegalArgumentException("Input value must be a positive integer");
+        }
+        this.CO2Saved += valueIncremented;
+        return this.CO2Saved;
+    }
+
+    public int incrementCO2Used(int valueIncremented) {
+        if (valueIncremented <= 0) {
+            throw new IllegalArgumentException("Input value must be a positive integer");
+        }
+        this.hasExceededBudget(); 
+
+        this.CO2Used += valueIncremented;
+        return this.CO2Used;
+    }
+
+    // Don't know if we need this so I'll just leave it here. I imagine level incrementer
+    public int setLevel(int newLevel) {
+        if (newLevel <= 0) {
+            throw new IllegalArgumentException("Input value must be a positive integer");
+        }
+
+        this.level = newLevel;
+        return this.level;
+    }
+
+    // budget checkers
+    public boolean hasExceededBudget() {
+        if (this.CO2Used > this.co2Budget) {
+            this.exceededBudgetFlag = true;
+            // CO2Used = co2Budget;
+        }
+        return this.exceededBudgetFlag;
+    }
+
+    public int getAmountOverBudget() {
+        if (this.hasExceededBudget()) {
+            return this.CO2Used - this.co2Budget;
+        } else {
+            return 0;
+        }
+    }
+
+    public int resetOverBudget() {
+        if (this.hasExceededBudget()) {
+            this.CO2Used = this.co2Budget;
+            this.exceededBudgetFlag = false;
+            return this.co2Budget;
+        } 
+        return this.CO2Used;
+    }
+
+    public int calculateScore() {
+        this.mailboxesCompleted = this.getMailboxesCompleted();
+        this.totalMailboxes = this.getTotalMailboxes();
+        int CO2score = this.CO2Saved;
+
+        double mailboxesRatio = (double) this.mailboxesCompleted / this.totalMailboxes;
+        // mailboxesMultiplier = mailboxesRatio + 1;
+        this.mailboxesMultiplier = mailboxesRatio;
+
+        double scoreDouble = CO2score * this.mailboxesMultiplier;
+        this.score = (int) Math.ceil(scoreDouble);
+
+        this.exceededBudgetFlag = this.hasExceededBudget();
+        if (this.exceededBudgetFlag == true) {
+            this.score = 0;
+            return this.score;
+        }
+
+        return this.score;
+    }
 }
-
-// NOTE: budget - average driver does about 160km per day, electric vehicle emits 53 per km. budget = 160*53 = 8480
