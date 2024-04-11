@@ -29,10 +29,49 @@ public class City {
     this.routes = routes;
     this.size = size;
     this.mailboxes = mailboxes;
+
+    for (Mailbox mailbox : mailboxes) {
+      mailbox.setTripCalculator(this);
+    }
   }
 
   public ArrayList<Mailbox> getMailboxes() {
     return this.mailboxes;
+  }
+
+  // public void markAllMailboxesReady() {
+  //   for (Mailbox mailbox : this.mailboxes) {
+  //     mailbox.
+  //   }
+  // }
+
+  public ArrayList<Mailbox> getWaitingMailboxes() {
+    ArrayList<Mailbox> waitingMailboxes = new ArrayList<>();
+    for (Mailbox mailbox : this.mailboxes) {
+      if (mailbox.getStatus() == MailboxStatus.WAITING) {
+        waitingMailboxes.add(mailbox);
+      }
+    }
+    return waitingMailboxes;
+  }
+
+  public ArrayList<Mailbox> getReadyMailboxes() {
+    ArrayList<Mailbox> readyMailboxes = new ArrayList<>();
+    for (Mailbox mailbox : this.mailboxes) {
+      if (mailbox.getStatus() == MailboxStatus.READY) {
+        readyMailboxes.add(mailbox);
+      }
+    }
+    return readyMailboxes;
+  }
+  public ArrayList<Mailbox> getUninitializedMailboxes() {
+    ArrayList<Mailbox> uninitializedMailboxes = new ArrayList<>();
+    for (Mailbox mailbox : this.mailboxes) {
+      if (mailbox.getStatus() == MailboxStatus.UNINITIALIZED) {
+        uninitializedMailboxes.add(mailbox);
+      }
+    }
+    return uninitializedMailboxes;
   }
 
   public void showAllMailboxes() {

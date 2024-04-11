@@ -1,13 +1,22 @@
 package com.rideshare.Controllers;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 
 import com.rideshare.City;
+import com.rideshare.Mailbox;
+import com.rideshare.MailboxStatus;
 import com.rideshare.Timer;
+import com.rideshare.TimerState;
 import com.rideshare.GameManager.MapLoader;
 import com.rideshare.GameManager.Sprite;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -18,29 +27,35 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
-public class GameController extends Controller {
+public class GameController {
     @FXML
     public javafx.scene.control.Button startButton;
 
     private City _city;
-    private AnchorPane _root = new AnchorPane();
+    private AnchorPane _root;
     private HashMap<String, Font> fonts = new HashMap<String, Font>();
-    
+    private Text _clockText;
+    private Stage _stage;
+
     public GameController() {
-        this(_stage);
+        return;
+    }
+    
+    protected AnchorPane setScene(boolean isFullScreen) throws IOException {
+        Scene scene = _stage.getScene();
+        scene.setRoot(_root);
+        _stage.setFullScreen(isFullScreen);
+        return _root;
     }
 
-    public GameController(Stage stage) {
-        super(stage);
-        Controller.gameController = this;
-    }
-
-    @Override
-    void load() {
+    void load(AnchorPane root, Stage stage) {
         try {
+            _stage = stage;
+            _root = root;
             loadFonts();
-            _root = setScene("game", true);
+            setScene(true);
             loadMap("level-1");
             loadTimeModal();
             loadProgressModal();
@@ -75,6 +90,7 @@ public class GameController extends Controller {
         clockText.setFont(fonts.get("clock"));
         clockText.setFill(javafx.scene.paint.Color.BLACK);
         timeModalRoot.getChildren().add(clockText);
+        _clockText = clockText;
 
         _root.getChildren().add(timeModalRoot);
     }
@@ -102,11 +118,25 @@ public class GameController extends Controller {
             System.out.println("AnchorPane not found!");
         }
 
-        // Sprite player = new Sprite("girl-1", this);
-        // player.render();
-        // Timer t = new Timer(_clockText);
-        // t.start();
-        // _city.showAllMailboxes();
+        Sprite player = new Sprite("girl-1", _stage);
+        player.render();
+        Timer t = new Timer(_clockText);
+        t.start();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> showRandomMailbox()));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.playFromStart();
+    }
+
+    private void showRandomMailbox() {
+        int numMailboxes = _city.getUninitializedMailboxes().size();
+        int randomMailboxIndex = new Random().nextInt(numMailboxes);
+        Mailbox currentMailbox = _city.getUninitializedMailboxes().get(randomMailboxIndex);
+        
+        currentMailbox.setDuration(5);
+        currentMailbox.render();
+        currentMailbox.markWaiting();
+        currentMailbox.show();
     }
 
 }
