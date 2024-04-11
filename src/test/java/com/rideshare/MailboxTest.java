@@ -64,7 +64,7 @@ public class MailboxTest {
         int duration = 5;
         Mailbox mailbox = new Mailbox(positionX, positionY, duration);
         mailbox.show();
-        assertEquals(TimerState.RUNNING, mailbox.getTimer());
+        assertEquals(TimerStatus.RUNNING, mailbox.getTimer());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class MailboxTest {
         Mailbox mailbox = new Mailbox(positionX, positionY, duration);
         mailbox.show();
         mailbox.hide();
-        assertEquals(TimerState.PAUSED, mailbox.getTimer());
+        assertEquals(TimerStatus.PAUSED, mailbox.getTimer());
 
     }
     @Test
@@ -86,7 +86,7 @@ public class MailboxTest {
         Mailbox mailbox = new Mailbox(positionX, positionY, duration);
         mailbox.show();
         mailbox.markComplete();
-        assertEquals(TimerState.STOPPED, mailbox.getTimer());
+        assertEquals(TimerStatus.STOPPED, mailbox.getTimer());
     }
 
     @Test

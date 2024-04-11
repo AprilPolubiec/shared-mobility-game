@@ -26,7 +26,7 @@ public class TimerTest {
     @Test
     void testInitialize() {
         Timer t = new Timer();
-        assertEquals(TimerState.INITIALIZED, t.getState());
+        assertEquals(TimerStatus.INITIALISED, t.getState());
         assertEquals(0, LocalTime.of(0,0,0).compareTo(t.getTime()));
     }
 
@@ -42,7 +42,7 @@ public class TimerTest {
             now = LocalTime.now();
         }
         assertEquals(3, LocalTime.of(0,0,0).compareTo(t.getTime()));
-        assertEquals(TimerState.RUNNING, t.getState());
+        assertEquals(TimerStatus.RUNNING, t.getState());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class TimerTest {
         waitTime(3);
         t.pause();
     
-        assertEquals(TimerState.PAUSED, t.getState());
+        assertEquals(TimerStatus.PAUSED, t.getState());
         assertEquals(3, LocalTime.of(0,0,0).compareTo(t.getTime()));
         waitTime(3);
         assertEquals(3, LocalTime.of(0,0,0).compareTo(t.getTime()));
@@ -72,7 +72,7 @@ public class TimerTest {
         waitTime(3);
         t.stop();
     
-        assertEquals(TimerState.STOPPED, t.getState());
+        assertEquals(TimerStatus.STOPPED, t.getState());
         // Time should get reset to 0
         assertEquals(0, LocalTime.of(0,0,0).compareTo(t.getTime()));
     }

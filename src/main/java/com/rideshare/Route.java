@@ -9,8 +9,8 @@ import javafx.geometry.Point2D;
  * The route contains a data structure representing its path throughout the city.
  */
 public class Route {
-    private RouteNodeMatrix nodeMatrix;
-    private TransportationType transportationType;
+    private final RouteNodeMatrix nodeMatrix;
+    private final TransportationType transportationType;
     private City city;
     public String name;
     

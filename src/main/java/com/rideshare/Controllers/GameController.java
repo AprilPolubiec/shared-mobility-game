@@ -8,7 +8,7 @@ import com.rideshare.City;
 import com.rideshare.Mailbox;
 import com.rideshare.MailboxStatus;
 import com.rideshare.Timer;
-import com.rideshare.TimerState;
+import com.rideshare.TimerStatus;
 import com.rideshare.GameManager.MapLoader;
 import com.rideshare.GameManager.Sprite;
 

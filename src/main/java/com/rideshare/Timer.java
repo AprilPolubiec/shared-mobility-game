@@ -13,7 +13,7 @@ public class Timer {
     private final LocalTime DAY_END = LocalTime.of(0, 0, 0);
     boolean isPaused = false;
     private LocalTime currentInGameTime;
-    private TimerState state = TimerState.UNINITIALIZED;
+    private TimerStatus status = TimerStatus.UNINITIALISED;
     private Timeline _timeline;
     Text _clockText;
 
@@ -24,11 +24,11 @@ public class Timer {
 
     public void initialize() {
         currentInGameTime = DAY_START;
-        state = TimerState.INITIALIZED;
+        status = TimerStatus.INITIALISED;
     }
 
     private void updateInGameTime() {
-        if(state == TimerState.RUNNING) {
+        if(status == TimerStatus.RUNNING) {
             currentInGameTime = currentInGameTime.plusMinutes(1);
             // Update clock text
             if(_clockText != null) {
@@ -43,21 +43,21 @@ public class Timer {
 
     public void start() {
         currentInGameTime = DAY_START;
-        state = TimerState.RUNNING;
+        status = TimerStatus.RUNNING;
         _timeline = new Timeline(new KeyFrame(Duration.seconds(1.0 / 6), event -> updateInGameTime()));
         _timeline.setCycleCount(Timeline.INDEFINITE);
         _timeline.play();
     }
 
     public void pause() {
-        state = TimerState.PAUSED;
+        status = TimerStatus.PAUSED;
         _timeline.pause();
         isPaused = true;
     }
 
     public void resume() {
         _timeline.play();
-        state = TimerState.RUNNING;
+        status = TimerStatus.RUNNING;
         isPaused = false;
     }
     
@@ -74,7 +74,7 @@ public class Timer {
 
     
     private void stop() {
-        state = TimerState.STOPPED;
+        status = TimerStatus.STOPPED;
         isPaused = false;
         _timeline.stop();
         System.out.println("Timer has been stopped.");
@@ -84,8 +84,8 @@ public class Timer {
         return this.currentInGameTime;
     }
         
-    public TimerState getState() {
-        return this.state;
+    public TimerStatus getState() {
+        return this.status;
     }
    
 }

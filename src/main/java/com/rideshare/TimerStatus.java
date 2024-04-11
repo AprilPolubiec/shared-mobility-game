@@ -1,8 +1,8 @@
 package com.rideshare;
 
-public enum TimerState {
-    UNINITIALIZED,
-    INITIALIZED,
+public enum TimerStatus {
+    UNINITIALISED,
+    INITIALISED,
     STOPPED,
     RUNNING,
     PAUSED,
