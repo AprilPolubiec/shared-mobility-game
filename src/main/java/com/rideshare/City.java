@@ -29,10 +29,6 @@ public class City {
     this.routes = routes;
     this.size = size;
     this.mailboxes = mailboxes;
-
-    for (Mailbox mailbox : mailboxes) {
-      mailbox.setTripCalculator(this);
-    }
   }
 
   public ArrayList<Mailbox> getMailboxes() {

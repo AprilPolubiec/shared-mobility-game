@@ -93,8 +93,13 @@ public class Timer {
         return this.state;
     }
 
+    // 1 second = 6 minutes
     public static int secondsToGameMinutes(int seconds) {
         return seconds * 6;
+    }
+    // 1 minute = 1/6 seconds
+    public static int gameMinutesToSeconds(int minutes) {
+        return minutes / 6;
     }
 
     public void render(AnchorPane root) {

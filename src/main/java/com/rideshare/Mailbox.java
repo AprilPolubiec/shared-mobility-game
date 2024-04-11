@@ -33,7 +33,6 @@ public class Mailbox {
    // DateTime startTime; // Maybe
    MediaPlayer mailboxWaitingAudio;
    MediaPlayer mailboxCompletedAudio;
-   TripCalculator _tripCalculator;
 
    public Mailbox(int row, int col, int houseTileId, TileManager tileManager) {
       _row = row;
@@ -41,10 +40,6 @@ public class Mailbox {
       _tileManager = tileManager;
       _houseTileId = houseTileId;
       status.set(MailboxStatus.UNINITIALIZED);
-   }
-
-   public void setTripCalculator(City city) {
-      _tripCalculator = new TripCalculator(city);
    }
 
    // TODO: pass sprite in constructor, not here
@@ -61,10 +56,6 @@ public class Mailbox {
       
       _mailboxTile.setOnMouseClicked(event -> {
          markInProgress();
-         // Path finder eek
-         // ArrayList<Trip> trips = _tripCalculator.calculateTrips(13, 13, _row, _col);
-         // ArrayList<Trip> trips = _tripCalculator.calculateTrips(sprite.getGridPanePosition().row, sprite.getGridPanePosition().col, _row, _col);
-         // sprite.moveOnRoute(trips.get(0).getNodeList());
       });
       status.set(MailboxStatus.READY);
    }
@@ -79,6 +70,10 @@ public class Mailbox {
    }
    public void addStatusListener(ChangeListener<? super MailboxStatus> listener) {
       this.status.addListener(listener);
+   }
+
+   public GridPanePosition getGridPanePosition() {
+      return new GridPanePosition(_row, _col);
    }
 
    public void show() {

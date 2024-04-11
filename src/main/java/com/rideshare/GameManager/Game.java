@@ -1,5 +1,6 @@
 package com.rideshare.GameManager;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.rideshare.City;
@@ -7,6 +8,8 @@ import com.rideshare.Mailbox;
 import com.rideshare.MailboxStatus;
 import com.rideshare.Player;
 import com.rideshare.Timer;
+import com.rideshare.Trip;
+import com.rideshare.TripCalculator;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -22,11 +25,13 @@ public class Game {
     private Timer _timer;
     private int _level;
     private City _city;
+    private TripCalculator _tripCalculator;
     public Game(AnchorPane root, City city, Sprite player) { // TODO: this should be a Player
         this._player = player;
         this._city = city;
         this._timer = new Timer();
         this._timer.render(root);
+        this._tripCalculator = new TripCalculator(this._city);
     }
 
     public void setLevel(int levelNumber) {
@@ -58,7 +63,7 @@ public class Game {
         int numMailboxes = _city.getUninitializedMailboxes().size();
         int randomMailboxIndex = new Random().nextInt(numMailboxes);
         Mailbox currentMailbox = _city.getUninitializedMailboxes().get(randomMailboxIndex);
-        currentMailbox.setDuration(5);
+        currentMailbox.setDuration(Timer.gameMinutesToSeconds(120)); // 2 in-game hours
         currentMailbox.render();
         currentMailbox.show();
         currentMailbox.addStatusListener(new ChangeListener<MailboxStatus>() {
@@ -75,6 +80,9 @@ public class Game {
                 if (newStatus == MailboxStatus.IN_PROGRESS) {
                     // Do something
                     // CALCULATE TRIPS
+                    // Path finder eek
+                    ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition().row, _player.getGridPanePosition().col, currentMailbox.getGridPanePosition().row, currentMailbox.getGridPanePosition().col);
+                    _player.moveOnRoute(trips.get(0).getNodeList());
                 }
             }
         });
