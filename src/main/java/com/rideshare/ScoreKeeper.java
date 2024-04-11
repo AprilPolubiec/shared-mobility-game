@@ -50,6 +50,10 @@ public class ScoreKeeper {
         return this.mailboxesCompleted;
     }
 
+    public int getLevel(){
+        return this.level;
+    }
+
     public int getTotalMailboxes() {
         return this.totalMailboxes;
     }
@@ -137,4 +141,16 @@ public class ScoreKeeper {
 
         return this.score;
     }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    // Setter method for mailboxesCompleted
+    public void setMailboxesCompleted(int mailboxesCompleted) {
+        this.mailboxesCompleted = mailboxesCompleted;
+    }
+    
+    
 }
+

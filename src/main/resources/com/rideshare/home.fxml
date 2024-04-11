@@ -54,7 +54,7 @@
       </AnchorPane>
       <AnchorPane layoutX="261.0" layoutY="284.0">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleStartButtonPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/ui/green_button04.png" />
                </image>

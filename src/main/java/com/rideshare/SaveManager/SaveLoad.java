@@ -14,43 +14,38 @@ public class SaveLoad {
     ScoreKeeper sk;
 
     public SaveLoad(ScoreKeeper scoreKeeper) {
-        this.sk = sk;
+        this.sk = scoreKeeper;
     }
 
-    public void save() {
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("save.dat")));
-            
+    public void save(String fileName) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(fileName)))) {
+
             DataStorage ds = new DataStorage();
 
-            // variables that we're saving
-            ds.score = sk.score;
-            ds.mailboxesCompleted = sk.mailboxesCompleted;
-            ds.level = sk.level;
+            ds.score = sk.calculateScore();
+            ds.mailboxesCompleted = sk.getMailboxesCompleted();
+            ds.level = sk.getLevel();
 
-            // writing to the file save.dat
+            
             oos.writeObject(ds);
 
         } catch (Exception e) {
             System.out.println("Something's gone wrong with the save!! :( )");
         }
-        
+
     }
 
-    public void loadSave() {
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("save.dat")));
-
+    public void loadSave(String fileName) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(fileName)))) {
             DataStorage ds = (DataStorage) ois.readObject();
 
-            // returning the values we're saving
-            sk.score = ds.score;
-            sk.mailboxesCompleted = ds.mailboxesCompleted;
-            sk.level = ds.level;
-
+            sk.setScore(ds.score);
+            sk.setMailboxesCompleted(ds.mailboxesCompleted);
+            sk.setLevel(ds.level);
+            
+            
         } catch (Exception e) {
             System.out.println("Something's gone wrong with the load!! :( )");
         }
     } 
-    
 }

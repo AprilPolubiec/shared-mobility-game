@@ -11,8 +11,26 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+import java.io.File;
+import com.rideshare.ScoreKeeper; 
+import com.rideshare.SaveManager.SaveLoad;
+import java.net.URL;
+
+
+
+
 
 public class HomeController {
+
+    private ScoreKeeper sk;
+    private SaveLoad saveLoad;
+
+ 
+    public void initialize() {
+        sk = new ScoreKeeper();
+        saveLoad = new SaveLoad(sk); 
+    }
     @FXML
     public javafx.scene.control.Button loadGameButton;
     @FXML
@@ -54,10 +72,14 @@ public class HomeController {
     @FXML
     public void handleStartButtonPressed() {
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
-            AnchorPane root = loader.load();
-            GameController gc = loader.getController();
-            gc.load(root, _stage);
+            AnchorPane anchorPane = (AnchorPane) _stage.getScene().lookup("#newLoadGameModal");
+        if (anchorPane != null) {
+            // Hide the AnchorPane
+            anchorPane.setVisible(false);
+        } else {
+            System.out.println("AnchorPane not found!");
+        }
+           
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,14 +87,31 @@ public class HomeController {
 
     @FXML
     public void handleLoadButtonPressed() {
-        // TODO: load saved game file
-        // TODO: Show saved game options
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Game");
+    
+       //creating a path to game_data directory where game status' will be saved
+        File initialDirectory = new File("/game_data");
+        fileChooser.setInitialDirectory(initialDirectory);
+    
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Data Files (*.dat)", "*.dat");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+    
+       
+        File selectedFile = fileChooser.showOpenDialog(null);
+    
+        if (selectedFile != null) {
+            String fileName = selectedFile.getAbsolutePath();
+            saveLoad.loadSave(fileName); 
+        }
     }
 
     @FXML
     public void handleGameSelected() {
         // TODO: load saved game file
+        saveLoad.loadSave();
         // TODO: Show saved game options
+
     }
 
     @FXML
