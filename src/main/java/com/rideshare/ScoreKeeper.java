@@ -18,10 +18,9 @@ package com.rideshare;
        */
 
 public class ScoreKeeper {
-
     // All relevant attributes initialised
     // The CO2 budget is just a random value here.
-    static final int maxCo2Budget = 10;
+    static final int maxCo2Budget = 10; // NOTE: budget - average driver does about 160km per day, electric vehicle emits 53 per km. budget = 160*53 = 8480
     // co2Budget here is a 'more local variable' allowed to go into the negatives in order to check if the budget has been exceeded
     int co2Budget;
     int CO2Saved;
@@ -141,8 +140,4 @@ public class ScoreKeeper {
 
         return this.score;
     }
-
-   
-    
 }
-

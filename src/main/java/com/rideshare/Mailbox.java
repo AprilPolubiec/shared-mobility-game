@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
 
+import com.rideshare.GameManager.Sprite;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 
@@ -42,7 +43,8 @@ public class Mailbox {
       _tripCalculator = new TripCalculator(city);
    }
 
-   public void render() {
+   // TODO: pass sprite in constructor, not here
+   public void render(Sprite sprite) { // TODO: this should be Player not Sprite
       Media waitingMedia = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
       mailboxWaitingAudio = new MediaPlayer(waitingMedia);
 
@@ -52,10 +54,13 @@ public class Mailbox {
       _mailboxTileImageIdx = 0;
       this._mailboxTile = _tileManager.drawTile(_houseTileId + TileUtils.FLAG_HOUSE_OFFSET + _mailboxTileImageIdx, _row,
             _col);
+      
       _mailboxTile.setOnMouseClicked(event -> {
          markComplete();
          // Path finder eek
-         _tripCalculator.calculateTrips(13, 13, _row, _col);
+         // ArrayList<Trip> trips = _tripCalculator.calculateTrips(13, 13, _row, _col);
+         ArrayList<Trip> trips = _tripCalculator.calculateTrips(sprite.getGridPanePosition().row, sprite.getGridPanePosition().col, _row, _col);
+         sprite.moveOnRoute(trips.get(0).getNodeList());
       });
       this.status = MailboxStatus.READY;
 
@@ -97,7 +102,7 @@ public class Mailbox {
       _tileManager.drawTile(202, _row - 1, _col);
       _tileManager.replaceTileImage(_mailboxTile, TileUtils.COMPLETED_FLAG_IDS[0]);
       this.status = MailboxStatus.COMPLETED;
-      mailboxCompletedAudio.play();
+      // mailboxCompletedAudio.play();
    }
 
    public void markFailed() {
@@ -107,7 +112,7 @@ public class Mailbox {
 
    public void markWaiting() {
       this.status = MailboxStatus.WAITING;
-      mailboxWaitingAudio.play();
+      // mailboxWaitingAudio.play();
    }
 
 }

@@ -3,6 +3,7 @@ package com.rideshare.TileManager;
 import com.rideshare.App;
 import com.rideshare.GameManager.MapLoader;
 
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -54,6 +55,11 @@ public class TileManager {
             }
         }
         _root.getChildren().add(0, _tileGrid);
+        // Bounds localBounds = _tileGrid.getBoundsInLocal();
+        // System.out.println(String.format("Tile Grid Local, x = %s - %s, y = %s - %s", localBounds.getMinX(), localBounds.getMaxX(), localBounds.getMinY(), localBounds.getMaxY()));
+        // Bounds boundsInScene = _tileGrid.localToScene(_tileGrid.getBoundsInLocal());
+        // System.out.println(String.format("Tile Grid, x = %s - %s, y = %s - %s", boundsInScene.getMinX(), boundsInScene.getMaxX(), boundsInScene.getMinY(), boundsInScene.getMaxY()));
+        // System.out.println(String.format("Tile [%s, %s], x = %s y = %s", rowIdx, colIdx, boundsInScene.getMinX(), boundsInScene.getMinY()));
     }
 
 
@@ -61,6 +67,7 @@ public class TileManager {
         String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();
         ImageView tileImage = new ImageView(tileUrl);
         _tileGrid.add(tileImage, colIdx, rowIdx);
+    
         return tileImage;
     }
 

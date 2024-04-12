@@ -6,6 +6,7 @@ import com.rideshare.Mailbox;
 import com.rideshare.Route;
 import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationType;
+import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.TileManager.TiledMapLayer;
@@ -141,12 +142,4 @@ public class MapLoader {
         }
         return data;
     }
-}
-
-class MapJson {
-    public int height;
-    public int tileheight;
-    public int width;
-    public int tilewidth;
-    public TiledMapLayer[] layers;
 }
