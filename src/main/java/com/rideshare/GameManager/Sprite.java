@@ -1,39 +1,34 @@
 package com.rideshare.GameManager;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import com.rideshare.App;
 import com.rideshare.GridPanePosition;
+import com.rideshare.Timer;
 import com.rideshare.TransportationMode;
 import com.rideshare.TransportationNode;
+import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.Animation;
-import javafx.animation.AnimationTimer;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Sprite {
+public abstract class Sprite {
     private String resource_directory;
-    HashMap<String, List<Image>> icons = new HashMap<String, List<Image>>();
-    Scene scene;
-    Stage _stage;
-    ImageView imageView;
+    private HashMap<String, List<Image>> icons = new HashMap<String, List<Image>>();
+    private ImageView imageView;
     private double xPos;
     private double yPos;
     private String direction = "down";
@@ -41,9 +36,7 @@ public class Sprite {
     private int spriteTimer;
     private boolean isMoving;
 
-    public Sprite(String name, Stage stage) {
-        this._stage = stage;
-        this.scene = stage.getScene();
+    public Sprite(String name) {
         this.load(name);       
     }
 
@@ -77,21 +70,19 @@ public class Sprite {
         }
     }
 
-    public void render() {
+    protected void render(AnchorPane root, GridPanePosition startPosition) {
         // Place on the screen
         imageView = new ImageView(icons.get("down").get(0));
-        xPos = 32 * 13; // [13,13]
-        yPos = 32 * 13; // [13,13]
-        // xPos = (32 * 30) / 2;
-        // yPos = (32 * 30) / 2;
+        xPos = 32 * startPosition.row;
+        yPos = 32 * startPosition.col;
         imageView.setX(xPos);
         imageView.setY(yPos);
 
-        ((AnchorPane) _stage.getScene().getRoot()).getChildren().add(imageView);
+        root.getChildren().add(imageView);
         spriteLoop().playFromStart();
     }
 
-    public GridPanePosition getGridPanePosition() {
+    protected GridPanePosition getGridPanePosition() {
         int col = (int) Math.floor(xPos / 30);
         int row = (int) Math.floor(yPos / 30);
         return new GridPanePosition(row, col);
@@ -118,15 +109,16 @@ public class Sprite {
     }
 
     public void moveOnRoute(ArrayList<TransportationNode> nodes) {
-        TransportationNode endNode = nodes.get(nodes.size() - 1);
         SequentialTransition sequentialTransition = new SequentialTransition();
 
         for (int i = 0; i < nodes.size() - 1; i++) {
             TransportationNode currentNode = nodes.get(i);
             TransportationNode nextNode = nodes.get(i + 1);
             // TODO: duration is dependent on tranportation type
-            // TransportationMode
-            TranslateTransition transition = new TranslateTransition(Duration.seconds(1), this.imageView);
+            TransportationMode transportationMode = currentNode.modeOfTransport;
+            double minutes = (TileUtils.TILE_DISTANCE_IN_KM / transportationMode.getSpeed()) * 60.0; // Number of game minutes to go 0.5 km
+            double seconds = Timer.gameMinutesToSeconds(minutes);
+            TranslateTransition transition = new TranslateTransition(Duration.seconds(seconds), this.imageView);
 
             if (currentNode.row < nextNode.row) {
                 transition.setByY(32.0);
@@ -172,13 +164,12 @@ public class Sprite {
         sequentialTransition.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                // TODO Auto-generated method stub
                 isMoving = false;
             }
         });
     }
 
-    public void animate() {
+    private void animate() {
         if (spriteTimer > 12) {
             if (spriteIdx < 1) {
                 spriteIdx += 1;
@@ -187,7 +178,6 @@ public class Sprite {
             }
             spriteTimer = 0;
         }
-        var r = icons.get(this.direction).get(spriteIdx);
         imageView.setImage(icons.get(this.direction).get(spriteIdx));
         spriteTimer++;
     }

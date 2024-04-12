@@ -10,9 +10,6 @@ package com.rideshare;
     hasStops (boolean): true/false value, indicates whether the mode has stops
  */
 public class TransportationMode {
-    // TODO:
-    // - decide how to represent emission rate (per km? per sec?)
-    // - decide how to represent speed (km/hr? pixels/ns?)
     private final String name;
     protected final int co2EmissionRate;
     protected final int speed;
@@ -24,15 +21,24 @@ public class TransportationMode {
         this.hasStops = hasStops;
 
     }
+    
+    /** 
+     * @return String
+     */
     public String getName() {
         return this.name;
     }
 
+    /** 
+     * @return int: CO2 emission in kg/km
+     */
     public int getEmissionRate() {
         return this.co2EmissionRate;
     }
 
-
+    /** 
+     * @return int: speed of transportation mode in km/hr
+     */
     public int getSpeed() {
         return this.speed;
     }

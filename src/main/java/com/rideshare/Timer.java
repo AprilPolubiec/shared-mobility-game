@@ -94,12 +94,12 @@ public class Timer {
     }
 
     // 1 second = 6 minutes
-    public static int secondsToGameMinutes(int seconds) {
-        return seconds * 6;
+    public static double secondsToGameMinutes(double seconds) {
+        return seconds * 6.0;
     }
     // 1 minute = 1/6 seconds
-    public static int gameMinutesToSeconds(int minutes) {
-        return minutes / 6;
+    public static double gameMinutesToSeconds(double minutes) {
+        return minutes / 6.0;
     }
 
     public void render(AnchorPane root) {

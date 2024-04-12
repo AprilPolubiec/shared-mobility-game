@@ -15,7 +15,7 @@ public class TransportationNode {
     boolean open;
     boolean checked;
     boolean canStop;
-    TransportationMode modeOfTransport;
+    public TransportationMode modeOfTransport;
     TransportationType transportationType;
     RouteNodeMatrix routeMatrix;
 
@@ -114,6 +114,7 @@ public class TransportationNode {
                 if(!modeOfTransport.hasStops() && transportationType != TransportationType.WALKING) {
                     setAsSolid(); // Prioritize train
                 }
+                // TODO: turn off car nodes??
                 if (transportationType == TransportationType.TRAIN) {
                     this.hCost -= 1000;
                 }

@@ -1,16 +1,9 @@
 package com.rideshare;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TimerTask;
 
-import com.rideshare.GameManager.Sprite;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 
-import javafx.animation.Animation;
-import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,7 +11,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 public class Mailbox {
    private int _row;
@@ -30,6 +22,7 @@ public class Mailbox {
    int _mailboxTileImageIdx;
    int _houseTileId;
    int _duration; // In seconds
+   int _timeLeft; // In seconds
    // DateTime startTime; // Maybe
    MediaPlayer mailboxWaitingAudio;
    MediaPlayer mailboxCompletedAudio;
@@ -42,7 +35,6 @@ public class Mailbox {
       status.set(MailboxStatus.UNINITIALIZED);
    }
 
-   // TODO: pass sprite in constructor, not here
    public void render() {
       Media waitingMedia = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
       mailboxWaitingAudio = new MediaPlayer(waitingMedia);
@@ -68,6 +60,7 @@ public class Mailbox {
    public MailboxStatus getStatus() {
       return this.status.get();
    }
+
    public void addStatusListener(ChangeListener<? super MailboxStatus> listener) {
       this.status.addListener(listener);
    }
@@ -76,22 +69,25 @@ public class Mailbox {
       return new GridPanePosition(_row, _col);
    }
 
+   // TODO: show a countdown above the mailbox instead
    public void show() {
       if (this.status.get() != MailboxStatus.WAITING) {
          markWaiting();
-         java.util.Timer timer = new java.util.Timer();
-         timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-               if (status.get() != MailboxStatus.COMPLETED) {
-                  Platform.runLater(() -> {
-                     // Code to update the UI goes here
-                     markFailed();
-                  });
-               }
-               timer.cancel();
-            }
-         }, _duration * 1000); // Convert seconds to milliseconds
+         // TODO: what if they just never disappear?
+         // TODO: insead of timer we need to be able to track time past
+         // java.util.Timer timer = new java.util.Timer();
+         // timer.schedule(new TimerTask() {
+         //    @Override
+         //    public void run() {
+         //       if (status.get() != MailboxStatus.COMPLETED) {
+         //          Platform.runLater(() -> {
+         //             // Code to update the UI goes here
+         //             markFailed();
+         //          });
+         //       }
+         //       timer.cancel();
+         //    }
+         // }, _duration * 1000); // Convert seconds to milliseconds
       }
 
       this._isVisible = true;
