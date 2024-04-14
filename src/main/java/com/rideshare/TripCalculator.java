@@ -274,7 +274,8 @@ public class TripCalculator {
             // FIND BEST NODE
             int bestNodeIdx = 0;
             int bestNodeFCost = 999;
-
+            int iterations = 0;
+            int maxIterations = 1000;
             for (int i = 0; i < openList.size(); i++) {
                 // Check if the F cost is better than current best
                 TransportationNode nodeToCheck = openList.get(i);
@@ -313,6 +314,12 @@ public class TripCalculator {
                 Trip trip = createTrip(tripType, goalNode, startNode);
                 resetNodes();
                 return trip;
+            }
+            iterations++;
+
+            if (iterations >= maxIterations) {
+                System.out.println("Max iterations reached, no route found");
+                return null;
             }
         }
         return null;

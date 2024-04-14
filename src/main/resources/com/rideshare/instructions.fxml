@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="instructModal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="337.0" prefWidth="458.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ScrollPane hvalue="0.16" layoutY="-2.0" prefHeight="337.0" prefWidth="459.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="711.0" prefWidth="442.0">
+               <children>
+                  <Text layoutX="44.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is you! A postal worker for Earth Friendly Express" wrappingWidth="407.9765625">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="61.0" fitWidth="64.0" layoutX="200.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/sprites/girl-1/down-2.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="67.0" fitWidth="72.0" layoutX="176.0" layoutY="178.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/tiles/tile063.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="54.0" fitWidth="53.0" layoutX="248.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../../Downloads/mailbox.png" />
+                     </image>
+                  </ImageView>
+                  <Text layoutX="73.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Deliver mail to houses by clicking on them..." wrappingWidth="314.9765625">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="69.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="And click on the form of public transport you want to take" wrappingWidth="309.4765625">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="46.0" fitWidth="47.0" layoutX="212.0" layoutY="321.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/sprites/girl-1/down-2.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="74.0" fitWidth="111.0" layoutX="187.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/ui/instructions/giphy.gif" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="112.0" fitWidth="118.0" layoutX="52.0" layoutY="326.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/ui/instructions/car.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="90.0" fitWidth="175.0" layoutX="127.0" layoutY="397.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/ui/instructions/train.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="49.0" fitWidth="93.0" layoutX="328.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/ui/instructions/PixelBus.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="56.0" fitWidth="49.0" layoutX="157.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true" rotate="-115.6">
+                     <image>
+                        <Image url="@../../images/ui/instructions/speed%20arrow.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="56.0" fitWidth="49.0" layoutX="216.0" layoutY="373.0" pickOnBounds="true" preserveRatio="true" rotate="179.2">
+                     <image>
+                        <Image url="@../../images/ui/instructions/speed%20arrow.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="56.0" fitWidth="49.0" layoutX="274.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true" rotate="115.0">
+                     <image>
+                        <Image url="@../../images/ui/instructions/speed%20arrow.png" />
+                     </image>
+                  </ImageView>
+                  <Text layoutX="38.0" layoutY="496.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Using public transport will use up your CO2 budget. Each form of transport will use different amounts of CO2, so pick carefully. If you fail your CO2 pledge, it's...." wrappingWidth="394.4765625">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="194.0" fitWidth="290.0" layoutX="79.0" layoutY="522.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/ui/instructions/GAME%20OVER.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
