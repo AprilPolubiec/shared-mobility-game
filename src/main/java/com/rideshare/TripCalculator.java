@@ -43,7 +43,8 @@ public class TripCalculator {
         this.currentRouteMatrix = this._currentNode.routeMatrix;
 
         print(String.format("Mailbox at [%s, %s]", endRow, endCol));
-        this._goalNode = getGoalNode(endRow, endCol - 1); // Col - 1 b/c that is where the house is
+        GridPanePosition housePosition = Mailbox.getHousePosition(endRow, endCol);
+        this._goalNode = getGoalNode(housePosition.row, housePosition.col); // Col - 1 b/c that is where the house is
         print(String.format("Starting search from [%s, %s] to [%s, %s]", startRow, startCol, _goalNode.row,
                 _goalNode.col));
 
@@ -80,11 +81,11 @@ public class TripCalculator {
     }
 
     private TransportationNode getGoalNode(int row, int col) {
-        // The goal node is the street which is either in front, to the left or to the
+        // The goal node is the walking path which is either in front, to the left or to the
         // right
         if (row + 1 < cityHeight) { // Prefer just below the house
-            ArrayList<TransportationNode> rightNodes = city.getRouteNodes(row + 1, col);
-            for (TransportationNode node : rightNodes) {
+            ArrayList<TransportationNode> nodesBelow = city.getRouteNodes(row + 1, col);
+            for (TransportationNode node : nodesBelow) {
                 if (node.transportationType == TransportationType.WALKING && !node.solid) {
                     return node;
                 }
@@ -118,7 +119,7 @@ public class TripCalculator {
             }
         }
 
-        return city.getRouteNodes(row, col - 1).get(0); // Not good
+        throw new IllegalArgumentException(String.format("There are no walking nodes available around [%s, %s]", row, col)); // Not good
     }
 
     private void openNeighbors(int row, int col, TransportationNode currentNode) {
