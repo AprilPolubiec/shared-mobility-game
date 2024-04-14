@@ -11,6 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+
 
 public class HomeController {
     @FXML
@@ -89,8 +91,17 @@ public class HomeController {
             
             Stage instructionsStage = new Stage();
             instructionsStage.setTitle("Instructions");
+            // instructionsStage.initModality(Modality.APPLICATION_MODAL); // Block input to other windows
             instructionsStage.setScene(new Scene(root));
-    
+
+            // Get the exit button from the loaded FXML
+            // Button exitButton = (Button) root.lookup("#exitButton");
+
+            // Set action for the exit button
+            // exitButton.setOnAction(event -> instructionsStage.close());
+
+            // Show the pop-up window
+            // instructionsStage.show();
             instructionsStage.show();
         } catch (IOException e) {
             e.printStackTrace();
