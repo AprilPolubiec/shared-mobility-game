@@ -3,6 +3,8 @@ package com.rideshare;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.rideshare.TileManager.TileUtils;
+
 /**
  * Description: A trip is a series of Routes that can be taken to get from point
  * A
@@ -53,12 +55,12 @@ import java.util.Collections;
         float currentLegDuration = 0;
         float currentLegEmission = 0;
         int iterations = 0;
-        while (current != null & iterations <= 40) {
+        while (current != null & iterations <= 200) {
             this._nodeList.add(current);
 
-            currentLegDistance += .5; // Each node = .5km
-            currentLegDuration += (0.5 / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go one km
-            currentLegEmission += (float) current.modeOfTransport.getEmissionRate() * 0.5; // Emission rate is in km/hr
+            currentLegDistance += TileUtils.TILE_DISTANCE_IN_KM; // Each node = .5km
+            currentLegDuration += (TileUtils.TILE_DISTANCE_IN_KM / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go 0.5 km
+            currentLegEmission += (float) current.modeOfTransport.getEmissionRate() * TileUtils.TILE_DISTANCE_IN_KM; // Emission rate is in km/hr
 
             if (current.parent == null || current.transportationType != current.parent.transportationType) {
                 this.tripDuration += currentLegDuration;

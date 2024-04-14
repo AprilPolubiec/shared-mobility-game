@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import com.rideshare.Controllers.HomeController;
-import com.rideshare.GameManager.Sprite;
 
 /**
  * JavaFX App
@@ -20,13 +19,6 @@ public class App extends Application {
         AnchorPane root = fxmlLoader.load();
         HomeController hc = fxmlLoader.getController();
         hc.load(stage, root);
-        // try {
-        //     Sprite s = new Sprite("girl-1", stage);
-        //     s.enableWASD(true);
-        // } catch (Exception e) {
-        //     // TODO: handle exception
-        //     e.printStackTrace();
-        // }
     }
 
     public static void main(String[] args) {
