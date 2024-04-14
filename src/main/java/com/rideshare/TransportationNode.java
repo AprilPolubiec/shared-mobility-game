@@ -16,7 +16,7 @@ public class TransportationNode {
     boolean checked;
     boolean canStop;
     public TransportationMode modeOfTransport;
-    TransportationType transportationType;
+    public TransportationType transportationType;
     RouteNodeMatrix routeMatrix;
 
     public TransportationNode(int col, int row, TransportationType transportationType, RouteNodeMatrix routeNodeMatrix) {
