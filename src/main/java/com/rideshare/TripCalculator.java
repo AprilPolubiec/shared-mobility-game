@@ -65,7 +65,7 @@ public class TripCalculator {
             publicTransitTrip.print();
         }
         Trip fastestTrip = runPathFinding(TripType.FAST, this._startNode,
-        this._currentNode, this._goalNode);
+                this._currentNode, this._goalNode);
         fastestTrip.print();
         trips.add(fastestTrip);
         return trips;
@@ -199,13 +199,16 @@ public class TripCalculator {
     }
 
     // TODO: what about getting off and hopping on the next stop?
-    public TransportationNode getClosestStation(TransportationNode goalNode, TransportationType transportationType) {
+    public TransportationNode getClosestStation(TransportationNode goalNode, TransportationType transportationType,
+            String routeName) {
         ArrayList<RouteNodeMatrix> transitMatrices = new ArrayList<RouteNodeMatrix>();
         // First - find the closest train to our starting nodes and ending nodes
         for (Route route : city.routes) {
             Boolean isTransit = route.getTransportationType() == TransportationType.TRAIN
                     || route.getTransportationType() == TransportationType.BUS;
-            if ((transportationType == null && isTransit) || route.getTransportationType() == transportationType) {
+
+            if ((transportationType == null && isTransit)
+                    || (route.getTransportationType() == transportationType && route.name.equals(routeName))) {
                 transitMatrices.add(route.getRouteNodeMatrix());
             }
         }
@@ -236,8 +239,9 @@ public class TripCalculator {
     }
 
     public Trip runTransitPathFinding(TransportationNode startNode, TransportationNode goalNode) {
-        TransportationNode startStation = getClosestStation(startNode, null);
-        TransportationNode endStation = getClosestStation(goalNode, startStation.transportationType);
+        TransportationNode startStation = getClosestStation(startNode, null, null);
+        TransportationNode endStation = getClosestStation(goalNode, startStation.transportationType,
+                startStation.modeOfTransport.getName());
 
         // TODO: handle if start and end are the same, we can just skip this path finder
         if (startStation == endStation) {
@@ -252,7 +256,7 @@ public class TripCalculator {
         return firstLeg;
     }
 
-    private void closeNonTransitNodes() {
+    private void closeNonTransitNodes(TransportationNode startNode) {
         for (Route route : this.city.routes) {
             TransportationNode[][] nodeMatrix = route.getRouteNodeMatrix().get();
 
@@ -260,8 +264,9 @@ public class TripCalculator {
                 int rowIdx = i;
                 for (int j = 0; j < nodeMatrix[rowIdx].length; j++) {
                     TransportationNode n = nodeMatrix[i][j];
-                    if (route.getTransportationType() != TransportationType.TRAIN
-                            && route.getTransportationType() != TransportationType.BUS) {
+                    if ((route.getTransportationType() != TransportationType.TRAIN
+                            && route.getTransportationType() != TransportationType.BUS)
+                            || !route.name.equals(startNode.modeOfTransport.getName())) {
                         n.setAsChecked();
                         checkedList.add(n);
                     }
@@ -273,7 +278,7 @@ public class TripCalculator {
     public Trip runPathFinding(TripType tripType, TransportationNode startNode, TransportationNode currentNode,
             TransportationNode goalNode) {
         if (tripType == TripType.TRANSIT_ONLY) {
-            closeNonTransitNodes();
+            closeNonTransitNodes(startNode);
         }
         while (goalReached == false) {
             int col = currentNode.col;
@@ -330,7 +335,17 @@ public class TripCalculator {
     }
 
     private void openNode(TransportationNode node, TransportationNode currentNode) {
-        if (node.open == false && node.checked == false && node.solid == false) {
+        Boolean isCheckableNode = node.open == false && node.checked == false && node.solid == false;
+
+        if (isCheckableNode) {
+            if (currentNode.modeOfTransport.hasStops()) {
+                // We are currently on a form of public transportation - the only nodes we can open are nodes on the same path
+                if (!currentNode.canStop && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName())) return;
+            }
+            if (node.modeOfTransport.hasStops()) {
+                // If the node we are checking is a public transit - it has to either be a valid stop or be on the transit path
+                if (!node.canStop && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName())) return;
+            }
             node.setAsOpen();
             node.parent = currentNode;
             openList.add(node);

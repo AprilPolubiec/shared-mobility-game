@@ -38,6 +38,7 @@ public abstract class Sprite {
     private int spriteTimer;
     private boolean isMoving;
     private String spriteName;
+    private String currentSprite;
 
     public Sprite(String name) {
         spriteName = name;
@@ -45,6 +46,10 @@ public abstract class Sprite {
     }
 
     private void load(String name) {
+        if (currentSprite == name) {
+            return;
+        }
+        // System.out.println(String.format("Loading %s", name));
         try {
             this.resource_directory = "/images/sprites/" + name;
 
@@ -66,17 +71,20 @@ public abstract class Sprite {
             icons.put("down", down_icons);
             icons.put("left", left_icons);
             icons.put("right", right_icons);
-
+            this.currentSprite = name;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
 
     protected void render(AnchorPane root, GridPanePosition startPosition) {
         // Place on the screen
         imageView = new ImageView(icons.get("down").get(0));
-        xPos = 32 * startPosition.row;
-        yPos = 32 * startPosition.col;
+        imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
+        imageView.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
+        xPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.row;
+        yPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.col;
         imageView.setX(xPos);
         imageView.setY(yPos);
 
@@ -139,20 +147,20 @@ public abstract class Sprite {
             TranslateTransition transition = new TranslateTransition(Duration.seconds(seconds), this.imageView);
 
             if (currentNode.row < nextNode.row) {
-                transition.setByY(32.0);
-                yPos += 32;
+                transition.setByY(TileUtils.TILE_SIZE_IN_PIXELS);
+                yPos += TileUtils.TILE_SIZE_IN_PIXELS;
             }
             if (currentNode.row > nextNode.row) {
-                transition.setByY(-32.0);
-                yPos -= 32;
+                transition.setByY(-TileUtils.TILE_SIZE_IN_PIXELS);
+                yPos -= TileUtils.TILE_SIZE_IN_PIXELS;
             }
             if (currentNode.col > nextNode.col) {
-                transition.setByX(-32.0);
-                xPos -= 32;
+                transition.setByX(-TileUtils.TILE_SIZE_IN_PIXELS);
+                xPos -= TileUtils.TILE_SIZE_IN_PIXELS;
             }
             if (currentNode.col < nextNode.col) {
-                transition.setByX(32.0);
-                xPos += 32;
+                transition.setByX(TileUtils.TILE_SIZE_IN_PIXELS);
+                xPos += TileUtils.TILE_SIZE_IN_PIXELS;
             }
 
             Utils.print(String.format("Now at [%s, %s]", getGridPanePosition().row, getGridPanePosition().col));
@@ -172,10 +180,20 @@ public abstract class Sprite {
                     if (nextNode.col < nextNextNode.col) {
                         direction = "right";
                     }
-                    if (nextNextNode.transportationType == TransportationType.CAR) {
-                        load("car");
-                    } else {
-                        load(spriteName);
+                    switch (nextNode.transportationType) {
+                        case CAR:
+                            load("car");
+                            break;
+                        case BUS:
+                            if (nextNode.row == nextNextNode.row && nextNextNode.col == nextNextNode.col) {
+                                load(spriteName);
+                            } else {
+                                load("bus");
+                            }
+                            break;
+                        default:
+                            load(spriteName);
+                            break;
                     }
                 }
             });
@@ -187,6 +205,7 @@ public abstract class Sprite {
             @Override
             public void handle(ActionEvent event) {
                 isMoving = false;
+                load(spriteName);
             }
         });
     }

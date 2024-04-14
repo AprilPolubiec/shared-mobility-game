@@ -60,7 +60,6 @@ public class Game {
     private void initializeGameLoop() {
         Utils.print(String.format("Starting game loop"));
         _timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
-            Utils.print(String.format("Keyframe"));
             // Get the mailboxes that have not been rendered yet
             int numMailboxes = _city.getMailboxes().size();
             int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
@@ -145,7 +144,9 @@ public class Game {
 
     private void handleMailboxSelected(Mailbox mailbox) {
         Utils.print(String.format("Mailbox selected"));
-
+        if (mailbox.getStatus() == MailboxStatus.IN_PROGRESS) {
+            return;
+        }
         // Calculate trips from player to mailbox
         ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition().row,
                 _player.getGridPanePosition().col, mailbox.getGridPanePosition().row,
@@ -161,9 +162,10 @@ public class Game {
                 _currentTrip = newValue;
                 _timer.resume();
                 _player.moveOnRoute(newValue.getNodeList());
+                // TODO: how do I wait for the above to finish?
             }
         });
-        mailbox.markComplete();
+        mailbox.markInProgress();
     }
 
     private void handleMailboxCompleted() {

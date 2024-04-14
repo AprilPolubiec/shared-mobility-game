@@ -64,6 +64,7 @@ public class GameController {
         progressBar.setPrefHeight(50);
 
         progressBar.setStyle("-fx-accent: #fa8132;");
+        AnchorPane.setBottomAnchor(vBox, 0.0);
         _root.getChildren().add(vBox);
     }
 

@@ -13,7 +13,7 @@ public class TileUtils {
     public static final Integer FLAG_HOUSE_OFFSET = 7; // Every flag Id is +7
 
     public static double TILE_DISTANCE_IN_KM = 0.5;
-    public static int TILE_SIZE_IN_PIXELS = 32;
+    public static int TILE_SIZE_IN_PIXELS = 28;
     
     public static double pixelsToKm(int pixels) {
         return (TILE_DISTANCE_IN_KM * pixels) / TILE_SIZE_IN_PIXELS;
