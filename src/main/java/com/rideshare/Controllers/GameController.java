@@ -38,7 +38,7 @@ public class GameController {
             _stage = stage;
             _root = root;
             setScene(true);
-            loadMap("level-1");
+            loadMap("test-buses");
             // loadTimer();
             loadProgressModal();
         } catch (Exception e) {

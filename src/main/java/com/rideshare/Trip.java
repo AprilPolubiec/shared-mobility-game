@@ -55,7 +55,7 @@ import com.rideshare.TileManager.TileUtils;
         float currentLegDuration = 0;
         float currentLegEmission = 0;
         int iterations = 0;
-        while (current != null & iterations <= 40) {
+        while (current != null & iterations <= 200) {
             this._nodeList.add(current);
 
             currentLegDistance += TileUtils.TILE_DISTANCE_IN_KM; // Each node = .5km

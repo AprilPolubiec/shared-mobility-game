@@ -130,7 +130,7 @@ public abstract class Sprite {
                     direction = "right";
                 }
             }
-            // TODO: duration is dependent on tranportation type
+
             TransportationMode transportationMode = currentNode.modeOfTransport;
             double minutes = (TileUtils.TILE_DISTANCE_IN_KM / transportationMode.getSpeed()) * 60.0; // Number of game
                                                                                                      // minutes to go
@@ -172,12 +172,11 @@ public abstract class Sprite {
                     if (nextNode.col < nextNextNode.col) {
                         direction = "right";
                     }
-                }
-                
-                if (nextNextNode.transportationType == TransportationType.CAR) {
-                    load("car");
-                } else {
-                    load(spriteName);
+                    if (nextNextNode.transportationType == TransportationType.CAR) {
+                        load("car");
+                    } else {
+                        load(spriteName);
+                    }
                 }
             });
             sequentialTransition.getChildren().add(transition);
