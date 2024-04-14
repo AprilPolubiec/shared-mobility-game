@@ -71,21 +71,21 @@ public class ScoreKeeper {
     }
 
     // setters
-    public int incrementCO2Saved(int valueIncremented) {
-        if (valueIncremented <= 0) {
+    public int incrementCO2Saved(int incrementValue) {
+        if (incrementValue < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
-        this.CO2Saved += valueIncremented;
+        this.CO2Saved += incrementValue;
         return this.CO2Saved;
     }
 
-    public int incrementCO2Used(int valueIncremented) {
-        if (valueIncremented <= 0) {
+    public int incrementCO2Used(int incrementValue) {
+        if (incrementValue < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
         this.hasExceededBudget(); 
 
-        this.CO2Used += valueIncremented;
+        this.CO2Used += incrementValue;
         return this.CO2Used;
     }
 

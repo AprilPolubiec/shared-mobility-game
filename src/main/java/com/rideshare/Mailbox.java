@@ -35,6 +35,10 @@ public class Mailbox {
       status.set(MailboxStatus.UNINITIALIZED);
    }
 
+   public static GridPanePosition getHousePosition(int row, int col) {
+      return new GridPanePosition(row, col - 1);
+   }
+
    public void render() {
       Media waitingMedia = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
       mailboxWaitingAudio = new MediaPlayer(waitingMedia);

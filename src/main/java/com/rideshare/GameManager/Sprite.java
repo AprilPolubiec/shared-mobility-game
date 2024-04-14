@@ -10,6 +10,7 @@ import com.rideshare.GridPanePosition;
 import com.rideshare.Timer;
 import com.rideshare.TransportationMode;
 import com.rideshare.TransportationNode;
+import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.Animation;
@@ -83,8 +84,8 @@ public abstract class Sprite {
     }
 
     protected GridPanePosition getGridPanePosition() {
-        int col = (int) Math.floor(xPos / 30);
-        int row = (int) Math.floor(yPos / 30);
+        int col = (int) Math.floor(xPos / TileUtils.TILE_SIZE_IN_PIXELS);
+        int row = (int) Math.floor(yPos / TileUtils.TILE_SIZE_IN_PIXELS);
         return new GridPanePosition(row, col);
     }
 
@@ -114,6 +115,20 @@ public abstract class Sprite {
         for (int i = 0; i < nodes.size() - 1; i++) {
             TransportationNode currentNode = nodes.get(i);
             TransportationNode nextNode = nodes.get(i + 1);
+            if (i == 0) {
+                if (currentNode.row < nextNode.row) {
+                    direction = "down";
+                }
+                if (currentNode.row > nextNode.row) {
+                    direction = "up";
+                }
+                if (currentNode.col > nextNode.col) {
+                    direction = "left";
+                }
+                if (currentNode.col < nextNode.col) {
+                    direction = "right";
+                }
+            }
             // TODO: duration is dependent on tranportation type
             TransportationMode transportationMode = currentNode.modeOfTransport;
             double minutes = (TileUtils.TILE_DISTANCE_IN_KM / transportationMode.getSpeed()) * 60.0; // Number of game minutes to go 0.5 km
@@ -136,7 +151,7 @@ public abstract class Sprite {
                 transition.setByX(32.0);
                 xPos += 32;
             }
-
+            Utils.print(String.format("Now at [%s, %s]", getGridPanePosition().row, getGridPanePosition().col));
             final TransportationNode nextNextNode = i + 2 < nodes.size() ? nodes.get(i + 2) : null;
             
             transition.setOnFinished(e -> {
@@ -154,7 +169,6 @@ public abstract class Sprite {
                         direction = "right";
                     }
                 }
-                
                 
             });
             sequentialTransition.getChildren().add(transition);
