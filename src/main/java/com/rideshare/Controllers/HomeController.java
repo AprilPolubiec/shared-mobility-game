@@ -72,18 +72,16 @@ public class HomeController {
     @FXML
     public void handleStartButtonPressed() {
         try {
-            AnchorPane anchorPane = (AnchorPane) _stage.getScene().lookup("#newLoadGameModal");
-        if (anchorPane != null) {
-            // Hide the AnchorPane
-            anchorPane.setVisible(false);
-        } else {
-            System.out.println("AnchorPane not found!");
-        }
-           
-        } catch (Exception e) {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("newLoad.fxml"));
+            AnchorPane root = loader.load();
+            NewLoadController nlc = loader.getController();
+            nlc.load(root, _stage); // Pass the stage to the controller
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     public void handleLoadButtonPressed() {

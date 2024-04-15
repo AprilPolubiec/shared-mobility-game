@@ -140,4 +140,14 @@ public class ScoreKeeper {
 
         return this.score;
     }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    // Setter method for mailboxesCompleted
+    public void setMailboxesCompleted(int mailboxesCompleted) {
+        this.mailboxesCompleted = mailboxesCompleted;
+    }
+    
 }
