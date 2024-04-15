@@ -55,19 +55,16 @@ public class TileManager {
             }
         }
         _root.getChildren().add(0, _tileGrid);
-        // Bounds localBounds = _tileGrid.getBoundsInLocal();
-        // System.out.println(String.format("Tile Grid Local, x = %s - %s, y = %s - %s", localBounds.getMinX(), localBounds.getMaxX(), localBounds.getMinY(), localBounds.getMaxY()));
-        // Bounds boundsInScene = _tileGrid.localToScene(_tileGrid.getBoundsInLocal());
-        // System.out.println(String.format("Tile Grid, x = %s - %s, y = %s - %s", boundsInScene.getMinX(), boundsInScene.getMaxX(), boundsInScene.getMinY(), boundsInScene.getMaxY()));
-        // System.out.println(String.format("Tile [%s, %s], x = %s y = %s", rowIdx, colIdx, boundsInScene.getMinX(), boundsInScene.getMinY()));
     }
 
 
     public ImageView drawTile(int tileId, int rowIdx, int colIdx) {
         String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();
         ImageView tileImage = new ImageView(tileUrl);
+        tileImage.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
+        tileImage.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
         _tileGrid.add(tileImage, colIdx, rowIdx);
-    
+        
         return tileImage;
     }
 
