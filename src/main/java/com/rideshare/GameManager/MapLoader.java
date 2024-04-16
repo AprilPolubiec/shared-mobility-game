@@ -4,17 +4,13 @@ import com.rideshare.App;
 import com.rideshare.City;
 import com.rideshare.Mailbox;
 import com.rideshare.Route;
-import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationType;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.TileManager.TiledMapLayer;
 
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 import com.google.gson.Gson;
@@ -55,14 +51,14 @@ public class MapLoader {
 
     public City createCityFromMapData(MapJson map) throws Exception {
         ArrayList<Route> routes = new ArrayList<Route>();
-        Route walkingRoute = getRoute(map, "Walking", TransportationType.WALKING, "");
-        Route drivingRoute = getRoute(map, "Roads", TransportationType.CAR, "Toyota Prius");
-        Route busRoute = getRoute(map, "Bus", TransportationType.BUS, "39A");
-        Route trainRoute = getRoute(map, "Train", TransportationType.TRAIN, "39A");
-        routes.add(walkingRoute);
-        routes.add(drivingRoute);
-        routes.add(busRoute);
-        routes.add(trainRoute);
+        ArrayList<Route> walkingRoute = getRoutes(map, "Walking", TransportationType.WALKING);
+        ArrayList<Route> drivingRoute = getRoutes(map, "Roads", TransportationType.CAR);
+        ArrayList<Route> busRoute = getRoutes(map, "Bus", TransportationType.BUS);
+        ArrayList<Route> trainRoute = getRoutes(map, "Train", TransportationType.TRAIN);
+        routes.addAll(walkingRoute);
+        routes.addAll(drivingRoute);
+        routes.addAll(busRoute);
+        routes.addAll(trainRoute);
 
         ArrayList<Mailbox> mailboxes = getMailboxes(map);
         City city = new City(map.height, routes, mailboxes);
@@ -95,19 +91,24 @@ public class MapLoader {
         return mailboxes;
     }
 
-    static public Route getRoute(MapJson map, String layerName, TransportationType transportationType, String name) {
-        TiledMapLayer layer = new TiledMapLayer();
+    static public ArrayList<Route> getRoutes(MapJson map, String layerName, TransportationType transportationType) {
+        ArrayList<Route> routes = new ArrayList<Route>();
+        ArrayList<TiledMapLayer> layers = new ArrayList<TiledMapLayer>();
         for (TiledMapLayer l : map.layers) {
-            if(l.name.equals(layerName)) {
-                layer = l;
+            if(l.name.contains(layerName)) {
+                layers.add(l);
             }
         }
-        int height = map.height;
-        int width = map.width;
-        int[][] matrix = arrayToMatrix(layer.data, height, width);
-    
-        Route route = new Route(matrix, transportationType, name);
-        return route;
+
+        for (TiledMapLayer tiledMapLayer : layers) {
+            String name = tiledMapLayer.name.contains("-") ? tiledMapLayer.name.substring(tiledMapLayer.name.indexOf("-", 0) + 1) : "";
+            int height = map.height;
+            int width = map.width;
+            int[][] matrix = arrayToMatrix(tiledMapLayer.data, height, width);
+            Route route = new Route(matrix, transportationType, name);
+            routes.add(route);
+        }
+        return routes;
     }
 
     static public int[][] arrayToMatrix(int[] arr, int numRows, int numColumns) {

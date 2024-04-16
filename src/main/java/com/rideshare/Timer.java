@@ -6,6 +6,11 @@ import java.time.format.DateTimeFormatter;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class Timer {
@@ -16,9 +21,10 @@ public class Timer {
     private TimerState state = TimerState.UNINITIALIZED;
     private Timeline _timeline;
     Text _clockText;
+    Font _font;
 
-    public Timer(Text clockText) {
-        this._clockText = clockText;
+    public Timer() {
+        this._font = Font.loadFont(getClass().getResourceAsStream("/fonts/digital-7.ttf"), 48);
         initialize();
     }
 
@@ -87,8 +93,31 @@ public class Timer {
         return this.state;
     }
 
-    public static int secondsToGameMinutes(int seconds) {
-        return seconds * 6;
+    // 1 second = 6 minutes
+    public static double secondsToGameMinutes(double seconds) {
+        return seconds * 6.0;
+    }
+    // 1 minute = 1/6 seconds
+    public static double gameMinutesToSeconds(double minutes) {
+        return minutes / 6.0;
+    }
+
+    public void render(AnchorPane root) {
+        StackPane timeModalRoot = new StackPane();
+        ImageView panelImageView = new ImageView(
+                new Image(getClass().getResourceAsStream("/images/ui/grey_panel.png")));
+        timeModalRoot.getChildren().add(panelImageView);
+        AnchorPane.setBottomAnchor(timeModalRoot, 0.0);
+        AnchorPane.setRightAnchor(timeModalRoot, 0.0);
+        panelImageView.setFitHeight(150);
+        panelImageView.setFitWidth(300);
+
+        _clockText = new Text("00:00AM");
+        _clockText.setFont(_font);
+        _clockText.setFill(javafx.scene.paint.Color.BLACK);
+        timeModalRoot.getChildren().add(_clockText);
+
+        root.getChildren().add(timeModalRoot);
     }
 
 }

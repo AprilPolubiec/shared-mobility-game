@@ -11,4 +11,15 @@ public class TileUtils {
     public static final Integer[] FLAG_TILE_IDS = { 17, 18, 35, 36, 53, 54, 71, 72, 89, 90 }; // TODO: separate out by color/level
     public static final Integer[] COMPLETED_FLAG_IDS = { 17, 18 };
     public static final Integer FLAG_HOUSE_OFFSET = 7; // Every flag Id is +7
+
+    public static double TILE_DISTANCE_IN_KM = 0.5;
+    public static int TILE_SIZE_IN_PIXELS = 28;
+    
+    public static double pixelsToKm(int pixels) {
+        return (TILE_DISTANCE_IN_KM * pixels) / TILE_SIZE_IN_PIXELS;
+    }
+
+    public static int kmToPixels(double km) {
+        return (int)((TILE_SIZE_IN_PIXELS * km) / TILE_DISTANCE_IN_KM);
+    }
 }

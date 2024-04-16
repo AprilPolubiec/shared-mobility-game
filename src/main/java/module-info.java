@@ -3,7 +3,7 @@ module com.rideshare {
     requires javafx.fxml;
     requires javafx.media;
     requires com.google.gson;
-
+    requires org.jgrapht.core;
     opens com.rideshare to javafx.fxml;
     opens com.rideshare.GameManager to com.google.gson;
 

@@ -20,13 +20,13 @@ package com.rideshare;
 public class ScoreKeeper {
     // All relevant attributes initialised
     // The CO2 budget is just a random value here.
-    static final int maxCo2Budget = 10; // NOTE: budget - average driver does about 160km per day, electric vehicle emits 53 per km. budget = 160*53 = 8480
+    static final int maxCo2Budget = 8500; // NOTE: budget - average driver does about 160km per day, electric vehicle emits 53 per km. budget = 160*53 = 8480
     // co2Budget here is a 'more local variable' allowed to go into the negatives in order to check if the budget has been exceeded
-    int co2Budget;
+    int co2Budget = 8500;
     int CO2Saved;
     int CO2Used;
-    int mailboxesCompleted;
-    int totalMailboxes;
+    private int mailboxesCompleted;
+    private int totalMailboxes;
     double mailboxesMultiplier;
     int score;
     int level;
@@ -39,12 +39,11 @@ public class ScoreKeeper {
         this.CO2Used = 0;
         this.mailboxesCompleted = 0;
         this.totalMailboxes = 0;
-        this.level = 1;
+        this.level = 0;
         this.exceededBudgetFlag = false;
         this.amountOverBudget = 0;
     }
 
-    // getters
     public int getMailboxesCompleted() {
         return this.mailboxesCompleted;
     }
@@ -55,8 +54,13 @@ public class ScoreKeeper {
         this.mailboxesCompleted = numCompleted;
     }
 
+    
+
     public int getTotalMailboxes() {
         return this.totalMailboxes;
+    }
+    public void setTotalMailboxes(int total) {
+        this.totalMailboxes = total;
     }
 
     public int getLevel(){
@@ -72,27 +76,27 @@ public class ScoreKeeper {
     }
 
     // setters
-    public int incrementCO2Saved(int valueIncremented) {
-        if (valueIncremented <= 0) {
+    public int incrementCO2Saved(int incrementValue) {
+        if (incrementValue < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
-        this.CO2Saved += valueIncremented;
+        this.CO2Saved += incrementValue;
         return this.CO2Saved;
     }
 
-    public int incrementCO2Used(int valueIncremented) {
-        if (valueIncremented <= 0) {
+    public int incrementCO2Used(int incrementValue) {
+        if (incrementValue < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
         this.hasExceededBudget(); 
 
-        this.CO2Used += valueIncremented;
+        this.CO2Used += incrementValue;
         return this.CO2Used;
     }
 
     // Don't know if we need this so I'll just leave it here. I imagine level incrementer
     public int setLevel(int newLevel) {
-        if (newLevel <= 0) {
+        if (newLevel < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
 
@@ -158,5 +162,11 @@ public class ScoreKeeper {
 
     public void setC02Used(int setC02Used){
         this.CO2Used = setC02Used;
+
+    public void print() {
+        Utils.print("SCOREKEEPER");
+        Utils.print(String.format("Mailboxes completed: %s/%s", mailboxesCompleted, totalMailboxes));
+        Utils.print(String.format("CO2 used: %s/%s", CO2Used, co2Budget));
+        Utils.print(String.format("Score: %s", calculateScore()));
     }
 }
