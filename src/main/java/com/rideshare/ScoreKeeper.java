@@ -48,13 +48,19 @@ public class ScoreKeeper {
     public int getMailboxesCompleted() {
         return this.mailboxesCompleted;
     }
-
-    public int getLevel(){
-        return this.level;
+    public void setMailboxesCompleted(int numCompleted) {
+        if (numCompleted > totalMailboxes) {
+            throw new IllegalArgumentException("Attempted to complete more mailboxes than exist.");
+        }
+        this.mailboxesCompleted = numCompleted;
     }
 
     public int getTotalMailboxes() {
         return this.totalMailboxes;
+    }
+
+    public int getLevel(){
+        return this.level;
     }
 
     public int getCO2Saved() {
@@ -144,10 +150,13 @@ public class ScoreKeeper {
     public void setScore(int score) {
         this.score = score;
     }
-
-    // Setter method for mailboxesCompleted
-    public void setMailboxesCompleted(int mailboxesCompleted) {
-        this.mailboxesCompleted = mailboxesCompleted;
-    }
+   
     
+    public void setC02Saved(int C02Saved) {
+        this.CO2Saved = C02Saved;
+    }
+
+    public void setC02Used(int setC02Used){
+        this.CO2Used = setC02Used;
+    }
 }

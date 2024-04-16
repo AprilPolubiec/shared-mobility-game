@@ -100,14 +100,14 @@ public class HomeController {
     
         if (selectedFile != null) {
             String fileName = selectedFile.getAbsolutePath();
-            saveLoad.loadSave(fileName); 
+            saveLoad.load(fileName); 
         }
     }
 
     @FXML
     public void handleGameSelected() {
         // TODO: load saved game file
-        saveLoad.loadSave();
+        saveLoad.load();
         // TODO: Show saved game options
 
     }
