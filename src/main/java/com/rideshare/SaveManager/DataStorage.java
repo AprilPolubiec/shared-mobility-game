@@ -5,12 +5,12 @@ import java.io.Serializable;
 
 public class DataStorage implements Serializable {
 
-    int score;
-    int mailboxesCompleted;
-    int totalMailboxes;
-    int level;
-    int CO2Saved = 0;
-    int CO2Used = 0;
-    
+    public int score;
+    public int mailboxesCompleted;
+    public int totalMailboxes;
+    public int level;
+    public int CO2Saved = 0;
+    public int CO2Used = 0;
+//made public so they can be accessed from game class
 
 }

@@ -13,24 +13,20 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import java.io.File;
-import com.rideshare.ScoreKeeper; 
+import com.rideshare.ScoreKeeper;
 import com.rideshare.SaveManager.SaveLoad;
 import java.net.URL;
-
-
-
-
 
 public class HomeController {
 
     private ScoreKeeper sk;
     private SaveLoad saveLoad;
 
- 
     public void initialize() {
         sk = new ScoreKeeper();
-        saveLoad = new SaveLoad(sk); 
+        saveLoad = new SaveLoad(sk);
     }
+
     @FXML
     public javafx.scene.control.Button loadGameButton;
     @FXML
@@ -53,16 +49,15 @@ public class HomeController {
         try {
             _root = root;
             _stage = stage;
-            Media media = new
-            Media(App.class.getResource(String.format("/images/audio/%s.mp3",
-            "bg-slow")).toString()); // replace
+            Media media = new Media(App.class.getResource(String.format("/images/audio/%s.mp3",
+                    "bg-slow")).toString()); // replace
             MediaPlayer _mediaPlayer = new MediaPlayer(media);
             // _mediaPlayer.play();
 
             _stage.setWidth(720);
             _stage.setHeight(439);
             _stage.centerOnScreen();
-            setScene( false);
+            setScene(false);
             _stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,32 +77,30 @@ public class HomeController {
         }
     }
 
-
     @FXML
     public void handleLoadButtonPressed() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load Game");
-    
-       //creating a path to game_data directory where game status' will be saved
+
+        // creating a path to game_data directory where game status' will be saved
         File initialDirectory = new File("/game_data");
         fileChooser.setInitialDirectory(initialDirectory);
-    
+
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Data Files (*.dat)", "*.dat");
         fileChooser.getExtensionFilters().add(extensionFilter);
-    
-       
+
         File selectedFile = fileChooser.showOpenDialog(null);
-    
+
         if (selectedFile != null) {
             String fileName = selectedFile.getAbsolutePath();
-            saveLoad.load(fileName); 
+            saveLoad.load(fileName);
         }
     }
 
     @FXML
     public void handleGameSelected() {
         // TODO: load saved game file
-        saveLoad.load();
+        saveLoad.loadSave();
         // TODO: Show saved game options
 
     }
@@ -120,27 +113,6 @@ public class HomeController {
 
     @FXML
     public void handleInstructionsButtonPressed() {
-        try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("instructions.fxml"));
-            AnchorPane root = loader.load();
-            
-            Stage instructionsStage = new Stage();
-            instructionsStage.setTitle("Instructions");
-            // instructionsStage.initModality(Modality.APPLICATION_MODAL); // Block input to other windows
-            instructionsStage.setScene(new Scene(root));
-
-            // Get the exit button from the loaded FXML
-            // Button exitButton = (Button) root.lookup("#exitButton");
-
-            // Set action for the exit button
-            // exitButton.setOnAction(event -> instructionsStage.close());
-
-            // Show the pop-up window
-            // instructionsStage.show();
-            instructionsStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // this.loadInstructionsScreen();
     }
 

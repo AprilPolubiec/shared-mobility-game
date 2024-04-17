@@ -5,6 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+
 import com.rideshare.ScoreKeeper;
 
 import javafx.scene.chart.PieChart.Data;
@@ -17,27 +22,25 @@ public class SaveLoad {
         this.sk = scoreKeeper;
     }
 
-    public void save(String fileName) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(fileName)))) {
-
-            DataStorage ds = new DataStorage();
-
-            ds.score = sk.calculateScore();
-            ds.mailboxesCompleted = sk.getMailboxesCompleted();
-            ds.level = sk.getLevel();
-            ds.CO2Saved = sk.getCO2Saved();
-            ds.CO2Used = sk.getCO2Used();
-            ds.level = sk.getTotalMailboxes();
-
-
-
-            
-            oos.writeObject(ds);
-
-        } catch (Exception e) {
-            System.out.println("Something's gone wrong with the save!! :( )");
+    public void save(String fileName, DataStorage data) {
+        try {
+            // Create a FileOutputStream in append mode
+            OutputStream outputStream = new FileOutputStream(fileName, true);
+            // Wrap it with a BufferedOutputStream for better performance
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+            // Create ObjectOutputStream with BufferedOutputStream
+            ObjectOutputStream oos = new ObjectOutputStream(bufferedOutputStream);
+            // Write the serialized DataStorage object to the file
+            oos.writeObject(data);
+            System.out.println("Game state appended to: " + fileName);
+            oos.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + fileName);
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Failure to append game state to: " + fileName);
+            e.printStackTrace();
         }
-
     }
 
     public void load(String fileName) {
@@ -47,13 +50,13 @@ public class SaveLoad {
             sk.setScore(ds.score);
             sk.setMailboxesCompleted(ds.mailboxesCompleted);
             sk.setLevel(ds.level);
-            sk.setC02Saved(ds.CO2Saved);
-            sk.setC02Used(ds.CO2Used);
+            sk.setCO2Saved(ds.CO2Saved);
+            sk.setCO2Used(ds.CO2Used);
             sk.setTotalMailboxes(ds.totalMailboxes);
-            
-            
+
         } catch (Exception e) {
             System.out.println("Something's gone wrong with the load!! :( )");
         }
-    } 
+    }
+
 }

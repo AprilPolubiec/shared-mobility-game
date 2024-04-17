@@ -153,11 +153,11 @@ public class ScoreKeeper {
     public void setScore(int score) {
         this.score = score;
     }
-    public void setC02Saved(int C02Saved) {
+    public void setCO2Saved(int C02Saved) {
         this.CO2Saved = C02Saved;
     }
 
-    public void setC02Used(int setC02Used) {
+    public void setCO2Used(int setC02Used) {
         this.CO2Used = setC02Used;
     }
 
