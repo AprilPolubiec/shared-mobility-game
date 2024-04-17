@@ -25,8 +25,10 @@ public class SaveLoad {
             ds.score = sk.calculateScore();
             ds.mailboxesCompleted = sk.getMailboxesCompleted();
             ds.level = sk.getLevel();
-            ds.level = sk.getCO2Saved();
-            ds.level = sk.getCO2Used();
+            ds.CO2Saved = sk.getCO2Saved();
+            ds.CO2Used = sk.getCO2Used();
+            ds.level = sk.getTotalMailboxes();
+
 
 
             
@@ -47,6 +49,7 @@ public class SaveLoad {
             sk.setLevel(ds.level);
             sk.setC02Saved(ds.CO2Saved);
             sk.setC02Used(ds.CO2Used);
+            sk.setTotalMailboxes(ds.totalMailboxes);
             
             
         } catch (Exception e) {
