@@ -1,5 +1,4 @@
 package com.rideshare;
-
 /** 
  * Description: A ScoreKeeper is an object whose main function is to store information about a player’s score.
     Attributes:
@@ -154,14 +153,13 @@ public class ScoreKeeper {
     public void setScore(int score) {
         this.score = score;
     }
-   
-    
     public void setC02Saved(int C02Saved) {
         this.CO2Saved = C02Saved;
     }
 
-    public void setC02Used(int setC02Used){
+    public void setC02Used(int setC02Used) {
         this.CO2Used = setC02Used;
+    }
 
     public void print() {
         Utils.print("SCOREKEEPER");
