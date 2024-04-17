@@ -12,8 +12,8 @@ public class GameOverPopupTest {
         System.out.println("Title: " + gameOverPopup.getTitle());
         System.out.println("Text: " + gameOverPopup.getText());
         System.out.println("Buttons: " + gameOverPopup.getButtons());
-        System.out.println("Open Button Text: " + gameOverPopup.getOpenButtonText());
-        System.out.println("Close Button Title: " + gameOverPopup.getCloseButtonTitle());
+        System.out.println("Open Button Text: " + gameOverPopup.getConfirmButtonText());
+        System.out.println("Close Button Title: " + gameOverPopup.getCancelButtonText());
         System.out.println("Close Button Text: " + gameOverPopup.getCloseButtonText());
 
         gameOverPopup.open();

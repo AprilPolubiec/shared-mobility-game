@@ -12,24 +12,45 @@ package com.rideshare;
 
 import java.util.List;
 
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.layout.AnchorPane;
+
 public class Popup {
     // Attributes
     private String title;
     private String text;
+    private String bodyText;
     private List<String> buttons;
-    private String openButtonText;
-    private String closeButtonTitle;
+    private String confirmButtonText;
+    private String cancelButtonText;
     private String closeButtonText;
+    Dialog<String> dialog;
+    DialogPane dialogPane;
 
     // Constructor
-    public Popup(String title, String text, List<String> buttons, String openButtonText, String closeButtonTitle,
+    public Popup(AnchorPane root, String title, String text, List<String> buttons, String confirmButtonText,
+            String cancelButtonText,
             String closeButtonText) {
-        this.title = title;
-        this.text = text;
-        this.buttons = buttons;
-        this.openButtonText = openButtonText;
-        this.closeButtonTitle = closeButtonTitle;
-        this.closeButtonText = closeButtonText;
+        
+        // Create dialog
+        this.dialog = new Dialog<String>();
+        this.dialog.setTitle(title);
+        
+        // Add buttons
+        ButtonType confirmButtonType = new ButtonType(confirmButtonText, ButtonData.OK_DONE);
+        ButtonType cancelButtonType = new ButtonType(cancelButtonText, ButtonData.CANCEL_CLOSE);
+        this.dialog.getDialogPane().getButtonTypes().add(confirmButtonType);
+        this.dialog.getDialogPane().getButtonTypes().add(cancelButtonType);
+
+        // Set content
+        this.dialog.setContentText(text);
+        this.dialog.setHeaderText("Header");
+
+        // Show
+        this.dialog.showAndWait();
     }
 
     // Getter methods
@@ -45,12 +66,12 @@ public class Popup {
         return buttons;
     }
 
-    public String getOpenButtonText() {
-        return openButtonText;
+    public String getConfirmButtonText() {
+        return confirmButtonText;
     }
 
-    public String getCloseButtonTitle() {
-        return closeButtonTitle;
+    public String getCancelButtonText() {
+        return cancelButtonText;
     }
 
     public String getCloseButtonText() {
@@ -73,27 +94,4 @@ public class Popup {
         System.out.println("Button clicked: " + buttonClicked);
     }
 
-    // Example usage
-    public static void main(String[] args) {
-        // Creating a Popup instance
-        Popup popup = new Popup("Confirmation", "Are you sure you want to delete this item?", List.of("Yes", "No"),
-                "Open", "Close", "Cancel");
-
-        // Accessing attributes
-        System.out.println("Title: " + popup.getTitle());
-        System.out.println("Text: " + popup.getText());
-        System.out.println("Buttons: " + popup.getButtons());
-        System.out.println("Open Button Text: " + popup.getOpenButtonText());
-        System.out.println("Close Button Title: " + popup.getCloseButtonTitle());
-        System.out.println("Close Button Text: " + popup.getCloseButtonText());
-
-        // Opening the popup
-        popup.open();
-
-        // Handling submission
-        popup.onSubmit("Yes");
-
-        // Closing the popup
-        popup.close();
-    }
 }

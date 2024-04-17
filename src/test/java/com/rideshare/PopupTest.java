@@ -15,8 +15,8 @@ public class PopupTest {
         assert popup.getTitle().equals("Confirmation");
         assert popup.getText().equals("Are you sure you want to delete this item?");
         assert popup.getButtons().equals(List.of("Yes", "No"));
-        assert popup.getOpenButtonText().equals("Open");
-        assert popup.getCloseButtonTitle().equals("Close");
+        assert popup.getConfirmButtonText().equals("Open");
+        assert popup.getCancelButtonText().equals("Close");
         assert popup.getCloseButtonText().equals("Cancel");
     }
 
