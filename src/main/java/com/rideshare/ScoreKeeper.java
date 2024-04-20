@@ -1,4 +1,10 @@
 package com.rideshare;
+
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+
 /** 
  * Description: A ScoreKeeper is an object whose main function is to store information about a player’s score.
     Attributes:
@@ -43,6 +49,28 @@ public class ScoreKeeper {
         this.amountOverBudget = 0;
     }
 
+    public void render(AnchorPane root) {
+        AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(300.0, 300.0);
+        AnchorPane.setBottomAnchor(scorekeeperPane, 150.0);
+        AnchorPane.setRightAnchor(scorekeeperPane, 0.0);
+        
+        VBox scoreVbox = new VBox();
+        AnchorPane.setTopAnchor(scoreVbox, 50.0);
+        AnchorPane.setLeftAnchor(scoreVbox, 50.0);
+
+        Text mailboxText = new Text(String.format("%s/%s Mailboxes", this.mailboxesCompleted, this.totalMailboxes));
+        mailboxText.setFont(Font.font("Futura Bold", 21));
+        
+        scoreVbox.getChildren().add(mailboxText);
+        
+        Text scoreText = new Text(String.format("Score: %s", calculateScore()));
+        scoreText.setFont(Font.font("Futura Bold", 21));
+        scoreVbox.getChildren().add(scoreText);
+        
+        scorekeeperPane.getChildren().add(scoreVbox);
+        root.getChildren().add(scorekeeperPane);
+    }
+
     public int getMailboxesCompleted() {
         return this.mailboxesCompleted;
     }
@@ -52,8 +80,6 @@ public class ScoreKeeper {
         }
         this.mailboxesCompleted = numCompleted;
     }
-
-    
 
     public int getTotalMailboxes() {
         return this.totalMailboxes;
