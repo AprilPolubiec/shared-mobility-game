@@ -3,7 +3,7 @@ package com.rideshare.GameManager;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.rideshare.ChooseTripPopup;
+import com.rideshare.ChooseTripComponent;
 import com.rideshare.City;
 import com.rideshare.GridPanePosition;
 import com.rideshare.Mailbox;
@@ -34,6 +34,7 @@ public class Game {
     private AnchorPane _root;
     private Trip _currentTrip;
     private Timeline _timeline;
+    private ChooseTripComponent _tripChooser;
 
     public Game(AnchorPane root, City city, Player player) {
         Utils.print(String.format("Building a new city"));
@@ -47,6 +48,19 @@ public class Game {
 
         this._player.getScoreKeeper().setLevel(0);
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
+
+        _tripChooser = new ChooseTripComponent(_root);
+        _tripChooser.onSelectedTripChanged(new ChangeListener<Trip>() {
+            @Override
+            public void changed(ObservableValue<? extends Trip> observable, Trip oldValue, Trip newValue) {
+                _currentTrip = newValue;
+                _timer.resume();
+                _player.moveOnRoute(newValue.getNodeList());
+                // TODO: how do I wait for the above to finish?
+                _tripChooser.clear();
+            }
+        });
+    
         initializeGameLoop();
     }
 
@@ -144,7 +158,8 @@ public class Game {
 
     private void handleMailboxSelected(Mailbox mailbox) {
         Utils.print(String.format("Mailbox selected"));
-        if (mailbox.getStatus() == MailboxStatus.IN_PROGRESS) {
+        // TODO: we should be checking that NO other mailboxes are in progress here
+        if (mailbox.getStatus() != MailboxStatus.IN_PROGRESS) {
             return;
         }
         // Calculate trips from player to mailbox
@@ -153,18 +168,9 @@ public class Game {
                 mailbox.getGridPanePosition().col);
         Utils.print(String.format("Found trips!"));
         _currentTrip = trips.get(0);
-        _player.moveOnRoute(_currentTrip.getNodeList());
         // TODO: Filter out trips that are too slow to reach mailbox?
-        ChooseTripPopup popup = new ChooseTripPopup(trips);
-        popup.onSelectedTripChanged(new ChangeListener<Trip>() {
-            @Override
-            public void changed(ObservableValue<? extends Trip> observable, Trip oldValue, Trip newValue) {
-                _currentTrip = newValue;
-                _timer.resume();
-                _player.moveOnRoute(newValue.getNodeList());
-                // TODO: how do I wait for the above to finish?
-            }
-        });
+        _tripChooser.setTrips(trips);
+        _tripChooser.render();
         mailbox.markInProgress();
     }
 
