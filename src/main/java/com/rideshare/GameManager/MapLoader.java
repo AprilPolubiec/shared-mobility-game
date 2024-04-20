@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 public class MapLoader {
     private AnchorPane root;
-    private TileManager _tileManager;
+    private static TileManager _tileManager;
     private City _city;
 
     public MapLoader(Scene scene) {
@@ -49,7 +49,7 @@ public class MapLoader {
         return _city;
     }
 
-    public City createCityFromMapData(MapJson map) throws Exception {
+    public static City createCityFromMapData(MapJson map) throws Exception {
         ArrayList<Route> routes = new ArrayList<Route>();
         ArrayList<Route> walkingRoute = getRoutes(map, "Walking", TransportationType.WALKING);
         ArrayList<Route> drivingRoute = getRoutes(map, "Roads", TransportationType.CAR);
@@ -65,7 +65,7 @@ public class MapLoader {
         return city;
     }
 
-    private ArrayList<Mailbox> getMailboxes(MapJson map) throws IOException {
+    private static ArrayList<Mailbox> getMailboxes(MapJson map) throws IOException {
         ArrayList<Mailbox> mailboxes = new ArrayList<Mailbox>();
         int[][] mailboxMatrix = null;
         for (TiledMapLayer layer : map.layers) {

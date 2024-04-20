@@ -1,7 +1,15 @@
 package com.rideshare;
 
+import java.util.ArrayList;
+
 import com.rideshare.GameManager.Sprite;
 
+import javafx.animation.SequentialTransition;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -14,12 +22,13 @@ import javafx.stage.Stage;
 public class Player extends Sprite {
     private String name;
     private ScoreKeeper scoreKeeper;
-    private GameProgressBar progressBar;
+    private ObjectProperty<PlayerStatus> status = new SimpleObjectProperty<>();
 
     public Player(String name, String avatar) {
         super(avatar);
         this.name = name;
         this.scoreKeeper = new ScoreKeeper();
+        status.set(PlayerStatus.IDLE);
     }
 
     public void loadExisting() {
@@ -34,7 +43,29 @@ public class Player extends Sprite {
         return scoreKeeper;
     }
 
-    public GameProgressBar getProgressBar() {
-        return progressBar;
+    public boolean isMoving() {
+        return super.isMoving();
     }
+
+	@Override
+	public void moveOnRoute(ArrayList<TransportationNode> nodes) {
+        SequentialTransition animation = getRouteAnimation(nodes);
+        isMoving = true;
+        status.set(PlayerStatus.ON_TRIP);
+        animation.play();
+        animation.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Player.super.onRouteCompleted();
+                status.set(PlayerStatus.IDLE);
+            }
+        });
+	}
+    public void addStatusListener(ChangeListener<? super PlayerStatus> listener) {
+        this.status.addListener(listener);
+     }
+
+    public PlayerStatus getStatus() {
+        return status.get();
+     }
 }
