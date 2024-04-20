@@ -48,26 +48,24 @@ public class TripCalculator {
         print(String.format("Starting search from [%s, %s] to [%s, %s]", startRow, startCol, _goalNode.row,
                 _goalNode.col));
 
-        // // Option 1: The fastest path
-        // Trip fastestTrip = runPathFinding(TripType.FAST, this._startNode,
-        // this._currentNode, this._goalNode);
-        // fastestTrip.print();
-        // trips.add(fastestTrip);
-        // // // Option 2: Get most CO2 efficient
-        // Trip mostEfficientTrip = runPathFinding(TripType.EFFICIENT, this._startNode,
-        // this._currentNode, this._goalNode);
-        // mostEfficientTrip.print();
-        // trips.add(mostEfficientTrip);
-        // Option 3: Get public transit path
+        // Option 1: Public transit trip
         Trip publicTransitTrip = runTransitPathFinding(this._startNode, this._goalNode);
         if (publicTransitTrip != null) {
             trips.add(publicTransitTrip);
             publicTransitTrip.print();
         }
+
+        // Option 2: Fastest trip
         Trip fastestTrip = runPathFinding(TripType.FAST, this._startNode,
                 this._currentNode, this._goalNode);
         fastestTrip.print();
         trips.add(fastestTrip);
+
+        // Option 3: Most efficient trip
+        Trip mostEfficientTrip = runPathFinding(TripType.EFFICIENT, this._startNode,
+        this._currentNode, this._goalNode);
+        mostEfficientTrip.print();
+        trips.add(mostEfficientTrip);
         return trips;
     }
 

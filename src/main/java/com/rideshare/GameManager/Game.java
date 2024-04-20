@@ -22,7 +22,6 @@ import com.rideshare.SaveManager.DataStorage;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.AnchorPane;
@@ -36,64 +35,88 @@ public class Game {
     private TripCalculator _tripCalculator;
     private AnchorPane _root;
     private Trip _currentTrip;
+    private Mailbox _currentMailbox;
     private Timeline _timeline;
     private ChooseTripComponent _tripChooser;
     private SaveLoad _saveLoad;
-    private ScoreKeeper scoreKeeper;
     private int mailboxesLeft;
 
+    // TODO: a constructor for loading from a saved game
+    public Game(SaveLoad savedGame) {
+        this._saveLoad = savedGame;
+    }
+
     public Game(AnchorPane root, City city, Player player) {
-        Utils.print(String.format("Building a new city"));
+        Utils.print(String.format("Creating a game"));
         this._player = player;
         this._city = city;
         this._root = root;
-        this._timer = new Timer();
-        this._timer.render(root);
+        
         this._tripCalculator = new TripCalculator(this._city);
-        this._level = 0;
+        this._level = 0; // TODO: or pull in from the loader
 
+        initializeTimer();
+        initializeScoreKeeper();
+        initializeTripChooser();
+        initializeGameLoop();
+    }
+
+    private void initializeTimer() {
+        this._timer = new Timer();
+        this._timer.render(_root);
+    }
+
+    private void initializeScoreKeeper() {
+        // TODO - unless its being loaded?
         this._player.getScoreKeeper().setLevel(0);
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
+        this._saveLoad = new SaveLoad(this._player.getScoreKeeper());
+    }
 
+    private void initializeTripChooser() {
         _tripChooser = new ChooseTripComponent(_root);
         _tripChooser.onSelectedTripChanged(new ChangeListener<Trip>() {
             @Override
             public void changed(ObservableValue<? extends Trip> observable, Trip oldValue, Trip newValue) {
-                _currentTrip = newValue;
-                _timer.resume();
-                _player.moveOnRoute(newValue.getNodeList());
-                _tripChooser.clear();
+                handleTripSelected(newValue);
             }
         });
+    }
 
-        initializeGameLoop();
-
-        this.scoreKeeper = new ScoreKeeper();
-        this._saveLoad = new SaveLoad(this.scoreKeeper);
+    private void handleTripSelected(Trip selectedTrip) {
+        _currentTrip = selectedTrip;
+        _timer.resume();
+        _player.moveOnRoute(selectedTrip.getNodeList());
+        _tripChooser.clear();
     }
 
     // TODO: this will take in whatever is loaded by the loader and initialize from
     // there
-    public void loadExisting() {
-        this._player.loadExisting();
-        return;
-    }
+    // public void loadExisting() {
+    //     this._player.loadExisting();
+    //     return;
+    // }
 
     private void initializeGameLoop() {
         Utils.print(String.format("Starting game loop"));
         _timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+            
             // Get the mailboxes that have not been rendered yet
             int numMailboxes = _city.getMailboxes().size();
             int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
             Utils.print(String.format("%s mailboxes left", mailboxesLeft));
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
-            // _player.getScoreKeeper().print();
-            // If the timer is running and no mailboxes are left, we've completed the level
+
+            // No more mailboxes are left - we've completed the level
             if (mailboxesLeft == 0) {
                 handleLevelCompleted();
+
+            // If timer has stopped with mailboxes left over or the player exceeded CO2, level failed
             } else if ((_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0)
                     || _player.getScoreKeeper().hasExceededBudget()) {
                 handleLevelFailed();
+            
+            // If the timer is running, we can show a random mailbox
             } else if (_timer.getState() == TimerState.RUNNING) {
                 int numUninitializedMailboxes = _city.getUninitializedMailboxes().size();
                 int randomMailboxIndex = new Random().nextInt(numUninitializedMailboxes);
@@ -136,19 +159,9 @@ public class Game {
 
     private void handleLevelCompleted() {
         Utils.print(String.format("Level completed"));
-        // TODO
-        // making a new datastorage object to pass as argument when calling save()
-        DataStorage ds = new DataStorage();
-
-        ds.score = scoreKeeper.calculateScore();
-        ds.mailboxesCompleted = scoreKeeper.getMailboxesCompleted();
-        ds.level = scoreKeeper.getLevel();
-        ds.CO2Saved = scoreKeeper.getCO2Saved();
-        ds.CO2Used = scoreKeeper.getCO2Used();
-        ds.totalMailboxes = scoreKeeper.getTotalMailboxes();
-
         if (isLevelOver()) {
-            _saveLoad.save("game_state.dat", ds);
+            // TODO: hook up the saveloader
+            // _saveLoad.save("game_state.dat", ds);
             _timeline.stop();
             this._level += 1;
         } else {
@@ -159,18 +172,9 @@ public class Game {
     private void handleLevelFailed() {
         Utils.print(String.format("Level failed"));
         // TODO
-        DataStorage ds = new DataStorage();
-        ds.score = scoreKeeper.calculateScore();
-        ds.mailboxesCompleted = scoreKeeper.getMailboxesCompleted();
-        ds.level = scoreKeeper.getLevel();
-        ds.CO2Saved = scoreKeeper.getCO2Saved();
-        ds.CO2Used = scoreKeeper.getCO2Used();
-        ds.totalMailboxes = scoreKeeper.getTotalMailboxes();
-
         if (isLevelOver()) {
-            _saveLoad.save("game_state.dat", ds);
+            // _saveLoad.save("game_state.dat", ds);
             _timeline.stop();
-            this._level += 1;
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
         }
@@ -180,7 +184,7 @@ public class Game {
     private void showMailbox(Mailbox mailbox) {
         Utils.print(String.format("Showing mailbox at [%s, %s]", mailbox.getGridPanePosition().row,
                 mailbox.getGridPanePosition().col));
-        // mailbox.setDuration(Timer.gameMinutesToSeconds(60)); // 1 in-game hour
+
         mailbox.render();
         mailbox.show();
         mailbox.addStatusListener(new ChangeListener<MailboxStatus>() {
@@ -188,7 +192,6 @@ public class Game {
             public void changed(ObservableValue<? extends MailboxStatus> observable, MailboxStatus oldStatus,
                     MailboxStatus newStatus) {
                 System.out.println("Status changed: " + newStatus);
-                // Call a method or do something else based on the new value
                 if (newStatus == MailboxStatus.SELECTED) {
                     handleMailboxSelected(mailbox);
                 }
@@ -209,16 +212,25 @@ public class Game {
         if (_player.getStatus() == PlayerStatus.ON_TRIP) {
             return;
         }
+
+        if (_currentMailbox != null && _currentMailbox != mailbox) {
+            _currentMailbox.markWaiting();
+        }
+        _currentMailbox = mailbox;
+
+        // Pause the clock
         pause();
         // Calculate trips from player to mailbox
         ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition().row,
                 _player.getGridPanePosition().col, mailbox.getGridPanePosition().row,
                 mailbox.getGridPanePosition().col);
         Utils.print(String.format("Found trips!"));
-        _currentTrip = trips.get(0);
+
+        // Render the trips in the trip chooser
         _tripChooser.setTrips(trips);
         _tripChooser.render();
 
+        // Listen for when the player has started and completed their trip
         _player.addStatusListener(new ChangeListener<PlayerStatus>() {
             @Override
             public void changed(ObservableValue<? extends PlayerStatus> observable, PlayerStatus oldValue,

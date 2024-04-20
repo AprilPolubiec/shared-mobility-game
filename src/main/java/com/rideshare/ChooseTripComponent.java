@@ -28,6 +28,8 @@ public class ChooseTripComponent {
 
     public ChooseTripComponent(AnchorPane root) {
         _root = root;
+        AnchorPane.setRightAnchor(component, 0.0);
+        _root.getChildren().add(component);
         return;
     }
 
@@ -91,9 +93,6 @@ public class ChooseTripComponent {
             tripAnchor.getChildren().add(statsVbox);
             component.getChildren().add(tripAnchor);
         }
-
-        AnchorPane.setRightAnchor(component, 0.0);
-        _root.getChildren().add(component);
     }
 
     private GridPane createStatSection(String stat, String amtLabel) {

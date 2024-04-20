@@ -55,7 +55,7 @@ public class Mailbox {
       
       _mailboxTile.setOnMouseClicked(event -> {
          markSelected();
-         // Set all other mailboxes to unselected
+         // Set all other mailboxes to unselected?
       });
 
       _mailboxTile.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -94,6 +94,7 @@ public class Mailbox {
    // TODO: show a countdown above the mailbox instead
    public void show() {
       if (this.status.get() != MailboxStatus.WAITING) {
+         mailboxWaitingAudio.play();
          markWaiting();
          // TODO: what if they just never disappear?
          // TODO: insead of timer we need to be able to track time past
@@ -142,7 +143,6 @@ public class Mailbox {
 
    public void markWaiting() {
       this.status.set(MailboxStatus.WAITING);
-      mailboxWaitingAudio.play();
    }
 
 }
