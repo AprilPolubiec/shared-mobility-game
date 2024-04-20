@@ -50,13 +50,14 @@ public class NewLoadController {
     public void handleLoadButtonPressed(ActionEvent event) {
         //
     }
+
     @FXML
     public void handleNewGameButtonPressed(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("chooseCharacter.fxml"));
             AnchorPane root = loader.load();
-            GameController gc = loader.getController();
-            gc.load(root, _stage);
+            ChooseCharacterController controller = loader.getController();
+            controller.load(root, _stage);
         } catch (Exception e) {
             e.printStackTrace();
         }

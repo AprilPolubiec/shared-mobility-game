@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rideshare.Controllers.ChooseCharacterController">
+   <children>
+      <ImageView fitHeight="948.0" fitWidth="1674.0" layoutX="-9.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/bg/home-2.png" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="449.0" layoutY="319.0" prefHeight="284.0" prefWidth="358.0">
+         <children>
+            <ImageView fitHeight="354.0" fitWidth="466.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/red_panel.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="344.0" fitWidth="451.0" layoutX="5.0" layoutY="4.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/grey_panel.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="75.0" fitWidth="75.0" layoutX="193.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/sprites/girl-1/down-2.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="51.0" fitWidth="48.0" layoutX="379.0" layoutY="152.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/red_sliderRight.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="51.0" fitWidth="48.0" layoutX="27.0" layoutY="151.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/red_sliderLeft.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="88.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your character">
+               <font>
+                  <Font name="Futura Bold" size="24.0" />
+               </font>
+            </Text>
+            <TextField layoutX="176.0" layoutY="282.0" prefHeight="27.0" prefWidth="110.0" promptText="ENTER NAME">
+               <font>
+                  <Font name="Futura Bold" size="13.0" />
+               </font>
+            </TextField>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
