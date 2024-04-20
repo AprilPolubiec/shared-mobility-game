@@ -38,6 +38,9 @@ public class ScoreKeeper {
     boolean exceededBudgetFlag;
     int amountOverBudget;
 
+    private Text scoreText;
+    private Text mailboxText;
+
     // The ScoreKeeper constructor
     public ScoreKeeper() {
         this.CO2Saved = 0;
@@ -58,13 +61,12 @@ public class ScoreKeeper {
         AnchorPane.setTopAnchor(scoreVbox, 50.0);
         AnchorPane.setLeftAnchor(scoreVbox, 50.0);
 
-        Text mailboxText = new Text(String.format("%s/%s Mailboxes", this.mailboxesCompleted, this.totalMailboxes));
-        mailboxText.setFont(Font.font("Futura Bold", 21));
-        
+        this.mailboxText = new Text(String.format("%s/%s Mailboxes", this.mailboxesCompleted, this.totalMailboxes));
+        this.mailboxText.setFont(Font.font("Futura Bold", 21));
         scoreVbox.getChildren().add(mailboxText);
         
-        Text scoreText = new Text(String.format("Score: %s", calculateScore()));
-        scoreText.setFont(Font.font("Futura Bold", 21));
+        this.scoreText = new Text(String.format("Score: %s",0));
+        this.scoreText.setFont(Font.font("Futura Bold", 21));
         scoreVbox.getChildren().add(scoreText);
         
         scorekeeperPane.getChildren().add(scoreVbox);
@@ -74,11 +76,13 @@ public class ScoreKeeper {
     public int getMailboxesCompleted() {
         return this.mailboxesCompleted;
     }
+
     public void setMailboxesCompleted(int numCompleted) {
         if (numCompleted > totalMailboxes) {
             throw new IllegalArgumentException("Attempted to complete more mailboxes than exist.");
         }
         this.mailboxesCompleted = numCompleted;
+        this.mailboxText.setText(String.format("%s/%s Mailboxes", this.mailboxesCompleted, this.totalMailboxes));
     }
 
     public int getTotalMailboxes() {
@@ -155,6 +159,7 @@ public class ScoreKeeper {
         return this.CO2Used;
     }
 
+    // TODO: fix this - its returning 0 (probably rounding down)
     public int calculateScore() {
         this.mailboxesCompleted = this.getMailboxesCompleted();
         this.totalMailboxes = this.getTotalMailboxes();
@@ -173,6 +178,7 @@ public class ScoreKeeper {
             return this.score;
         }
 
+        this.scoreText.setText(String.format("Score: %s", this.score));
         return this.score;
     }
 
