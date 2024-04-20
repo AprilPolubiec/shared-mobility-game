@@ -179,6 +179,10 @@ public class Game {
         scoreKeeper.setMailboxesCompleted(scoreKeeper.getMailboxesCompleted() + 1);
         scoreKeeper.incrementCO2Used((int) _currentTrip.getEmission());
         scoreKeeper.print();
+        
+        _player.getProgressBar().updateProgress();
+
+
     }
 
     private void handleMailboxFailed() {

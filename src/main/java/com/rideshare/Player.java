@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 public class Player extends Sprite {
     private String name;
     private ScoreKeeper scoreKeeper;
+    private GameProgressBar progressBar;
 
     public Player(String name, String avatar) {
         super(avatar);
@@ -31,5 +32,9 @@ public class Player extends Sprite {
 
     public ScoreKeeper getScoreKeeper() {
         return scoreKeeper;
+    }
+
+    public GameProgressBar getProgressBar() {
+        return progressBar;
     }
 }
