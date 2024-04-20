@@ -1,9 +1,5 @@
 package com.rideshare;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-
 import javafx.scene.Scene;
 
 // https://www.youtube.com/watch?v=2JNEme00ZFA&list=RDCMUCS94AD0gxLakurK-6jnqV1w&index=6
@@ -83,7 +79,7 @@ public class TripCalculator {
         return startNode;
     }
 
-    private TransportationNode getGoalNode(int row, int col) {
+    public TransportationNode getGoalNode(int row, int col) {
         // The goal node is the walking path which is either in front, to the left or to
         // the
         // right
@@ -211,7 +207,7 @@ public class TripCalculator {
             }
         }
 
-        TransportationNode closestStation = transitMatrices.get(0).getNode(0, 0);
+        TransportationNode closestStation = null;
 
         for (RouteNodeMatrix routeNodeMatrix : transitMatrices) {
             TransportationNode[][] matrix = routeNodeMatrix.get();
@@ -224,7 +220,7 @@ public class TripCalculator {
                         int yDistance = Math.abs(rowIdx - goalNode.row);
                         int distance = xDistance + yDistance;
 
-                        if (distance < Math.abs(closestStation.col - goalNode.col)
+                        if (closestStation == null || distance < Math.abs(closestStation.col - goalNode.col)
                                 + Math.abs(closestStation.row - goalNode.row)) {
                             closestStation = matrix[rowIdx][colIdx];
                         }
@@ -238,8 +234,10 @@ public class TripCalculator {
 
     public Trip runTransitPathFinding(TransportationNode startNode, TransportationNode goalNode) {
         TransportationNode startStation = getClosestStation(startNode, null, null);
+        Utils.print(String.format("Start station: %s [%s, %s]", startStation.modeOfTransport.getName(), startStation.row, startStation.col));
         TransportationNode endStation = getClosestStation(goalNode, startStation.transportationType,
                 startStation.modeOfTransport.getName());
+        Utils.print(String.format("End station: %s [%s, %s]", endStation.modeOfTransport.getName(), endStation.row, endStation.col));
 
         // TODO: handle if start and end are the same, we can just skip this path finder
         if (startStation == endStation) {

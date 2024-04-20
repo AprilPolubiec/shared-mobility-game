@@ -53,6 +53,7 @@ public class Game {
         this._root = root;
         
         this._tripCalculator = new TripCalculator(this._city);
+
         this._level = 0; // TODO: or pull in from the loader
 
         initializeTimer();
@@ -110,12 +111,10 @@ public class Game {
             // No more mailboxes are left - we've completed the level
             if (mailboxesLeft == 0) {
                 handleLevelCompleted();
-
             // If timer has stopped with mailboxes left over or the player exceeded CO2, level failed
             } else if ((_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0)
                     || _player.getScoreKeeper().hasExceededBudget()) {
                 handleLevelFailed();
-            
             // If the timer is running, we can show a random mailbox
             } else if (_timer.getState() == TimerState.RUNNING) {
                 int numUninitializedMailboxes = _city.getUninitializedMailboxes().size();
@@ -164,6 +163,7 @@ public class Game {
             // _saveLoad.save("game_state.dat", ds);
             _timeline.stop();
             this._level += 1;
+            // dosomething()
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
         }
@@ -240,11 +240,17 @@ public class Game {
                 }
                 if (newValue == PlayerStatus.IDLE) {
                     // Mailbox is compeleted - this could be so much better :')
-                    mailbox.markComplete();
+                    handleTripCompleted();
                 }
             }
 
         });
+    }
+
+    private void handleTripCompleted() {
+        _currentMailbox.markComplete();
+        // _currentTrip.getEmission();
+        // progressBar.setEmission();
     }
 
     private void handleMailboxCompleted() {

@@ -15,7 +15,7 @@ public class Route {
     public String name;
     
     public Route(int[][] routeMatrix, TransportationType transportationType, String name) {
-        nodeMatrix = new RouteNodeMatrix(routeMatrix, transportationType);
+        nodeMatrix = new RouteNodeMatrix(routeMatrix, transportationType, name);
         this.transportationType = transportationType;
         this.name = name;
     }

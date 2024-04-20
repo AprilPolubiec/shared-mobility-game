@@ -11,6 +11,7 @@ public class RouteNodeMatrix {
   private int[][] originalMatrix;
   private TransportationNode[][] matrix;
   private TransportationType transportationType;
+  private String name;
 
   // The value for stops
   private static final Map<TransportationType, Integer[]> stopCodes = new HashMap<>();
@@ -30,7 +31,8 @@ public class RouteNodeMatrix {
     openCodes.put(TransportationType.TRAIN, TileUtils.TRAIN_TILE_IDS);
   }
 
-  public RouteNodeMatrix(int[][] mapDataMatrix, TransportationType transportationType) {
+  public RouteNodeMatrix(int[][] mapDataMatrix, TransportationType transportationType, String name) {
+    this.name = name;
     originalMatrix = mapDataMatrix.clone();
     matrix = new TransportationNode[mapDataMatrix.length][mapDataMatrix[0].length];
     this.transportationType = transportationType;
@@ -51,6 +53,10 @@ public class RouteNodeMatrix {
         matrix[rowIdx][colIdx] = node;
       }
     }
+  }
+
+  public String getRouteName() {
+    return this.name;
   }
 
   public TransportationNode getNode(int rowIdx, int colIdx) {
