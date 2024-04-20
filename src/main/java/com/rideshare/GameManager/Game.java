@@ -206,7 +206,7 @@ public class Game {
         });
     }
 
-    // TODO: handle switching between selecting different mailboxes
+    // TODO: handle switching between selecting different mailboxes - right now the trip selector renders on top of each other,need to hide
     private void handleMailboxSelected(Mailbox mailbox) {
         Utils.print(String.format("Mailbox selected"));
 

@@ -248,6 +248,7 @@ public class TripCalculator {
         Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStation, endStation, goalNode);
         firstLeg.appendTrip(middleLeg);
         firstLeg.appendTrip(lastLeg);
+        firstLeg.setTripType(TripType.TRANSIT_ONLY);
         firstLeg.print();
         return firstLeg;
     }

@@ -77,7 +77,21 @@ public class ChooseTripComponent {
             });
     
             // Put header (ie: FAST, EFFICIENT, TRANSIT ONLY)
-            Text label = new Text(String.format("Trip %s", i + 1));
+            Text label = new Text("");
+            switch (trip.getTripType()) {
+                case EFFICIENT:
+                    label = new Text(String.format("WALK"));
+                    break;
+                case FAST:
+                    label = new Text(String.format("DRIVE"));
+                    break;
+                case TRANSIT_ONLY:
+                    label = new Text(String.format("PUBLIC TRANSIT"));
+                    break;
+                default:
+                    break;
+            }
+            
             label.setFill(Color.WHITE);
             label.setFont(Font.font("Futura Bold", 21));
             label.setX((300 - label.getBoundsInLocal().getWidth()) / 2);

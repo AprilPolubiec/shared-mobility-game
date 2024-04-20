@@ -54,7 +54,9 @@ public class Mailbox {
             _col);
       
       _mailboxTile.setOnMouseClicked(event -> {
-         markSelected();
+         if (status.get() == MailboxStatus.WAITING) {
+            markSelected();
+         }
          // Set all other mailboxes to unselected?
       });
 
