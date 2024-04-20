@@ -9,6 +9,7 @@ import com.rideshare.City;
 import com.rideshare.Player;
 import com.rideshare.GameManager.Game;
 import com.rideshare.GameManager.MapLoader;
+import com.rideshare.TileManager.TileUtils;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -63,11 +64,13 @@ public class GameController {
         progressBar.setProgress(0.5);
 
         VBox vBox = new VBox(progressBar);
-        progressBar.setPrefWidth(960);
+        progressBar.setPrefWidth(TileUtils.TILE_SIZE_IN_PIXELS * 30);
         progressBar.setPrefHeight(50);
-
+        
         progressBar.setStyle("-fx-accent: #fa8132;");
+        AnchorPane.setLeftAnchor(vBox, (_root.getScene().getWidth() / 2) - (TileUtils.TILE_SIZE_IN_PIXELS * 30 / 2));
         AnchorPane.setBottomAnchor(vBox, 0.0);
+        
         _root.getChildren().add(vBox);
     }
 

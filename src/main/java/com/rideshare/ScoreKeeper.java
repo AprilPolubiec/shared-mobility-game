@@ -1,5 +1,7 @@
 package com.rideshare;
 
+import com.rideshare.TileManager.TileUtils;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -55,7 +57,7 @@ public class ScoreKeeper {
     public void render(AnchorPane root) {
         AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(300.0, 300.0);
         AnchorPane.setBottomAnchor(scorekeeperPane, 150.0);
-        AnchorPane.setRightAnchor(scorekeeperPane, 0.0);
+        AnchorPane.setLeftAnchor(scorekeeperPane, (root.getScene().getWidth() / 2) + (TileUtils.TILE_SIZE_IN_PIXELS * 30 / 2));
         
         VBox scoreVbox = new VBox();
         AnchorPane.setTopAnchor(scoreVbox, 50.0);
