@@ -35,7 +35,9 @@ public class TileManager {
 
     public void draw() {
         _tileGrid = new GridPane();
-        AnchorPane.setLeftAnchor(_tileGrid, (_root.getScene().getWidth() / 2) - (TileUtils.TILE_SIZE_IN_PIXELS * 30 / 2));
+        // TODO: maybe change
+        // AnchorPane.setTopAnchor(tileGrid, 0.0);
+        // AnchorPane.setLeftAnchor(tileGrid, 0.0);
 
         // Add the GridPane to the AnchorPane
         for (TiledMapLayer layer : _layers) {

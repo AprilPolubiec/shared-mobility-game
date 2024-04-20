@@ -2,8 +2,6 @@ package com.rideshare;
 
 import java.util.ArrayList;
 
-import com.rideshare.TileManager.TileUtils;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +28,7 @@ public class ChooseTripComponent {
 
     public ChooseTripComponent(AnchorPane root) {
         _root = root;
-        AnchorPane.setLeftAnchor(component, (root.getScene().getWidth() / 2) + (TileUtils.TILE_SIZE_IN_PIXELS * 30 / 2));        
+        AnchorPane.setRightAnchor(component, 0.0);
         _root.getChildren().add(component);
         return;
     }
@@ -83,6 +81,8 @@ public class ChooseTripComponent {
             // Put trip stats
             VBox statsVbox = new VBox();
             AnchorPane.setTopAnchor(statsVbox, 35.0);
+            // Set the top and left anchors for the VBox
+            // AnchorPane.setTopAnchor(statsVbox, (tripAnchor.getHeight() - statsVbox.prefHeight(-1)) / 2);
             AnchorPane.setLeftAnchor(statsVbox, 10.0);
 
             // Speed

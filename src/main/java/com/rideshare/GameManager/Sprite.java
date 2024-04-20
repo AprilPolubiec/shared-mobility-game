@@ -83,7 +83,7 @@ public abstract class Sprite {
         imageView = new ImageView(icons.get("down").get(0));
         imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
         imageView.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
-        xPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.row + (root.getScene().getWidth() / 2) - (TileUtils.TILE_SIZE_IN_PIXELS * 30 / 2);
+        xPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.row;
         yPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.col;
         imageView.setX(xPos);
         imageView.setY(yPos);
