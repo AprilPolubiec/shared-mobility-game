@@ -3,7 +3,7 @@ package com.rideshare.GameManager;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.rideshare.ChooseTripPopup;
+import com.rideshare.ChooseTripComponent;
 import com.rideshare.City;
 import com.rideshare.GridPanePosition;
 import com.rideshare.Mailbox;
@@ -34,6 +34,7 @@ public class Game {
     private AnchorPane _root;
     private Trip _currentTrip;
     private Timeline _timeline;
+    private ChooseTripComponent _tripChooser;
 
     public Game(AnchorPane root, City city, Player player) {
         Utils.print(String.format("Building a new city"));
@@ -47,6 +48,19 @@ public class Game {
 
         this._player.getScoreKeeper().setLevel(0);
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
+
+        _tripChooser = new ChooseTripComponent(_root);
+        _tripChooser.onSelectedTripChanged(new ChangeListener<Trip>() {
+            @Override
+            public void changed(ObservableValue<? extends Trip> observable, Trip oldValue, Trip newValue) {
+                _currentTrip = newValue;
+                _timer.resume();
+                _player.moveOnRoute(newValue.getNodeList());
+                // TODO: how do I wait for the above to finish?
+                _tripChooser.clear();
+            }
+        });
+    
         initializeGameLoop();
     }
 
@@ -155,17 +169,8 @@ public class Game {
         Utils.print(String.format("Found trips!"));
         _currentTrip = trips.get(0);
         // TODO: Filter out trips that are too slow to reach mailbox?
-        ChooseTripPopup popup = new ChooseTripPopup(_root, trips);
-        popup.render();
-        popup.onSelectedTripChanged(new ChangeListener<Trip>() {
-            @Override
-            public void changed(ObservableValue<? extends Trip> observable, Trip oldValue, Trip newValue) {
-                _currentTrip = newValue;
-                _timer.resume();
-                _player.moveOnRoute(newValue.getNodeList());
-                // TODO: how do I wait for the above to finish?
-            }
-        });
+        _tripChooser.setTrips(trips);
+        _tripChooser.render();
         mailbox.markInProgress();
     }
 

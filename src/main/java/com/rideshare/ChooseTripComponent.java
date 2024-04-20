@@ -20,20 +20,26 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class ChooseTripPopup extends Popup {
+public class ChooseTripComponent {
     ObjectProperty<Trip> selectedTrip = new SimpleObjectProperty<>();
     AnchorPane _root;
     ArrayList<Trip> trips;
+    private VBox component = new VBox();
 
-    public ChooseTripPopup(AnchorPane root, ArrayList<Trip> trips) {
-        // TODO: should call the popup constructor when its ready
+    public ChooseTripComponent(AnchorPane root) {
         _root = root;
-        this.trips = trips;
         return;
     }
 
+    public void setTrips(ArrayList<Trip> trips) {
+        this.trips = trips;
+    }
+
+    public void clear() {
+        this.component.getChildren().clear();
+    }
+
     public void render() {
-        VBox tripOptionsVBox = new VBox();
         for (int i = 0; i < trips.size(); i++) {
             Trip trip = trips.get(i);
             AnchorPane tripAnchor = UIComponentUtils.createStyledDialog(100.0, 250.0);
@@ -83,11 +89,11 @@ public class ChooseTripPopup extends Popup {
             statsVbox.getChildren().addAll(speedStats, efficiencyStats);
             
             tripAnchor.getChildren().add(statsVbox);
-            tripOptionsVBox.getChildren().add(tripAnchor);
+            component.getChildren().add(tripAnchor);
         }
 
-        AnchorPane.setRightAnchor(tripOptionsVBox, 0.0);
-        _root.getChildren().add(tripOptionsVBox);
+        AnchorPane.setRightAnchor(component, 0.0);
+        _root.getChildren().add(component);
     }
 
     private GridPane createStatSection(String stat, String amtLabel) {
