@@ -144,7 +144,8 @@ public class Game {
 
     private void handleMailboxSelected(Mailbox mailbox) {
         Utils.print(String.format("Mailbox selected"));
-        if (mailbox.getStatus() == MailboxStatus.IN_PROGRESS) {
+        // TODO: we should be checking that NO other mailboxes are in progress here
+        if (mailbox.getStatus() != MailboxStatus.IN_PROGRESS) {
             return;
         }
         // Calculate trips from player to mailbox
@@ -153,9 +154,9 @@ public class Game {
                 mailbox.getGridPanePosition().col);
         Utils.print(String.format("Found trips!"));
         _currentTrip = trips.get(0);
-        _player.moveOnRoute(_currentTrip.getNodeList());
         // TODO: Filter out trips that are too slow to reach mailbox?
-        ChooseTripPopup popup = new ChooseTripPopup(trips);
+        ChooseTripPopup popup = new ChooseTripPopup(_root, trips);
+        popup.render();
         popup.onSelectedTripChanged(new ChangeListener<Trip>() {
             @Override
             public void changed(ObservableValue<? extends Trip> observable, Trip oldValue, Trip newValue) {

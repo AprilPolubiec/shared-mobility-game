@@ -85,6 +85,9 @@ import com.rideshare.TileManager.TileUtils;
     public int getScore() {
         return this._score;
     }
+    public String getTripType() {
+        return this.tripType.name();
+    }
 
     public double getDuration() {
         return Math.floor(this.tripDuration);
