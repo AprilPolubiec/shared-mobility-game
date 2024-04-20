@@ -73,6 +73,7 @@ import com.rideshare.TileManager.TileUtils;
 
             current = current.parent;
             iterations++;
+            
         }
         Collections.reverse(_nodeList); // Reverse list so its from start to end
         legs.add(this);

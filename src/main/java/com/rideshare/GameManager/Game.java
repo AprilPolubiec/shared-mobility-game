@@ -16,6 +16,8 @@ import com.rideshare.TimerState;
 import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
 import com.rideshare.Utils;
+import com.rideshare.SaveManager.SaveLoad;
+import com.rideshare.SaveManager.DataStorage;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -36,6 +38,9 @@ public class Game {
     private Trip _currentTrip;
     private Timeline _timeline;
     private ChooseTripComponent _tripChooser;
+    private SaveLoad _saveLoad;
+    private ScoreKeeper scoreKeeper;
+    private int mailboxesLeft;
 
     public Game(AnchorPane root, City city, Player player) {
         Utils.print(String.format("Building a new city"));
@@ -62,6 +67,9 @@ public class Game {
         });
 
         initializeGameLoop();
+
+        this.scoreKeeper = new ScoreKeeper();
+        this._saveLoad = new SaveLoad(this.scoreKeeper);
     }
 
     // TODO: this will take in whatever is loaded by the loader and initialize from
@@ -112,6 +120,14 @@ public class Game {
         return this._level;
     }
 
+    public int getMailboxesLeft() {
+        return mailboxesLeft;
+    }
+
+    public Timer getTimer() {
+        return this._timer;
+    }
+
     public void start() {
         _player.render(_root, new GridPanePosition(13, 13)); // TODO: how do we detrmine start pos?
         _timer.start();
@@ -121,14 +137,43 @@ public class Game {
     private void handleLevelCompleted() {
         Utils.print(String.format("Level completed"));
         // TODO
-        _timeline.stop();
-        this._level += 1;
+        // making a new datastorage object to pass as argument when calling save()
+        DataStorage ds = new DataStorage();
+
+        ds.score = scoreKeeper.calculateScore();
+        ds.mailboxesCompleted = scoreKeeper.getMailboxesCompleted();
+        ds.level = scoreKeeper.getLevel();
+        ds.CO2Saved = scoreKeeper.getCO2Saved();
+        ds.CO2Used = scoreKeeper.getCO2Used();
+        ds.totalMailboxes = scoreKeeper.getTotalMailboxes();
+
+        if (isLevelOver()) {
+            _saveLoad.save("game_state.dat", ds);
+            _timeline.stop();
+            this._level += 1;
+        } else {
+            System.out.println("Level is incomplete, cannot save game state!");
+        }
     }
 
     private void handleLevelFailed() {
         Utils.print(String.format("Level failed"));
         // TODO
-        _timeline.stop();
+        DataStorage ds = new DataStorage();
+        ds.score = scoreKeeper.calculateScore();
+        ds.mailboxesCompleted = scoreKeeper.getMailboxesCompleted();
+        ds.level = scoreKeeper.getLevel();
+        ds.CO2Saved = scoreKeeper.getCO2Saved();
+        ds.CO2Used = scoreKeeper.getCO2Used();
+        ds.totalMailboxes = scoreKeeper.getTotalMailboxes();
+
+        if (isLevelOver()) {
+            _saveLoad.save("game_state.dat", ds);
+            _timeline.stop();
+            this._level += 1;
+        } else {
+            System.out.println("Level is incomplete, cannot save game state!");
+        }
         // Render game over!
     }
 
@@ -199,5 +244,18 @@ public class Game {
 
     private void handleMailboxFailed() {
         // TODO?
+    }
+
+    private boolean isLevelOver() {
+        int mailboxesLeft = getMailboxesLeft();
+        if (mailboxesLeft == 0) {
+            return true;
+        } else if (getTimer().getState() == TimerState.STOPPED) {
+            return true;
+        } else {
+            // The level is not over
+            System.out.println("Level incomplete");
+            return false;
+        }
     }
 }
