@@ -1,5 +1,7 @@
 package com.rideshare;
 
+import com.rideshare.TileManager.TileUtils;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -25,7 +27,7 @@ import javafx.scene.text.Text;
 public class ScoreKeeper {
     // All relevant attributes initialised
     // The CO2 budget is just a random value here.
-    static final int maxCo2Budget = 8500; // NOTE: budget - average driver does about 160km per day, electric vehicle emits 53 per km. budget = 160*53 = 8480
+    private final int maxCo2Budget = 8500; // NOTE: budget - average driver does about 160km per day, electric vehicle emits 53 per km. budget = 160*53 = 8480
     // co2Budget here is a 'more local variable' allowed to go into the negatives in order to check if the budget has been exceeded
     int co2Budget = 8500;
     int CO2Saved;
@@ -40,6 +42,7 @@ public class ScoreKeeper {
 
     private Text scoreText;
     private Text mailboxText;
+    private Text co2Text;
 
     // The ScoreKeeper constructor
     public ScoreKeeper() {
@@ -55,7 +58,7 @@ public class ScoreKeeper {
     public void render(AnchorPane root) {
         AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(300.0, 300.0);
         AnchorPane.setBottomAnchor(scorekeeperPane, 150.0);
-        AnchorPane.setRightAnchor(scorekeeperPane, 0.0);
+        AnchorPane.setLeftAnchor(scorekeeperPane, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);
         
         VBox scoreVbox = new VBox();
         AnchorPane.setTopAnchor(scoreVbox, 50.0);
@@ -68,6 +71,10 @@ public class ScoreKeeper {
         this.scoreText = new Text(String.format("Score: %s",0));
         this.scoreText.setFont(Font.font("Futura Bold", 21));
         scoreVbox.getChildren().add(scoreText);
+    
+        this.co2Text = new Text(String.format("CO2 Used: %s/%s",0, this.maxCo2Budget));
+        this.co2Text.setFont(Font.font("Futura Bold", 21));
+        scoreVbox.getChildren().add(co2Text);
         
         scorekeeperPane.getChildren().add(scoreVbox);
         root.getChildren().add(scorekeeperPane);
@@ -120,6 +127,7 @@ public class ScoreKeeper {
         this.hasExceededBudget(); 
 
         this.CO2Used += incrementValue;
+        this.co2Text.setText(String.format("CO2 Used: %s/%s",this.CO2Used, this.maxCo2Budget));
         return this.CO2Used;
     }
 

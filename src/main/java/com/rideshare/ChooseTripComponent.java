@@ -2,6 +2,8 @@ package com.rideshare;
 
 import java.util.ArrayList;
 
+import com.rideshare.TileManager.TileUtils;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -28,7 +30,8 @@ public class ChooseTripComponent {
 
     public ChooseTripComponent(AnchorPane root) {
         _root = root;
-        AnchorPane.setRightAnchor(component, 0.0);
+        AnchorPane.setLeftAnchor(component, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);        
+        AnchorPane.setTopAnchor(component, 25.0);        
         _root.getChildren().add(component);
         return;
     }
@@ -42,9 +45,12 @@ public class ChooseTripComponent {
     }
 
     public void render() {
+        Text titleText = new Text("Choose trip");
+        titleText.setFont(new Font("Futura Bold", 24));
+        component.getChildren().add(titleText);
         for (int i = 0; i < trips.size(); i++) {
             Trip trip = trips.get(i);
-            AnchorPane tripAnchor = UIComponentUtils.createStyledDialog(100.0, 250.0);
+            AnchorPane tripAnchor = UIComponentUtils.createStyledDialog(100.0, 300.0);
             tripAnchor.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent me) {
@@ -74,16 +80,14 @@ public class ChooseTripComponent {
             Text label = new Text(String.format("Trip %s", i + 1));
             label.setFill(Color.WHITE);
             label.setFont(Font.font("Futura Bold", 21));
-            label.setX((250 - label.getBoundsInLocal().getWidth()) / 2);
+            label.setX((300 - label.getBoundsInLocal().getWidth()) / 2);
             AnchorPane.setTopAnchor(label, 0.0);
             tripAnchor.getChildren().add(label);
 
             // Put trip stats
             VBox statsVbox = new VBox();
             AnchorPane.setTopAnchor(statsVbox, 35.0);
-            // Set the top and left anchors for the VBox
-            // AnchorPane.setTopAnchor(statsVbox, (tripAnchor.getHeight() - statsVbox.prefHeight(-1)) / 2);
-            AnchorPane.setLeftAnchor(statsVbox, 10.0);
+            AnchorPane.setLeftAnchor(statsVbox, 20.0);
 
             // Speed
             GridPane speedStats = createStatSection("Speed", String.format("%s min", (int)trip.getDuration()));

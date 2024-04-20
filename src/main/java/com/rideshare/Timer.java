@@ -4,6 +4,8 @@ import javafx.util.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import com.rideshare.TileManager.TileUtils;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
@@ -108,7 +110,7 @@ public class Timer {
                 new Image(getClass().getResourceAsStream("/images/ui/grey_panel.png")));
         timeModalRoot.getChildren().add(panelImageView);
         AnchorPane.setBottomAnchor(timeModalRoot, 0.0);
-        AnchorPane.setRightAnchor(timeModalRoot, 0.0);
+        AnchorPane.setLeftAnchor(timeModalRoot, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);
         panelImageView.setFitHeight(150);
         panelImageView.setFitWidth(300);
 
