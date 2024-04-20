@@ -59,16 +59,16 @@ public class GameController {
 
     // TODO: create a ProgressBar class!
     private void loadProgressModal() {
-        // ProgressBar progressBar = new ProgressBar(0);
-        // progressBar.setProgress(0.5);
+        ProgressBar progressBar = new ProgressBar(0);
+        progressBar.setProgress(0.5);
 
-        // VBox vBox = new VBox(progressBar);
-        // progressBar.setPrefWidth(960);
-        // progressBar.setPrefHeight(50);
+        VBox vBox = new VBox(progressBar);
+        progressBar.setPrefWidth(960);
+        progressBar.setPrefHeight(50);
 
-        // progressBar.setStyle("-fx-accent: #fa8132;");
-        // AnchorPane.setBottomAnchor(vBox, 0.0);
-        // _root.getChildren().add(vBox);
+        progressBar.setStyle("-fx-accent: #fa8132;");
+        AnchorPane.setBottomAnchor(vBox, 0.0);
+        _root.getChildren().add(vBox);
     }
 
     @FXML

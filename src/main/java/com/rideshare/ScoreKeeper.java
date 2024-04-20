@@ -1,4 +1,5 @@
 package com.rideshare;
+
 /** 
  * Description: A ScoreKeeper is an object whose main function is to store information about a player’s score.
     Attributes:
@@ -31,6 +32,7 @@ public class ScoreKeeper {
     int level;
     boolean exceededBudgetFlag;
     int amountOverBudget;
+    private ProgressBar progressBar;
 
     // The ScoreKeeper constructor
     public ScoreKeeper() {
@@ -46,6 +48,7 @@ public class ScoreKeeper {
     public int getMailboxesCompleted() {
         return this.mailboxesCompleted;
     }
+
     public void setMailboxesCompleted(int numCompleted) {
         if (numCompleted > totalMailboxes) {
             throw new IllegalArgumentException("Attempted to complete more mailboxes than exist.");
@@ -53,17 +56,11 @@ public class ScoreKeeper {
         this.mailboxesCompleted = numCompleted;
     }
 
-    
-
     public int getTotalMailboxes() {
         return this.totalMailboxes;
     }
     public void setTotalMailboxes(int total) {
         this.totalMailboxes = total;
-    }
-
-    public int getLevel(){
-        return this.level;
     }
 
     public int getCO2Saved() {
@@ -148,17 +145,6 @@ public class ScoreKeeper {
         }
 
         return this.score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-    public void setCO2Saved(int C02Saved) {
-        this.CO2Saved = C02Saved;
-    }
-
-    public void setCO2Used(int setC02Used) {
-        this.CO2Used = setC02Used;
     }
 
     public void print() {
