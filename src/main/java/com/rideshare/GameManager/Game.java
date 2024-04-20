@@ -16,7 +16,6 @@ import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
 import com.rideshare.Utils;
 import com.rideshare.SaveManager.SaveLoad;
-import com.rideshare.SaveManager.DataStorage;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -38,7 +37,6 @@ public class Game {
     private Timeline _timeline;
     private SaveLoad _saveLoad;
     private ScoreKeeper scoreKeeper;
-    private int mailboxesLeft;
 
     public Game(AnchorPane root, City city, Player player) {
         Utils.print(String.format("Building a new city"));
@@ -54,7 +52,7 @@ public class Game {
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         initializeGameLoop();
 
-        this.scoreKeeper = new ScoreKeeper();
+        this.scoreKeeper = this._player.getScoreKeeper();
         this._saveLoad = new SaveLoad(this.scoreKeeper);
     }
 
@@ -107,6 +105,8 @@ public class Game {
     }
 
     public int getMailboxesLeft() {
+        int numMailboxes = _city.getMailboxes().size();
+        int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
         return mailboxesLeft;
     }
 
@@ -124,17 +124,9 @@ public class Game {
         Utils.print(String.format("Level completed"));
         // TODO
         // making a new datastorage object to pass as argument when calling save()
-        DataStorage ds = new DataStorage();
-
-        ds.score = scoreKeeper.calculateScore();
-        ds.mailboxesCompleted = scoreKeeper.getMailboxesCompleted();
-        ds.level = scoreKeeper.getLevel();
-        ds.CO2Saved = scoreKeeper.getCO2Saved();
-        ds.CO2Used = scoreKeeper.getCO2Used();
-        ds.totalMailboxes = scoreKeeper.getTotalMailboxes();
 
         if (isLevelOver()) {
-            _saveLoad.save("game_state.dat", ds);
+            _saveLoad.save("game_state.dat");
             _timeline.stop();
             this._level += 1;
         } else {
@@ -144,17 +136,9 @@ public class Game {
 
     private void handleLevelFailed() {
         Utils.print(String.format("Level failed"));
-        // TODO
-        DataStorage ds = new DataStorage();
-        ds.score = scoreKeeper.calculateScore();
-        ds.mailboxesCompleted = scoreKeeper.getMailboxesCompleted();
-        ds.level = scoreKeeper.getLevel();
-        ds.CO2Saved = scoreKeeper.getCO2Saved();
-        ds.CO2Used = scoreKeeper.getCO2Used();
-        ds.totalMailboxes = scoreKeeper.getTotalMailboxes();
 
         if (isLevelOver()) {
-            _saveLoad.save("game_state.dat", ds);
+            _saveLoad.save("game_state.dat");
             _timeline.stop();
             this._level += 1;
         } else {

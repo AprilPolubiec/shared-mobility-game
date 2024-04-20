@@ -22,7 +22,7 @@ public class NewLoadController {
     @FXML
     public javafx.scene.control.Button loadGameButton;
     public javafx.scene.control.Button newGameButton;
-    
+
     private AnchorPane _root;
     private Stage _stage;
     private SaveLoad saveLoad; // Assuming you intended to use SaveLoad here
@@ -33,14 +33,13 @@ public class NewLoadController {
         _stage.setFullScreen(isFullScreen);
     }
 
-
     void load(AnchorPane root, Stage stage) {
         try {
             _stage = stage;
             _root = root;
-   
+
             setScene(true);
-      
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,8 +47,24 @@ public class NewLoadController {
 
     @FXML
     public void handleLoadButtonPressed(ActionEvent event) {
-        //
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Game");
+
+        // creating a path to game_data directory where game status' will be saved
+        File initialDirectory = new File("/game_data");
+        fileChooser.setInitialDirectory(initialDirectory);
+
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Data Files (*.dat)", "*.dat");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            String fileName = selectedFile.getAbsolutePath();
+            saveLoad.load(fileName);
+        }
     }
+
     @FXML
     public void handleNewGameButtonPressed(ActionEvent event) {
         try {

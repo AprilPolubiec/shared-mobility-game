@@ -11,6 +11,6 @@ public class DataStorage implements Serializable {
     public int level;
     public int CO2Saved = 0;
     public int CO2Used = 0;
-//made public so they can be accessed from game class
+    // made public so they can be accessed from game class
 
 }

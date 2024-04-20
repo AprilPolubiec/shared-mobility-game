@@ -16,22 +16,27 @@ import javafx.scene.chart.PieChart.Data;
 
 public class SaveLoad {
 
-    ScoreKeeper sk;
+    ScoreKeeper scoreKeeper;
 
     public SaveLoad(ScoreKeeper scoreKeeper) {
-        this.sk = scoreKeeper;
+        this.scoreKeeper = scoreKeeper;
     }
 
-    public void save(String fileName, DataStorage data) {
+    public void save(String fileName) {
         try {
-            // Create a FileOutputStream in append mode
+            // create a file outputstream wrapped in bufferedoutputstream, allows us to
+            // append the data instead of overwriting it
+            DataStorage ds = new DataStorage();
+            ds.score = scoreKeeper.calculateScore();
+            ds.mailboxesCompleted = scoreKeeper.getMailboxesCompleted();
+            ds.level = scoreKeeper.getLevel();
+            ds.CO2Saved = scoreKeeper.getCO2Saved();
+            ds.CO2Used = scoreKeeper.getCO2Used();
+            ds.totalMailboxes = scoreKeeper.getTotalMailboxes();
             OutputStream outputStream = new FileOutputStream(fileName, true);
-            // Wrap it with a BufferedOutputStream for better performance
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-            // Create ObjectOutputStream with BufferedOutputStream
             ObjectOutputStream oos = new ObjectOutputStream(bufferedOutputStream);
-            // Write the serialized DataStorage object to the file
-            oos.writeObject(data);
+            oos.writeObject(ds);
             System.out.println("Game state appended to: " + fileName);
             oos.close();
         } catch (FileNotFoundException e) {
@@ -47,12 +52,12 @@ public class SaveLoad {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(fileName)))) {
             DataStorage ds = (DataStorage) ois.readObject();
 
-            sk.setScore(ds.score);
-            sk.setMailboxesCompleted(ds.mailboxesCompleted);
-            sk.setLevel(ds.level);
-            sk.setCO2Saved(ds.CO2Saved);
-            sk.setCO2Used(ds.CO2Used);
-            sk.setTotalMailboxes(ds.totalMailboxes);
+            scoreKeeper.setScore(ds.score);
+            scoreKeeper.setMailboxesCompleted(ds.mailboxesCompleted);
+            scoreKeeper.setLevel(ds.level);
+            scoreKeeper.setCO2Saved(ds.CO2Saved);
+            scoreKeeper.setCO2Used(ds.CO2Used);
+            scoreKeeper.setTotalMailboxes(ds.totalMailboxes);
 
         } catch (Exception e) {
             System.out.println("Something's gone wrong with the load!! :( )");

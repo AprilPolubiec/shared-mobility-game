@@ -78,26 +78,6 @@ public class HomeController {
     }
 
     @FXML
-    public void handleLoadButtonPressed() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Load Game");
-
-        // creating a path to game_data directory where game status' will be saved
-        File initialDirectory = new File("/game_data");
-        fileChooser.setInitialDirectory(initialDirectory);
-
-        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Data Files (*.dat)", "*.dat");
-        fileChooser.getExtensionFilters().add(extensionFilter);
-
-        File selectedFile = fileChooser.showOpenDialog(null);
-
-        if (selectedFile != null) {
-            String fileName = selectedFile.getAbsolutePath();
-            saveLoad.load(fileName);
-        }
-    }
-
-    @FXML
     public void handleGameSelected() {
         // TODO: load saved game file
         saveLoad.loadSave();
@@ -113,6 +93,28 @@ public class HomeController {
 
     @FXML
     public void handleInstructionsButtonPressed() {
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("instructions.fxml"));
+            AnchorPane root = loader.load();
+
+            Stage instructionsStage = new Stage();
+            instructionsStage.setTitle("Instructions");
+            // instructionsStage.initModality(Modality.APPLICATION_MODAL); // Block input to
+            // other windows
+            instructionsStage.setScene(new Scene(root));
+
+            // Get the exit button from the loaded FXML
+            // Button exitButton = (Button) root.lookup("#exitButton");
+
+            // Set action for the exit button
+            // exitButton.setOnAction(event -> instructionsStage.close());
+
+            // Show the pop-up window
+            // instructionsStage.show();
+            instructionsStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // this.loadInstructionsScreen();
     }
 
