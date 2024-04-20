@@ -47,22 +47,7 @@ public class NewLoadController {
 
     @FXML
     public void handleLoadButtonPressed(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Load Game");
-
-        // creating a path to game_data directory where game status' will be saved
-        File initialDirectory = new File("/game_data");
-        fileChooser.setInitialDirectory(initialDirectory);
-
-        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Data Files (*.dat)", "*.dat");
-        fileChooser.getExtensionFilters().add(extensionFilter);
-
-        File selectedFile = fileChooser.showOpenDialog(null);
-
-        if (selectedFile != null) {
-            String fileName = selectedFile.getAbsolutePath();
-            saveLoad.load(fileName);
-        }
+        saveLoad.load();
     }
 
     @FXML

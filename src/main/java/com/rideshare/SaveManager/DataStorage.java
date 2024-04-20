@@ -5,6 +5,8 @@ import java.io.Serializable;
 
 public class DataStorage implements Serializable {
 
+    public String spriteName;
+    public String name;
     public int score;
     public int mailboxesCompleted;
     public int totalMailboxes;

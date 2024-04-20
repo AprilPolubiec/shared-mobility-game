@@ -76,7 +76,6 @@ public abstract class Sprite {
             e.printStackTrace();
         }
     }
-    
 
     protected void render(AnchorPane root, GridPanePosition startPosition) {
         // Place on the screen
@@ -221,5 +220,13 @@ public abstract class Sprite {
         }
         imageView.setImage(icons.get(this.direction).get(spriteIdx));
         spriteTimer++;
+    }
+
+    public String getSpriteName() {
+        return this.spriteName;
+    }
+
+    public void setSpriteName(String spriteName) {
+        this.spriteName = spriteName;
     }
 }

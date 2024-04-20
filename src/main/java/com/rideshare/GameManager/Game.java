@@ -216,15 +216,7 @@ public class Game {
     }
 
     private boolean isLevelOver() {
-        int mailboxesLeft = getMailboxesLeft();
-        if (mailboxesLeft == 0) {
-            return true;
-        } else if (getTimer().getState() == TimerState.STOPPED) {
-            return true;
-        } else {
-            // The level is not over
-            System.out.println("Level incomplete");
-            return false;
-        }
+        return getMailboxesLeft() == 0 || getTimer().getState() == TimerState.STOPPED;
     }
+
 }
