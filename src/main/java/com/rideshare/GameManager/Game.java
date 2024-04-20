@@ -9,6 +9,7 @@ import com.rideshare.GridPanePosition;
 import com.rideshare.Mailbox;
 import com.rideshare.MailboxStatus;
 import com.rideshare.Player;
+import com.rideshare.PlayerStatus;
 import com.rideshare.ScoreKeeper;
 import com.rideshare.Timer;
 import com.rideshare.TimerState;
@@ -56,11 +57,10 @@ public class Game {
                 _currentTrip = newValue;
                 _timer.resume();
                 _player.moveOnRoute(newValue.getNodeList());
-                // TODO: how do I wait for the above to finish?
                 _tripChooser.clear();
             }
         });
-    
+
         initializeGameLoop();
     }
 
@@ -86,7 +86,7 @@ public class Game {
             } else if ((_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0)
                     || _player.getScoreKeeper().hasExceededBudget()) {
                 handleLevelFailed();
-            } else {
+            } else if (_timer.getState() == TimerState.RUNNING) {
                 int numUninitializedMailboxes = _city.getUninitializedMailboxes().size();
                 int randomMailboxIndex = new Random().nextInt(numUninitializedMailboxes);
                 Mailbox mailboxToShow = _city.getUninitializedMailboxes().get(randomMailboxIndex);
@@ -133,7 +133,8 @@ public class Game {
     }
 
     private void showMailbox(Mailbox mailbox) {
-        Utils.print(String.format("Showing mailbox at [%s, %s]", mailbox.getGridPanePosition().row, mailbox.getGridPanePosition().col));
+        Utils.print(String.format("Showing mailbox at [%s, %s]", mailbox.getGridPanePosition().row,
+                mailbox.getGridPanePosition().col));
         // mailbox.setDuration(Timer.gameMinutesToSeconds(60)); // 1 in-game hour
         mailbox.render();
         mailbox.show();
@@ -143,7 +144,7 @@ public class Game {
                     MailboxStatus newStatus) {
                 System.out.println("Status changed: " + newStatus);
                 // Call a method or do something else based on the new value
-                if (newStatus == MailboxStatus.IN_PROGRESS) {
+                if (newStatus == MailboxStatus.SELECTED) {
                     handleMailboxSelected(mailbox);
                 }
                 if (newStatus == MailboxStatus.COMPLETED) {
@@ -156,22 +157,37 @@ public class Game {
         });
     }
 
+    // TODO: handle switching between selecting different mailboxes
     private void handleMailboxSelected(Mailbox mailbox) {
         Utils.print(String.format("Mailbox selected"));
-        // TODO: we should be checking that NO other mailboxes are in progress here
-        if (mailbox.getStatus() != MailboxStatus.IN_PROGRESS) {
+
+        if (_player.getStatus() == PlayerStatus.ON_TRIP) {
             return;
         }
+        pause();
         // Calculate trips from player to mailbox
         ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition().row,
                 _player.getGridPanePosition().col, mailbox.getGridPanePosition().row,
                 mailbox.getGridPanePosition().col);
         Utils.print(String.format("Found trips!"));
         _currentTrip = trips.get(0);
-        // TODO: Filter out trips that are too slow to reach mailbox?
         _tripChooser.setTrips(trips);
         _tripChooser.render();
-        mailbox.markInProgress();
+
+        _player.addStatusListener(new ChangeListener<PlayerStatus>() {
+            @Override
+            public void changed(ObservableValue<? extends PlayerStatus> observable, PlayerStatus oldValue,
+                    PlayerStatus newValue) {
+                if (newValue == PlayerStatus.ON_TRIP) {
+                    mailbox.markInProgress();
+                }
+                if (newValue == PlayerStatus.IDLE) {
+                    // Mailbox is compeleted - this could be so much better :')
+                    mailbox.markComplete();
+                }
+            }
+
+        });
     }
 
     private void handleMailboxCompleted() {

@@ -7,6 +7,8 @@ public enum MailboxStatus {
     READY,
     // Mailbox has been rendered and it's timer has started
     WAITING,
+    // Player has selected the mailbox
+    SELECTED,
     // Player has selected a trip and is in transit to the mailbox
     IN_PROGRESS,
     // Player has reached the mailbox before its timer ended
