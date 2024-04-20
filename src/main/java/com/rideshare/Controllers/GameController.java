@@ -58,7 +58,6 @@ public class GameController {
         _city = loader.getCity();
     }
 
-    // TODO: create a ProgressBar class!
     private void loadProgressModal() {
         ProgressBar progressBar = new ProgressBar(0);
         progressBar.setProgress(0.5);

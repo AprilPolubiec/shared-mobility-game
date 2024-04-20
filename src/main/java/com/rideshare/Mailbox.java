@@ -76,7 +76,6 @@ public class Mailbox {
       status.set(MailboxStatus.READY);
    }
 
-   // TODO: actually just deduce from the house id
    public void setDuration(int duration) {
       _duration = duration;
    }
