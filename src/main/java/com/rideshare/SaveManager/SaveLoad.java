@@ -9,29 +9,35 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
+import javafx.stage.FileChooser;
 
 import com.rideshare.ScoreKeeper;
-
-import javafx.scene.chart.PieChart.Data;
+import com.rideshare.Player;
+import com.rideshare.GameManager.Sprite;
 
 public class SaveLoad {
+    Player player;
 
-    ScoreKeeper sk;
+    public SaveLoad() {}
 
-    public SaveLoad(ScoreKeeper scoreKeeper) {
-        this.sk = scoreKeeper;
-    }
-
-    public void save(String fileName, DataStorage data) {
+    public void save(Player player, String fileName) {
         try {
-            // Create a FileOutputStream in append mode
+            // create a file outputstream wrapped in bufferedoutputstream, allows us to
+            // append the data instead of overwriting it
+            DataStorage ds = new DataStorage();
+            ds.name = player.getPlayerName();
+            ds.spriteName = player.getAvatarName();
+            ds.score = player.getScoreKeeper().calculateScore();
+            ds.mailboxesCompleted = player.getScoreKeeper().getMailboxesCompleted();
+            ds.level = player.getScoreKeeper().getLevel();
+            ds.CO2Saved = player.getScoreKeeper().getCO2Saved();
+            ds.CO2Used = player.getScoreKeeper().getCO2Used();
+            ds.totalMailboxes = player.getScoreKeeper().getTotalMailboxes();
+    
             OutputStream outputStream = new FileOutputStream(fileName, true);
-            // Wrap it with a BufferedOutputStream for better performance
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-            // Create ObjectOutputStream with BufferedOutputStream
             ObjectOutputStream oos = new ObjectOutputStream(bufferedOutputStream);
-            // Write the serialized DataStorage object to the file
-            oos.writeObject(data);
+            oos.writeObject(ds);
             System.out.println("Game state appended to: " + fileName);
             oos.close();
         } catch (FileNotFoundException e) {
@@ -43,20 +49,38 @@ public class SaveLoad {
         }
     }
 
-    public void load(String fileName) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(fileName)))) {
-            DataStorage ds = (DataStorage) ois.readObject();
+    public Player load() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Game");
 
-            sk.setScore(ds.score);
-            sk.setMailboxesCompleted(ds.mailboxesCompleted);
-            sk.setLevel(ds.level);
-            sk.setCO2Saved(ds.CO2Saved);
-            sk.setCO2Used(ds.CO2Used);
-            sk.setTotalMailboxes(ds.totalMailboxes);
+        File initialDirectory = new File("/game_data");
+        fileChooser.setInitialDirectory(initialDirectory);
 
-        } catch (Exception e) {
-            System.out.println("Something's gone wrong with the load!! :( )");
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Data Files (*.dat)", "*.dat");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            String fileName = selectedFile.getAbsolutePath();
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(selectedFile))) {
+                DataStorage ds = (DataStorage) ois.readObject();
+
+                player.setPlayerName(ds.name);
+                player.setAvatar(ds.spriteName);
+                player.getScoreKeeper().setScore(ds.score);
+                player.getScoreKeeper().setMailboxesCompleted(ds.mailboxesCompleted);
+                player.getScoreKeeper().setLevel(ds.level);
+                player.getScoreKeeper().setCO2Saved(ds.CO2Saved);
+                player.getScoreKeeper().setCO2Used(ds.CO2Used);
+                player.getScoreKeeper().setTotalMailboxes(ds.totalMailboxes);
+            } catch (Exception e) {
+                System.out.println("Something went wrong while loading the game state from file: " + fileName);
+                e.printStackTrace();
+                return null;
+            }
         }
+        return player;
     }
 
 }

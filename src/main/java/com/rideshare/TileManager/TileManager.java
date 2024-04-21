@@ -3,7 +3,6 @@ package com.rideshare.TileManager;
 import com.rideshare.App;
 import com.rideshare.GameManager.MapLoader;
 
-import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -35,10 +34,6 @@ public class TileManager {
 
     public void draw() {
         _tileGrid = new GridPane();
-        // TODO: maybe change
-        // AnchorPane.setTopAnchor(tileGrid, 0.0);
-        // AnchorPane.setLeftAnchor(tileGrid, 0.0);
-
         // Add the GridPane to the AnchorPane
         for (TiledMapLayer layer : _layers) {
             int[][] matrix = MapLoader.arrayToMatrix(layer.data, _height, _width);

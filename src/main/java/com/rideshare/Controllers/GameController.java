@@ -1,14 +1,11 @@
 package com.rideshare.Controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
 import com.rideshare.City;
 import com.rideshare.Player;
 import com.rideshare.GameManager.Game;
 import com.rideshare.GameManager.MapLoader;
+import com.rideshare.TileManager.TileUtils;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -24,6 +21,8 @@ public class GameController {
     private City _city;
     private AnchorPane _root;
     private Stage _stage;
+
+    private Player player;
 
     public GameController() {
         return;
@@ -49,6 +48,10 @@ public class GameController {
         }
     }
 
+    void setPlayer(Player player) {
+        this.player = player;
+        this.loadMap(player.getScoreKeeper().getMapName());
+    }
 
     private void loadMap(String mapName) {
         // TODO: should be able to load different maps eventually
@@ -81,7 +84,7 @@ public class GameController {
         } else {
             System.out.println("AnchorPane not found!");
         }
-        Player player = new Player("april", "girl-1");
+        // Player player = new Player("april", "girl-1");
 
         Game game = new Game(_root, _city, player);
         game.start();

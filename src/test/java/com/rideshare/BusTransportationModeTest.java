@@ -10,8 +10,8 @@ public class BusTransportationModeTest {
         String displayName = "CitiBus";
         TransportationMode tm = new BusTransportationMode(displayName);
         
-        assertEquals(0, tm.getEmissionRate()); // TODO: decide emission rate
-        assertEquals(5, tm.getSpeed()); // TODO: decide how to measure speed
+        assertEquals(0, tm.getEmissionRate());
+        assertEquals(5, tm.getSpeed());
         assertEquals(displayName, tm.getName());
         assertEquals(true, tm.hasStops());
     }

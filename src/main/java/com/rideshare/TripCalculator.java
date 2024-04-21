@@ -234,6 +234,9 @@ public class TripCalculator {
 
     public Trip runTransitPathFinding(TransportationNode startNode, TransportationNode goalNode) {
         TransportationNode startStation = getClosestStation(startNode, null, null);
+        if (startStation == null) { // No stations available!
+            return null;
+        }
         Utils.print(String.format("Start station: %s [%s, %s]", startStation.modeOfTransport.getName(), startStation.row, startStation.col));
         TransportationNode endStation = getClosestStation(goalNode, startStation.transportationType,
                 startStation.modeOfTransport.getName());
@@ -248,6 +251,7 @@ public class TripCalculator {
         Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStation, endStation, goalNode);
         firstLeg.appendTrip(middleLeg);
         firstLeg.appendTrip(lastLeg);
+        firstLeg.setTripType(TripType.TRANSIT_ONLY);
         firstLeg.print();
         return firstLeg;
     }

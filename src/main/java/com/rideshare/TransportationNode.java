@@ -89,11 +89,6 @@ public class TransportationNode {
         checked = true;
     }
 
-    public void setAsPath() {
-    //    button.setStyle("-fx-background-color: #04d457;");
-    // TODO: do something
-    }
-
     public void getCost(TransportationNode startNode, TransportationNode endNode, TripType tripType) {
         // GET G COST
         int xDistance = Math.abs(this.col - startNode.col);

@@ -1,9 +1,5 @@
 package com.rideshare;
 
-import java.util.ArrayList;
-
-import javafx.geometry.Point2D;
-
 /**
  * Description: A route is a way to get from point A to point B via a mode of transportation within a city. A route contains stops where a player can get on and off (eg: a bus stop). 
  * The route contains a data structure representing its path throughout the city.

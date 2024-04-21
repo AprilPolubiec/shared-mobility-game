@@ -16,7 +16,7 @@ public class RouteNodeMatrix {
   // The value for stops
   private static final Map<TransportationType, Integer[]> stopCodes = new HashMap<>();
   private static final Map<TransportationType, Integer[]> openCodes = new HashMap<>();
-  // TODO: create a tile manager for all of these
+
   static {
     stopCodes.put(TransportationType.WALKING, TileUtils.WALKING_TILE_IDS);
     stopCodes.put(TransportationType.CAR, TileUtils.ROAD_TILE_IDS);

@@ -1,6 +1,5 @@
 package com.rideshare.GameManager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +9,6 @@ import com.rideshare.GridPanePosition;
 import com.rideshare.Timer;
 import com.rideshare.TransportationMode;
 import com.rideshare.TransportationNode;
-import com.rideshare.TransportationType;
 import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
 
@@ -18,13 +16,9 @@ import javafx.animation.Animation;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public abstract class Sprite {
@@ -39,14 +33,21 @@ public abstract class Sprite {
     protected boolean isMoving;
     private String spriteName;
     private String currentSprite;
+    private Integer spriteSize;
+    private Transition spriteLoop;
 
     public Sprite(String name) {
         spriteName = name;
         this.load(name);
     }
 
-    private void load(String name) {
-        if (currentSprite == name) {
+    protected void setSpriteSize(Integer size) {
+        // TODO: you can only do this before rendering - take note of this
+        this.spriteSize = size;
+    }
+
+    protected void load(String name) {
+        if (currentSprite != null && currentSprite.equals(name)) {
             return;
         }
         // System.out.println(String.format("Loading %s", name));
@@ -77,12 +78,36 @@ public abstract class Sprite {
         }
     }
     
+    // To render at specific coordinates
+    protected void render(AnchorPane root, int xPos, int yPos) {
+        // Place on the screen
+        imageView = new ImageView(icons.get("down").get(0));
+        if (this.spriteSize == null) {
+            imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
+            imageView.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
+        } else {
+            imageView.setFitHeight(this.spriteSize);
+            imageView.setFitWidth(this.spriteSize);
+        }
+        this.xPos = xPos;
+        this.yPos = yPos;
+        imageView.setX(xPos);
+        imageView.setY(yPos);
+
+        root.getChildren().add(imageView);
+        spriteLoop().playFromStart();
+    }
 
     protected void render(AnchorPane root, GridPanePosition startPosition) {
         // Place on the screen
         imageView = new ImageView(icons.get("down").get(0));
-        imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
-        imageView.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
+        if (this.spriteSize == null) {
+            imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
+            imageView.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
+        } else {
+            imageView.setFitHeight(this.spriteSize);
+            imageView.setFitWidth(this.spriteSize);
+        }
         xPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.row;
         yPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.col;
         imageView.setX(xPos);
@@ -99,7 +124,7 @@ public abstract class Sprite {
     }
 
     private Transition spriteLoop() {
-        Transition loop = new Transition() {
+        this.spriteLoop = new Transition() {
             {
                 setCycleDuration(Duration.millis(1000 / 60.0));
             }
@@ -114,8 +139,9 @@ public abstract class Sprite {
             }
 
         };
-        loop.setCycleCount(Animation.INDEFINITE);
-        return loop;
+        this.spriteLoop.setCycleCount(Animation.INDEFINITE);
+        
+        return this.spriteLoop;
     }
 
     public abstract void moveOnRoute(ArrayList<TransportationNode> nodes);
@@ -212,7 +238,7 @@ public abstract class Sprite {
 
     private void animate() {
         if (spriteTimer > 12) {
-            if (spriteIdx < 1) {
+            if (spriteIdx < 2) {
                 spriteIdx += 1;
             } else {
                 spriteIdx = 0;
@@ -223,7 +249,15 @@ public abstract class Sprite {
         spriteTimer++;
     }
 
-    public boolean isMoving() {
+    protected boolean isMoving() {
         return this.isMoving;
+    }
+
+    protected String getSpriteName() {
+        return this.spriteName;
+    }
+
+    protected void setSpriteName(String spriteName) {
+        this.spriteName = spriteName;
     }
 }

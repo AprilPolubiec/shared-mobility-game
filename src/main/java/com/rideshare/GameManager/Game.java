@@ -6,6 +6,7 @@ import java.util.Random;
 import com.rideshare.ChooseTripComponent;
 import com.rideshare.City;
 import com.rideshare.GridPanePosition;
+import com.rideshare.LevelCompletePopup;
 import com.rideshare.Mailbox;
 import com.rideshare.MailboxStatus;
 import com.rideshare.Player;
@@ -15,17 +16,21 @@ import com.rideshare.Timer;
 import com.rideshare.TimerState;
 import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
+import com.rideshare.UIComponentUtils;
 import com.rideshare.Utils;
 import com.rideshare.SaveManager.SaveLoad;
-import com.rideshare.SaveManager.DataStorage;
+import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class Game {
@@ -42,6 +47,7 @@ public class Game {
     private SaveLoad _saveLoad;
     private int mailboxesLeft;
     private ProgressBar progressBar;
+    private ScoreKeeper scoreKeeper;
 
     // TODO: a constructor for loading from a saved game
     public Game(SaveLoad savedGame) {
@@ -62,6 +68,36 @@ public class Game {
         initializeScoreKeeper();
         initializeTripChooser();
         initializeGameLoop();
+        // TODO: remove me this is just for testing
+        renderLevelCompleted();
+    }
+
+    private void renderLevelCompleted() {
+        LevelCompletePopup l = new LevelCompletePopup();
+        // l.setScore(this._player.getScoreKeeper().calculateScore());
+        l.setScore(1290);
+        l.setEmission(this._player.getScoreKeeper().getCO2Used());
+        l.setTime(this._timer.getTimeElapsedString());
+        l.render(this._root);
+
+        l.onNextLevelSelected(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                // TODO Auto-generated method stub
+                Utils.print("listener triggered!");
+            }
+            
+        });
+        l.onRepeatLevelSelected(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                // TODO Auto-generated method stub
+                Utils.print("listener triggered!");
+            }
+            
+        });
     }
 
     private void initializeTimer() {
@@ -73,10 +109,8 @@ public class Game {
         // TODO - unless its being loaded?
         this._player.getScoreKeeper().setLevel(0);
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
-        this._saveLoad = new SaveLoad(this._player.getScoreKeeper());
-        
-        this._player.getScoreKeeper().renderProgressBar(_root);
-
+        // this._saveLoad = new SaveLoad(this._player.getScoreKeeper());
+        this._player.getScoreKeeper().render(_root);
     }
 
     private void initializeTripChooser() {
@@ -148,6 +182,8 @@ public class Game {
     }
 
     public int getMailboxesLeft() {
+        int numMailboxes = _city.getMailboxes().size();
+        int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
         return mailboxesLeft;
     }
 
@@ -164,8 +200,7 @@ public class Game {
     private void handleLevelCompleted() {
         Utils.print(String.format("Level completed"));
         if (isLevelOver()) {
-            // TODO: hook up the saveloader
-            // _saveLoad.save("game_state.dat", ds);
+            renderLevelCompleted();
             _timeline.stop();
             this._level += 1;
             // dosomething()
@@ -176,9 +211,14 @@ public class Game {
 
     private void handleLevelFailed() {
         Utils.print(String.format("Level failed"));
-        // TODO
         if (isLevelOver()) {
-            // _saveLoad.save("game_state.dat", ds);
+            // Show game over popup
+            // _saveLoad.save("game_state.dat");
+            // AnchorPane gameOverModal = UIComponentUtils.createStyledDialog(300, 450);
+            // ImageView gameOverImage = new ImageView(
+            //     new Image(getClass().getResourceAsStream("/images/ui/instructions/GAME OVER.png")));
+            // gameOverModal.getChildren().add(gameOverImage);
+            // this._root.getChildren().add(gameOverModal);
             _timeline.stop();
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
@@ -210,7 +250,7 @@ public class Game {
         });
     }
 
-    // TODO: handle switching between selecting different mailboxes
+    // TODO: handle switching between selecting different mailboxes - right now the trip selector renders on top of each other,need to hide
     private void handleMailboxSelected(Mailbox mailbox) {
         Utils.print(String.format("Mailbox selected"));
 
@@ -272,15 +312,7 @@ public class Game {
     }
 
     private boolean isLevelOver() {
-        int mailboxesLeft = getMailboxesLeft();
-        if (mailboxesLeft == 0) {
-            return true;
-        } else if (getTimer().getState() == TimerState.STOPPED) {
-            return true;
-        } else {
-            // The level is not over
-            System.out.println("Level incomplete");
-            return false;
-        }
+        return getMailboxesLeft() == 0 || getTimer().getState() == TimerState.STOPPED;
     }
+
 }

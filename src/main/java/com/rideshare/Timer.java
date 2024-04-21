@@ -1,8 +1,13 @@
 package com.rideshare;
 
 import javafx.util.Duration;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+
+import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -97,6 +102,7 @@ public class Timer {
     public static double secondsToGameMinutes(double seconds) {
         return seconds * 6.0;
     }
+
     // 1 minute = 1/6 seconds
     public static double gameMinutesToSeconds(double minutes) {
         return minutes / 6.0;
@@ -108,7 +114,7 @@ public class Timer {
                 new Image(getClass().getResourceAsStream("/images/ui/grey_panel.png")));
         timeModalRoot.getChildren().add(panelImageView);
         AnchorPane.setBottomAnchor(timeModalRoot, 0.0);
-        AnchorPane.setRightAnchor(timeModalRoot, 0.0);
+        AnchorPane.setLeftAnchor(timeModalRoot, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);
         panelImageView.setFitHeight(150);
         panelImageView.setFitWidth(300);
 
@@ -118,6 +124,20 @@ public class Timer {
         timeModalRoot.getChildren().add(_clockText);
 
         root.getChildren().add(timeModalRoot);
+    }
+
+    public String getTimeElapsedString() {
+        long minutesElapsed = MINUTES.between(DAY_START, currentInGameTime);
+        int hours   = (int)minutesElapsed / 60;
+        int minutes = (int)minutesElapsed % 60;
+
+        // Left pad minutes with 0
+        String minutesString = Integer.toString(minutes);
+        while (minutesString.length() < 2) {
+            minutesString = String.format("0%s", minutesString);
+        }
+        
+        return String.format("%s:%s", hours, minutesString);
     }
 
 }

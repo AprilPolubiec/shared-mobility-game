@@ -11,7 +11,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 /**
  * @author April Polubec <aprilpdev@gmail.com>
@@ -21,6 +20,7 @@ import javafx.stage.Stage;
  */
 public class Player extends Sprite {
     private String name;
+    private String avatarName;
     private ScoreKeeper scoreKeeper;
     private ObjectProperty<PlayerStatus> status = new SimpleObjectProperty<>();
 
@@ -31,8 +31,30 @@ public class Player extends Sprite {
         status.set(PlayerStatus.IDLE);
     }
 
+    public void setAvatar(String avatarName) {
+        super.setSpriteName(avatarName);
+        this.avatarName = avatarName;
+        super.load(avatarName);
+    }
+
+    public void startAnimation() {
+        super.isMoving = true;
+    }
+
+    public void endAnimation() {
+        super.isMoving = false;
+    }
+
+    public void setSpriteSize(Integer size) {
+        super.setSpriteSize(size);
+    }
+
     public void loadExisting() {
         // do things
+    }
+
+    public void render(AnchorPane root, int x, int y) {
+        super.render(root, x, y);
     }
 
     public void render(AnchorPane root, GridPanePosition startPosition) {
@@ -47,8 +69,8 @@ public class Player extends Sprite {
         return super.isMoving();
     }
 
-	@Override
-	public void moveOnRoute(ArrayList<TransportationNode> nodes) {
+    @Override
+    public void moveOnRoute(ArrayList<TransportationNode> nodes) {
         SequentialTransition animation = getRouteAnimation(nodes);
         isMoving = true;
         status.set(PlayerStatus.ON_TRIP);
@@ -60,12 +82,25 @@ public class Player extends Sprite {
                 status.set(PlayerStatus.IDLE);
             }
         });
-	}
+    }
+
     public void addStatusListener(ChangeListener<? super PlayerStatus> listener) {
         this.status.addListener(listener);
-     }
+    }
 
     public PlayerStatus getStatus() {
         return status.get();
-     }
+    }
+
+    public String getPlayerName() {
+        return this.name;
+    }
+
+    public void setPlayerName(String name) {
+        this.name = name;
+    }
+
+    public String getAvatarName() {
+        return this.avatarName;
+    }
 }

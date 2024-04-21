@@ -1,10 +1,8 @@
 package com.rideshare;
-import java.util.TimerTask;
 
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -54,7 +52,9 @@ public class Mailbox {
             _col);
       
       _mailboxTile.setOnMouseClicked(event -> {
-         markSelected();
+         if (status.get() == MailboxStatus.WAITING) {
+            markSelected();
+         }
          // Set all other mailboxes to unselected?
       });
 
@@ -74,7 +74,6 @@ public class Mailbox {
       status.set(MailboxStatus.READY);
    }
 
-   // TODO: actually just deduce from the house id
    public void setDuration(int duration) {
       _duration = duration;
    }
