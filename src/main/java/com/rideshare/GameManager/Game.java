@@ -24,6 +24,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -40,6 +41,7 @@ public class Game {
     private ChooseTripComponent _tripChooser;
     private SaveLoad _saveLoad;
     private int mailboxesLeft;
+    private ProgressBar progressBar;
 
     // TODO: a constructor for loading from a saved game
     public Game(SaveLoad savedGame) {
@@ -72,6 +74,9 @@ public class Game {
         this._player.getScoreKeeper().setLevel(0);
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         this._saveLoad = new SaveLoad(this._player.getScoreKeeper());
+        
+        this._player.getScoreKeeper().renderProgressBar(_root);
+
     }
 
     private void initializeTripChooser() {
@@ -258,10 +263,8 @@ public class Game {
         scoreKeeper.setMailboxesCompleted(scoreKeeper.getMailboxesCompleted() + 1);
         scoreKeeper.incrementCO2Used((int) _currentTrip.getEmission());
         scoreKeeper.print();
+        scoreKeeper.updateProgressBar();
         
-        _player.getProgressBar().updateProgress();
-
-
     }
 
     private void handleMailboxFailed() {

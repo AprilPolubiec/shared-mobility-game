@@ -1,5 +1,11 @@
 package com.rideshare;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
 /** 
  * Description: A ScoreKeeper is an object whose main function is to store information about a player’s score.
     Attributes:
@@ -27,12 +33,13 @@ public class ScoreKeeper {
     int CO2Used;
     private int mailboxesCompleted;
     private int totalMailboxes;
+    private ProgressBar progressBar;
     double mailboxesMultiplier;
     int score;
     int level;
     boolean exceededBudgetFlag;
     int amountOverBudget;
-    private ProgressBar progressBar;
+    
 
     // The ScoreKeeper constructor
     public ScoreKeeper() {
@@ -43,6 +50,30 @@ public class ScoreKeeper {
         this.level = 0;
         this.exceededBudgetFlag = false;
         this.amountOverBudget = 0;
+        this.progressBar = new ProgressBar();
+    }
+
+    public void renderProgressBar(AnchorPane root) {
+        AnchorPane progressBarPane = new AnchorPane();
+        AnchorPane.setBottomAnchor(progressBarPane, 0.0);
+        AnchorPane.setRightAnchor(progressBarPane, 0.0);
+        
+        progressBarPane.setStyle("-fx-background-color: grey;");
+        progressBarPane.setPrefSize(960, 50);
+
+        VBox progressBarVbox = new VBox();
+
+        progressBar.setPrefWidth(960);
+        progressBar.setPrefHeight(50);
+        progressBar.setProgress(0.00);
+        progressBar.setStyle("-fx-accent: #fa8132;");
+        progressBarVbox.getChildren().add(progressBar);
+
+        progressBarPane.getChildren().add(progressBarVbox);
+        
+        root.getChildren().add(progressBarPane);
+        
+        
     }
 
     public int getMailboxesCompleted() {
@@ -145,6 +176,19 @@ public class ScoreKeeper {
         }
 
         return this.score;
+    }
+
+    public void updateProgressBar() {
+        double progress = (double) mailboxesCompleted/ totalMailboxes;
+        progressBar.setProgress(progress);
+    }
+
+    public ProgressBar getProgressBar() {
+        return this.progressBar;
+    }
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
     }
 
     public void print() {
