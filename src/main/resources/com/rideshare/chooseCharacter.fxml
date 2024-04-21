@@ -27,11 +27,6 @@
                   <Image url="@../../images/ui/grey_panel.png" />
                </image>
             </ImageView>
-            <ImageView id="spritePreview" fx:id="spritePreview" fitHeight="75.0" fitWidth="75.0" layoutX="193.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/sprites/girl-1/down-2.png" />
-               </image>
-            </ImageView>
             <ImageView id="rightButton" fx:id="rightButton" fitHeight="51.0" fitWidth="48.0" layoutX="379.0" layoutY="152.0" onMouseClicked="#onRightButtonClicked" pickOnBounds="true">
                <image>
                   <Image url="@../../images/ui/red_sliderRight.png" />

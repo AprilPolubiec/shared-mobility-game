@@ -31,10 +31,29 @@ public class Player extends Sprite {
         status.set(PlayerStatus.IDLE);
     }
 
+    public void setAvatar(String avatarName) {
+        super.load(avatarName);
+    }
+
+    public void startAnimation() {
+        super.isMoving = true;
+    }
+
+    public void endAnimation(String avatarName) {
+        super.isMoving = false;
+    }
+
+    public void setSpriteSize(Integer size) {
+        super.setSpriteSize(size);
+    }
+
     public void loadExisting() {
         // do things
     }
 
+    public void render(AnchorPane root, int x, int y) {
+        super.render(root, x, y);
+    }
     public void render(AnchorPane root, GridPanePosition startPosition) {
         super.render(root, startPosition);
     }

@@ -39,14 +39,20 @@ public abstract class Sprite {
     protected boolean isMoving;
     private String spriteName;
     private String currentSprite;
+    private Integer spriteSize;
 
     public Sprite(String name) {
         spriteName = name;
         this.load(name);
     }
 
-    private void load(String name) {
-        if (currentSprite == name) {
+    protected void setSpriteSize(int size) {
+        // TODO: you can only do this before rendering - take note of this
+        this.spriteSize = size;
+    }
+
+    protected void load(String name) {
+        if (currentSprite != null && currentSprite.equals(name)) {
             return;
         }
         // System.out.println(String.format("Loading %s", name));
@@ -77,6 +83,25 @@ public abstract class Sprite {
         }
     }
     
+    // To render at specific coordinates
+    protected void render(AnchorPane root, int xPos, int yPos) {
+        // Place on the screen
+        imageView = new ImageView(icons.get("down").get(0));
+        if (this.spriteSize == null) {
+            imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
+            imageView.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
+        } else {
+            imageView.setFitHeight(this.spriteSize);
+            imageView.setFitWidth(this.spriteSize);
+        }
+        this.xPos = xPos;
+        this.yPos = yPos;
+        imageView.setX(xPos);
+        imageView.setY(yPos);
+
+        root.getChildren().add(imageView);
+        spriteLoop().playFromStart();
+    }
 
     protected void render(AnchorPane root, GridPanePosition startPosition) {
         // Place on the screen
