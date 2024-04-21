@@ -2,11 +2,13 @@ package com.rideshare.Controllers;
 
 import java.io.IOException;
 
+import com.rideshare.App;
 import com.rideshare.Player;
 import com.rideshare.UIComponentUtils;
 import com.rideshare.Utils;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -43,6 +45,14 @@ public class ChooseCharacterController {
     @FXML
     public void onStartButtonClicked() {
         Utils.print("Start clicked");
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
+            AnchorPane root = loader.load();
+            GameController controller = loader.getController();
+            controller.load(root, stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showNextSprite() {
