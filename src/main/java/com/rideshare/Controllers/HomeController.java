@@ -19,13 +19,10 @@ import java.net.URL;
 
 public class HomeController {
 
-    private ScoreKeeper sk;
+   
     private SaveLoad saveLoad;
 
-    public void initialize() {
-        sk = new ScoreKeeper();
-        saveLoad = new SaveLoad(sk);
-    }
+   
 
     @FXML
     public javafx.scene.control.Button loadGameButton;
