@@ -244,8 +244,8 @@ public class Game {
                     handleTripCompleted();
                 }
             }
-
         });
+        _tripChooser.clearSelectedTrip();
     }
 
     private void handleTripCompleted() {

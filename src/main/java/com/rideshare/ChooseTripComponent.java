@@ -146,4 +146,8 @@ public class ChooseTripComponent {
 
     // Methods
     // SelectTrip
+
+    public void clearSelectedTrip() {
+        selectedTrip.set(null);
+    }
 }
