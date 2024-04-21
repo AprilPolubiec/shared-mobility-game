@@ -55,16 +55,15 @@ public class ScoreKeeper {
 
     public void renderProgressBar(AnchorPane root) {
         AnchorPane progressBarPane = new AnchorPane();
-        AnchorPane.setBottomAnchor(progressBarPane, 0.0);
+        AnchorPane.setBottomAnchor(progressBarPane, 150.0);
         AnchorPane.setRightAnchor(progressBarPane, 0.0);
-        
         progressBarPane.setStyle("-fx-background-color: grey;");
-        progressBarPane.setPrefSize(960, 50);
+        progressBarPane.setPrefSize(300, 30);
 
         VBox progressBarVbox = new VBox();
 
-        progressBar.setPrefWidth(960);
-        progressBar.setPrefHeight(50);
+        progressBar.setPrefWidth(300);
+        progressBar.setPrefHeight(30);
         progressBar.setProgress(0.00);
         progressBar.setStyle("-fx-accent: #fa8132;");
         progressBarVbox.getChildren().add(progressBar);
