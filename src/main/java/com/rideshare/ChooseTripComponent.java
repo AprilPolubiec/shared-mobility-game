@@ -104,8 +104,8 @@ public class ChooseTripComponent {
             AnchorPane.setLeftAnchor(statsVbox, 20.0);
 
             // Speed
-            GridPane speedStats = createStatSection("Speed", String.format("%s min", (int)trip.getDuration()));
-            GridPane efficiencyStats = createStatSection("Efficiency", String.format("%sg", (int)trip.getEmission()));
+            GridPane speedStats = createStatSection("Speed", trip);
+            GridPane efficiencyStats = createStatSection("Efficiency", trip);
             statsVbox.getChildren().addAll(speedStats, efficiencyStats);
             
             tripAnchor.getChildren().add(statsVbox);
@@ -113,7 +113,7 @@ public class ChooseTripComponent {
         }
     }
 
-    private GridPane createStatSection(String stat, String amtLabel) {
+    private GridPane createStatSection(String stat, Trip trip) {
         Image fullCircle = new Image(App.class.getResource("/images/ui/green_circle.png").toString());
         Image emptyCircle = new Image(App.class.getResource("/images/ui/grey_circle.png").toString());
 
@@ -124,14 +124,30 @@ public class ChooseTripComponent {
         label.setFont(Font.font("Futura Bold", 13));
         GridPane.setMargin(label, new Insets(0,10,0,0));
         stats.add(label, 0, 0);
+        
+        int numFullCircles = 0;
+        switch (trip.getTripType()) {
+            case EFFICIENT:
+                numFullCircles = stat.equals("Speed") ? 1 : 5;
+                break;
+            case FAST:
+                numFullCircles = stat.equals("Speed") ? 5 : 1;
+                break;
+            case TRANSIT_ONLY:
+                numFullCircles = stat.equals("Speed") ? 3 : 3;
+                break;
+            default:
+                break;
+        }
+    
         for (int i = 1; i < 6; i++) {
-            ImageView imgView = new ImageView(fullCircle);
+            ImageView imgView = i <= numFullCircles ? new ImageView(fullCircle) : new ImageView(emptyCircle);
             imgView.setFitHeight(17.0);
             imgView.setFitWidth(17.0);
             GridPane.setMargin(imgView, new Insets(1));
             stats.add(imgView, i, 0);
         }
-
+        String amtLabel = stat.equals("Speed") ? String.format("%s min", (int)trip.getDuration()) : String.format("%s g", (int)trip.getEmission());
         Text amountText = new Text(amtLabel);
         amountText.setFont(Font.font("Futura", 13));
         stats.add(amountText, 7, 0);
