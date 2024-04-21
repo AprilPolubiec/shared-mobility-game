@@ -9,10 +9,7 @@ import javafx.scene.text.Text;
 
 import com.rideshare.TileManager.TileUtils;
 
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 /**
  * Description: A ScoreKeeper is an object whose main function is to store
