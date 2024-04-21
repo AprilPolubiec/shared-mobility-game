@@ -14,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class NewLoadController {
@@ -22,7 +21,7 @@ public class NewLoadController {
     @FXML
     public javafx.scene.control.Button loadGameButton;
     public javafx.scene.control.Button newGameButton;
-    
+
     private AnchorPane _root;
     private Stage _stage;
     private SaveLoad saveLoad; // Assuming you intended to use SaveLoad here
@@ -33,14 +32,13 @@ public class NewLoadController {
         _stage.setFullScreen(isFullScreen);
     }
 
-
     void load(AnchorPane root, Stage stage) {
         try {
             _stage = stage;
             _root = root;
-   
+
             setScene(true);
-      
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,8 +46,9 @@ public class NewLoadController {
 
     @FXML
     public void handleLoadButtonPressed(ActionEvent event) {
-        //
+        saveLoad.load();
     }
+
     @FXML
     public void handleNewGameButtonPressed(ActionEvent event) {
         try {
