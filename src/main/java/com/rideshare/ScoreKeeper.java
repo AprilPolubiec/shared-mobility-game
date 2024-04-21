@@ -2,6 +2,7 @@ package com.rideshare;
 
 import com.rideshare.TileManager.TileUtils;
 
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -45,6 +46,7 @@ public class ScoreKeeper {
     int level;
     boolean exceededBudgetFlag;
     int amountOverBudget;
+    private ProgressBar progressBar;
 
     private Text scoreText;
     private Text mailboxText;
@@ -58,6 +60,7 @@ public class ScoreKeeper {
         this.level = 0;
         this.exceededBudgetFlag = false;
         this.amountOverBudget = 0;
+        this.progressBar = new ProgressBar();
     }
 
     public void render(AnchorPane root) {
@@ -87,6 +90,40 @@ public class ScoreKeeper {
 
     public int getMailboxesCompleted() {
         return this.mailboxesCompleted;
+    }
+
+    public void renderProgressBar(AnchorPane root) {
+        AnchorPane progressBarPane = new AnchorPane();
+        AnchorPane.setBottomAnchor(progressBarPane, 450.0);
+        AnchorPane.setRightAnchor(progressBarPane, 140.0);
+        progressBarPane.setStyle("-fx-background-color: grey;");
+        progressBarPane.setPrefSize(300, 30);
+
+        VBox progressBarVbox = new VBox();
+
+        this.progressBar.setPrefWidth(300);
+        this.progressBar.setPrefHeight(30);
+        this.progressBar.setProgress(0.00);
+        this.progressBar.setStyle("-fx-accent: #fa8132;");
+        progressBarVbox.getChildren().add(this.progressBar);
+
+        progressBarPane.getChildren().add(progressBarVbox);
+
+        root.getChildren().add(progressBarPane);
+    }
+
+    public void updateProgressBar() {
+        double progress = (double) mailboxesCompleted / totalMailboxes;
+        progressBar.setProgress(progress);
+
+    }
+
+    public ProgressBar getProgressBar() {
+        return this.progressBar;
+    }
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
     }
 
     public void setMailboxesCompleted(int numCompleted) {
@@ -178,12 +215,13 @@ public class ScoreKeeper {
     // Faster you get a mailbox, the more it is worth
     public void updateScore(Mailbox mailbox, Trip trip) {
         int timeLeftOnMailbox = mailbox.getTimeLeft(); // This we want as high as possible
-        int tripEmission = (int)trip.getEmission(); // This we want as low as possible
+        int tripEmission = (int) trip.getEmission(); // This we want as low as possible
         // 100 points per second left on the mailbox
         // Plus the proportion of the total budget that was unused
-        this.score = (timeLeftOnMailbox * 100) + (int)((1.0 - ((double)tripEmission / co2Budget)) * 100);
+        this.score = (timeLeftOnMailbox * 100) + (int) ((1.0 - ((double) tripEmission / co2Budget)) * 100);
         this.scoreText.setText(String.format("Score: %s", this.score));
-        Utils.print(String.format("Updating score: (%s * 100) + (int)((1.0 - (%s / %s)) * 100) = %s", timeLeftOnMailbox, tripEmission, co2Budget, this.score));
+        Utils.print(String.format("Updating score: (%s * 100) + (int)((1.0 - (%s / %s)) * 100) = %s", timeLeftOnMailbox,
+                tripEmission, co2Budget, this.score));
     }
 
     public int getScore(int score) {
