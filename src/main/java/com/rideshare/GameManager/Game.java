@@ -302,6 +302,8 @@ public class Game {
         scoreKeeper.incrementCO2Used((int) _currentTrip.getEmission());
         scoreKeeper.updateScore(_currentMailbox, _currentTrip);
         scoreKeeper.print();
+
+        scoreKeeper.updateProgressBar();
     }
 
     private void handleMailboxFailed() {
