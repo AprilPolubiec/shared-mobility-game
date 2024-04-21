@@ -11,16 +11,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser;
-import java.io.File;
 import com.rideshare.ScoreKeeper;
 import com.rideshare.SaveManager.SaveLoad;
-import java.net.URL;
 
 public class HomeController {
-
-    private ScoreKeeper sk;
-    private SaveLoad saveLoad;
 
     @FXML
     public javafx.scene.control.Button loadGameButton;
@@ -44,11 +38,6 @@ public class HomeController {
         try {
             _root = root;
             _stage = stage;
-            Media media = new Media(App.class.getResource(String.format("/images/audio/%s.mp3",
-                    "bg-slow")).toString()); // replace
-            MediaPlayer _mediaPlayer = new MediaPlayer(media);
-            // _mediaPlayer.play();
-
             _stage.setWidth(720);
             _stage.setHeight(439);
             _stage.centerOnScreen();
