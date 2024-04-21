@@ -1,10 +1,8 @@
 package com.rideshare;
-import java.util.TimerTask;
 
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;

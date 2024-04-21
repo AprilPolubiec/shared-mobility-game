@@ -3,7 +3,6 @@ package com.rideshare.TileManager;
 import com.rideshare.App;
 import com.rideshare.GameManager.MapLoader;
 
-import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;

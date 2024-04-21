@@ -15,8 +15,6 @@ import com.rideshare.ScoreKeeper;
 import com.rideshare.Player;
 import com.rideshare.GameManager.Sprite;
 
-import javafx.scene.chart.PieChart.Data;
-
 public class SaveLoad {
 
     ScoreKeeper scoreKeeper;

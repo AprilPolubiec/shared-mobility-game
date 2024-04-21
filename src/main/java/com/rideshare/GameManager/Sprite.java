@@ -1,6 +1,5 @@
 package com.rideshare.GameManager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +9,6 @@ import com.rideshare.GridPanePosition;
 import com.rideshare.Timer;
 import com.rideshare.TransportationMode;
 import com.rideshare.TransportationNode;
-import com.rideshare.TransportationType;
 import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
 
@@ -18,13 +16,9 @@ import javafx.animation.Animation;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public abstract class Sprite {

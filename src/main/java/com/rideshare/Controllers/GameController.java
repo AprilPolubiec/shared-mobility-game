@@ -1,10 +1,6 @@
 package com.rideshare.Controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
 import com.rideshare.City;
 import com.rideshare.Player;
 import com.rideshare.GameManager.Game;

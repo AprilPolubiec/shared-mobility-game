@@ -11,8 +11,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-
 /**
  * @author April Polubec <aprilpdev@gmail.com>
  *         <p>
