@@ -34,13 +34,14 @@ public abstract class Sprite {
     private String spriteName;
     private String currentSprite;
     private Integer spriteSize;
+    private Transition spriteLoop;
 
     public Sprite(String name) {
         spriteName = name;
         this.load(name);
     }
 
-    protected void setSpriteSize(int size) {
+    protected void setSpriteSize(Integer size) {
         // TODO: you can only do this before rendering - take note of this
         this.spriteSize = size;
     }
@@ -100,8 +101,13 @@ public abstract class Sprite {
     protected void render(AnchorPane root, GridPanePosition startPosition) {
         // Place on the screen
         imageView = new ImageView(icons.get("down").get(0));
-        imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
-        imageView.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
+        if (this.spriteSize == null) {
+            imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
+            imageView.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
+        } else {
+            imageView.setFitHeight(this.spriteSize);
+            imageView.setFitWidth(this.spriteSize);
+        }
         xPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.row;
         yPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.col;
         imageView.setX(xPos);
@@ -118,7 +124,7 @@ public abstract class Sprite {
     }
 
     private Transition spriteLoop() {
-        Transition loop = new Transition() {
+        this.spriteLoop = new Transition() {
             {
                 setCycleDuration(Duration.millis(1000 / 60.0));
             }
@@ -133,8 +139,9 @@ public abstract class Sprite {
             }
 
         };
-        loop.setCycleCount(Animation.INDEFINITE);
-        return loop;
+        this.spriteLoop.setCycleCount(Animation.INDEFINITE);
+        
+        return this.spriteLoop;
     }
 
     public abstract void moveOnRoute(ArrayList<TransportationNode> nodes);
@@ -231,7 +238,7 @@ public abstract class Sprite {
 
     private void animate() {
         if (spriteTimer > 12) {
-            if (spriteIdx < 1) {
+            if (spriteIdx < 2) {
                 spriteIdx += 1;
             } else {
                 spriteIdx = 0;
@@ -242,15 +249,15 @@ public abstract class Sprite {
         spriteTimer++;
     }
 
-    public boolean isMoving() {
+    protected boolean isMoving() {
         return this.isMoving;
     }
 
-    public String getSpriteName() {
+    protected String getSpriteName() {
         return this.spriteName;
     }
 
-    public void setSpriteName(String spriteName) {
+    protected void setSpriteName(String spriteName) {
         this.spriteName = spriteName;
     }
 }

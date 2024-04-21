@@ -22,11 +22,6 @@ public class HomeController {
     private ScoreKeeper sk;
     private SaveLoad saveLoad;
 
-    public void initialize() {
-        sk = new ScoreKeeper();
-        saveLoad = new SaveLoad(sk);
-    }
-
     @FXML
     public javafx.scene.control.Button loadGameButton;
     @FXML
@@ -75,20 +70,6 @@ public class HomeController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    public void handleGameSelected() {
-        // TODO: load saved game file
-        saveLoad.loadSave();
-        // TODO: Show saved game options
-
-    }
-
-    @FXML
-    public void handleNewGameButtonPressed() {
-        // TODO: prompt user for name, etc
-        // TODO: create a player
     }
 
     @FXML

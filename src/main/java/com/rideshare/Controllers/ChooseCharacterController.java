@@ -45,11 +45,15 @@ public class ChooseCharacterController {
     @FXML
     public void onStartButtonClicked() {
         Utils.print("Start clicked");
+        this.newPlayer.setPlayerName("Todo");
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
             AnchorPane root = loader.load();
             GameController controller = loader.getController();
+            this.newPlayer.setSpriteSize(null);
+            this.newPlayer.endAnimation();
             controller.load(root, stage);
+            controller.setPlayer(newPlayer);
         } catch (Exception e) {
             e.printStackTrace();
         }
