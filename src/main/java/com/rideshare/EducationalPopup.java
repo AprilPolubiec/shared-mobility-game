@@ -1,11 +1,27 @@
 package com.rideshare;
 
+import com.rideshare.TileManager.TileUtils;
+
+import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+
 public class EducationalPopup {
     private final String[] walkingFacts = {
             "Completing five trips of 2km a week on foot instead of a car can decrease the amount of emissions by 86kg a year.",
             "Walking regularly can reduce the risk of cardiovascular disease by 35%",
             "Choosing to commute by walking or cycling once a week could save around 40kg of CO2 a year.",
             "By walking, cycling or wheeling you are reducing congestion and pollution, making local spaces more enjoyable, quieter and healthier." };
+
+    private final String[] walkingTips = {
+            "Find a good podcast to listen to on long walks.",
+            "Find a friend to join you on walks."
+    };
+
     private final String[] carFacts = {
             "60% of the emissions from the transportation sector in the US come from personal vehicles.",
             "333 million tons of carbon dioxide are released into the atmosphere from transportation annually.",
@@ -36,4 +52,40 @@ public class EducationalPopup {
             "Around 3.7 million people die each year from causes directly attributable to air pollution.",
             "Every gallon of gasoline you save avoids 22 pounds of CO2 emissions." };
 
+    private ScrollPane contentContainer;
+    private VBox factStack;
+
+    public void EducationalPopup() {
+    }
+
+    public void render(AnchorPane root) {
+        contentContainer = new ScrollPane();
+        factStack = new VBox();
+        AnchorPane.setLeftAnchor(contentContainer, (TileUtils.TILE_SIZE_IN_PIXELS * 30.0) + 300); // 300 = width of the
+                                                                                                  // trip chooser - not
+                                                                                                  // ideal!
+        AnchorPane.setTopAnchor(contentContainer, 25.0);
+        for (int i = 0; i < carFacts.length; i++) {
+            AnchorPane tets = UIComponentUtils.createStyledDialog(100, 200);
+            Text titleText = new Text("Car Fact");
+            titleText.setFont(new Font("Futura Bold", 14));
+            titleText.setFill(Color.WHITE);
+            AnchorPane.setTopAnchor(titleText, 5.0);
+            AnchorPane.setLeftAnchor(titleText, 100 - (titleText.getLayoutBounds().getWidth() / 2));
+
+            tets.getChildren().add(titleText);
+
+            Text f = new Text(carFacts[i]);
+            f.setWrappingWidth(180);
+            f.setFont(new Font("Futura Bold", 10));
+            AnchorPane.setTopAnchor(f, 30.0);
+            AnchorPane.setLeftAnchor(f, 10.0);
+
+            tets.getChildren().add(f);
+            VBox.setMargin(tets, new Insets(5, 0, 0, 0));
+            factStack.getChildren().add(tets);
+        }
+        contentContainer.setContent(factStack);
+        root.getChildren().add(contentContainer);
+    }
 }

@@ -61,13 +61,13 @@ public class ScoreKeeper {
     }
 
     public void render(AnchorPane root) {
-        AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(300.0, 300.0);
+        AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(150.0, 300.0);
         AnchorPane.setBottomAnchor(scorekeeperPane, 150.0);
         AnchorPane.setLeftAnchor(scorekeeperPane, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);
 
         VBox scoreVbox = new VBox();
         AnchorPane.setTopAnchor(scoreVbox, 50.0);
-        AnchorPane.setLeftAnchor(scoreVbox, 50.0);
+        AnchorPane.setLeftAnchor(scoreVbox, 30.0);
 
         this.mailboxText = new Text(String.format("%s/%s Mailboxes", this.mailboxesCompleted, this.totalMailboxes));
         this.mailboxText.setFont(Font.font("Futura Bold", 21));
