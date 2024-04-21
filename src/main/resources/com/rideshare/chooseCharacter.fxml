@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rideshare.Controllers.ChooseCharacterController">
+   <children>
+      <ImageView fitHeight="948.0" fitWidth="1674.0" layoutX="-9.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/bg/home-2.png" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="449.0" layoutY="319.0" prefHeight="284.0" prefWidth="358.0">
+         <children>
+            <ImageView fitHeight="354.0" fitWidth="466.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/red_panel.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="344.0" fitWidth="451.0" layoutX="5.0" layoutY="4.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/grey_panel.png" />
+               </image>
+            </ImageView>
+            <ImageView id="rightButton" fx:id="rightButton" fitHeight="51.0" fitWidth="48.0" layoutX="379.0" layoutY="152.0" onMouseClicked="#onRightButtonClicked" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/red_sliderRight.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="leftButton" fitHeight="51.0" fitWidth="48.0" layoutX="27.0" layoutY="151.0" onMouseClicked="#onLeftButtonClicked" pickOnBounds="true">
+               <image>
+                  <Image url="@../../images/ui/red_sliderLeft.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="88.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your character">
+               <font>
+                  <Font name="Futura Bold" size="24.0" />
+               </font>
+            </Text>
+            <TextField fx:id="nameInput" layoutX="176.0" layoutY="282.0" prefHeight="27.0" prefWidth="110.0" promptText="ENTER NAME">
+               <font>
+                  <Font name="Futura Bold" size="13.0" />
+               </font>
+            </TextField>
+         </children>
+      </AnchorPane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="582.0" layoutY="685.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/ui/green_button00.png" />
+         </image>
+      </ImageView>
+      <Text fill="WHITE" layoutX="651.0" layoutY="718.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+         <font>
+            <Font name="Futura Bold" size="24.0" />
+         </font>
+      </Text>
+      <Button fx:id="startButton" layoutX="581.0" layoutY="683.0" mnemonicParsing="false" onAction="#onStartButtonClicked" opacity="0.0" prefHeight="51.0" prefWidth="200.0" />
+   </children>
+</AnchorPane>

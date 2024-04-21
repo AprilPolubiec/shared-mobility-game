@@ -15,33 +15,25 @@ import com.rideshare.ScoreKeeper;
 import com.rideshare.Player;
 import com.rideshare.GameManager.Sprite;
 
-import javafx.scene.chart.PieChart.Data;
-
 public class SaveLoad {
-
-    ScoreKeeper scoreKeeper;
     Player player;
-    Sprite sprite;
 
-    public SaveLoad(ScoreKeeper scoreKeeper, Player player, Sprite sprite) {
-        this.scoreKeeper = scoreKeeper;
-        this.player = player;
-        this.sprite = sprite;
-    }
+    public SaveLoad() {}
 
-    public void save(String fileName) {
+    public void save(Player player, String fileName) {
         try {
             // create a file outputstream wrapped in bufferedoutputstream, allows us to
             // append the data instead of overwriting it
             DataStorage ds = new DataStorage();
             ds.name = player.getPlayerName();
-            ds.spriteName = sprite.getSpriteName();
-            ds.score = scoreKeeper.calculateScore();
-            ds.mailboxesCompleted = scoreKeeper.getMailboxesCompleted();
-            ds.level = scoreKeeper.getLevel();
-            ds.CO2Saved = scoreKeeper.getCO2Saved();
-            ds.CO2Used = scoreKeeper.getCO2Used();
-            ds.totalMailboxes = scoreKeeper.getTotalMailboxes();
+            ds.spriteName = player.getAvatarName();
+            ds.score = player.getScoreKeeper().calculateLevelScore();
+            ds.mailboxesCompleted = player.getScoreKeeper().getMailboxesCompleted();
+            ds.level = player.getScoreKeeper().getLevel();
+            ds.CO2Saved = player.getScoreKeeper().getCO2Saved();
+            ds.CO2Used = player.getScoreKeeper().getCo2Used();
+            ds.totalMailboxes = player.getScoreKeeper().getTotalMailboxes();
+    
             OutputStream outputStream = new FileOutputStream(fileName, true);
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
             ObjectOutputStream oos = new ObjectOutputStream(bufferedOutputStream);
@@ -57,7 +49,7 @@ public class SaveLoad {
         }
     }
 
-    public void load() {
+    public Player load() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load Game");
 
@@ -75,18 +67,20 @@ public class SaveLoad {
                 DataStorage ds = (DataStorage) ois.readObject();
 
                 player.setPlayerName(ds.name);
-                sprite.setSpriteName(ds.spriteName);
-                scoreKeeper.setScore(ds.score);
-                scoreKeeper.setMailboxesCompleted(ds.mailboxesCompleted);
-                scoreKeeper.setLevel(ds.level);
-                scoreKeeper.setCO2Saved(ds.CO2Saved);
-                scoreKeeper.setCO2Used(ds.CO2Used);
-                scoreKeeper.setTotalMailboxes(ds.totalMailboxes);
+                player.setAvatar(ds.spriteName);
+                player.getScoreKeeper().setScore(ds.score);
+                player.getScoreKeeper().setMailboxesCompleted(ds.mailboxesCompleted);
+                player.getScoreKeeper().setLevel(ds.level);
+                player.getScoreKeeper().setCO2Saved(ds.CO2Saved);
+                player.getScoreKeeper().setCo2Used(ds.CO2Used);
+                player.getScoreKeeper().setTotalMailboxes(ds.totalMailboxes);
             } catch (Exception e) {
                 System.out.println("Something went wrong while loading the game state from file: " + fileName);
                 e.printStackTrace();
+                return null;
             }
         }
+        return player;
     }
 
 }
