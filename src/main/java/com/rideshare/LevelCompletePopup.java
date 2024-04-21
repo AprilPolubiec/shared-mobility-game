@@ -21,13 +21,15 @@ public class LevelCompletePopup {
 
     private AnchorPane dialogRoot;
     private Font font;
+    private Font smallFont;
     private final int imageWidth = 400;
     private final int imageHeight = 360;
     private final double top = ((TileUtils.TILE_SIZE_IN_PIXELS * 30.0) / 2) - (imageHeight / 2);
     private final double left = ((TileUtils.TILE_SIZE_IN_PIXELS * 30.0) / 2) - (imageWidth / 2);
 
     public LevelCompletePopup() {
-        this.font = Font.loadFont(getClass().getResourceAsStream("/fonts/kenvector_future.ttf"), 48);
+        this.font = Font.loadFont(getClass().getResourceAsStream("/fonts/kenvector_future.ttf"), 42);
+        this.smallFont = Font.loadFont(getClass().getResourceAsStream("/fonts/kenvector_future.ttf"), 24);
 
         this.dialogRoot = new AnchorPane();
         String dialogUrl = App.class.getResource("/images/ui/level_complete.png").toString();
@@ -78,21 +80,29 @@ public class LevelCompletePopup {
         this.dialogRoot.getChildren().addAll(repeatLevelButton, nextLevelButton);
     }
 
+    // TODO: animate the increase?
     public void setScore(int score) {
         Text scoreText = new Text(String.format("%s", score));
         scoreText.setTranslateY(170);
         scoreText.setTranslateX(50);
         scoreText.setFont(font);
-
         this.dialogRoot.getChildren().add(scoreText);
     }
 
     public void setEmission(int emission) {
-        // root.getChildren().add(this.dialogRoot);
+        Text emissionText = new Text(String.format("%s", emission));
+        emissionText.setTranslateY(207);
+        emissionText.setTranslateX(100);
+        emissionText.setFont(smallFont);
+        this.dialogRoot.getChildren().add(emissionText);
     }
 
     public void setTime(String time) {
-        // root.getChildren().add(this.dialogRoot);
+        Text emissionText = new Text(String.format("%s", time));
+        emissionText.setTranslateY(233);
+        emissionText.setTranslateX(100);
+        emissionText.setFont(smallFont);
+        this.dialogRoot.getChildren().add(emissionText);
     }
 
     public void render(AnchorPane root) {

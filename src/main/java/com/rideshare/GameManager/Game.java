@@ -66,35 +66,28 @@ public class Game {
         initializeScoreKeeper();
         initializeTripChooser();
         initializeGameLoop();
-        // TODO: remove me this is just for testing
-        renderLevelCompleted();
     }
 
     private void renderLevelCompleted() {
         LevelCompletePopup l = new LevelCompletePopup();
-        // l.setScore(this._player.getScoreKeeper().calculateScore());
-        l.setScore(1290);
-        l.setEmission(this._player.getScoreKeeper().getCO2Used());
+        l.setScore(this._player.getScoreKeeper().calculateLevelScore((int)_timer.getMinutesLeft()));
+        l.setEmission(this._player.getScoreKeeper().getCo2Used());
         l.setTime(this._timer.getTimeElapsedString());
         l.render(this._root);
 
         l.onNextLevelSelected(new ChangeListener<Boolean>() {
-
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 // TODO Auto-generated method stub
                 Utils.print("listener triggered!");
             }
-            
         });
         l.onRepeatLevelSelected(new ChangeListener<Boolean>() {
-
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 // TODO Auto-generated method stub
                 Utils.print("listener triggered!");
             }
-            
         });
     }
 
@@ -128,13 +121,6 @@ public class Game {
         _tripChooser.clear();
     }
 
-    // TODO: this will take in whatever is loaded by the loader and initialize from
-    // there
-    // public void loadExisting() {
-    //     this._player.loadExisting();
-    //     return;
-    // }
-
     private void initializeGameLoop() {
         Utils.print(String.format("Starting game loop"));
         _timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
@@ -144,6 +130,7 @@ public class Game {
             int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
             Utils.print(String.format("%s mailboxes left", mailboxesLeft));
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
+
 
             // No more mailboxes are left - we've completed the level
             if (mailboxesLeft == 0) {
@@ -198,8 +185,8 @@ public class Game {
     private void handleLevelCompleted() {
         Utils.print(String.format("Level completed"));
         if (isLevelOver()) {
-            renderLevelCompleted();
             _timeline.stop();
+            renderLevelCompleted();
             this._level += 1;
             // dosomething()
         } else {
@@ -234,7 +221,7 @@ public class Game {
             @Override
             public void changed(ObservableValue<? extends MailboxStatus> observable, MailboxStatus oldStatus,
                     MailboxStatus newStatus) {
-                System.out.println("Status changed: " + newStatus);
+                System.out.println(String.format("Status changed for [%s %s]: %s ", mailbox.getGridPanePosition().row, mailbox.getGridPanePosition().col, newStatus));
                 if (newStatus == MailboxStatus.SELECTED) {
                     handleMailboxSelected(mailbox);
                 }
@@ -257,7 +244,7 @@ public class Game {
         }
 
         if (_currentMailbox != null && _currentMailbox != mailbox) {
-            _currentMailbox.markWaiting();
+            mailbox.markWaiting();
         }
         _currentMailbox = mailbox;
 
@@ -279,7 +266,7 @@ public class Game {
             public void changed(ObservableValue<? extends PlayerStatus> observable, PlayerStatus oldValue,
                     PlayerStatus newValue) {
                 if (newValue == PlayerStatus.ON_TRIP) {
-                    mailbox.markInProgress();
+                    _currentMailbox.markInProgress();
                 }
                 if (newValue == PlayerStatus.IDLE) {
                     // Mailbox is compeleted - this could be so much better :')
@@ -300,6 +287,7 @@ public class Game {
         ScoreKeeper scoreKeeper = _player.getScoreKeeper();
         scoreKeeper.setMailboxesCompleted(scoreKeeper.getMailboxesCompleted() + 1);
         scoreKeeper.incrementCO2Used((int) _currentTrip.getEmission());
+        scoreKeeper.updateScore(_currentMailbox, _currentTrip);
         scoreKeeper.print();
     }
 

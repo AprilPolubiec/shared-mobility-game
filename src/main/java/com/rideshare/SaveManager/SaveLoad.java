@@ -27,11 +27,11 @@ public class SaveLoad {
             DataStorage ds = new DataStorage();
             ds.name = player.getPlayerName();
             ds.spriteName = player.getAvatarName();
-            ds.score = player.getScoreKeeper().calculateScore();
+            ds.score = player.getScoreKeeper().calculateLevelScore();
             ds.mailboxesCompleted = player.getScoreKeeper().getMailboxesCompleted();
             ds.level = player.getScoreKeeper().getLevel();
             ds.CO2Saved = player.getScoreKeeper().getCO2Saved();
-            ds.CO2Used = player.getScoreKeeper().getCO2Used();
+            ds.CO2Used = player.getScoreKeeper().getCo2Used();
             ds.totalMailboxes = player.getScoreKeeper().getTotalMailboxes();
     
             OutputStream outputStream = new FileOutputStream(fileName, true);
@@ -72,7 +72,7 @@ public class SaveLoad {
                 player.getScoreKeeper().setMailboxesCompleted(ds.mailboxesCompleted);
                 player.getScoreKeeper().setLevel(ds.level);
                 player.getScoreKeeper().setCO2Saved(ds.CO2Saved);
-                player.getScoreKeeper().setCO2Used(ds.CO2Used);
+                player.getScoreKeeper().setCo2Used(ds.CO2Used);
                 player.getScoreKeeper().setTotalMailboxes(ds.totalMailboxes);
             } catch (Exception e) {
                 System.out.println("Something went wrong while loading the game state from file: " + fileName);
