@@ -1,14 +1,15 @@
 
 package com.rideshare.Controllers;
 
-import java.io.File;
+
 import java.io.IOException;
 
 import com.rideshare.App;
+import com.rideshare.Player;
 import com.rideshare.SaveManager.SaveLoad;
 
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
+
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,7 +37,6 @@ public class NewLoadController {
         try {
             _stage = stage;
             _root = root;
-
             setScene(true);
 
         } catch (Exception e) {
@@ -46,16 +46,25 @@ public class NewLoadController {
 
     @FXML
     public void handleLoadButtonPressed(ActionEvent event) {
-        saveLoad.load();
+        Player existingPlayer = saveLoad.load();
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
+            AnchorPane root = loader.load();
+            GameController controller = loader.getController();
+            controller.load(root, _stage);
+            controller.setPlayer(existingPlayer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void handleNewGameButtonPressed(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("chooseCharacter.fxml"));
             AnchorPane root = loader.load();
-            GameController gc = loader.getController();
-            gc.load(root, _stage);
+            ChooseCharacterController controller = loader.getController();
+            controller.load(root, _stage);
         } catch (Exception e) {
             e.printStackTrace();
         }

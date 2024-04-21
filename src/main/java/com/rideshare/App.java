@@ -7,14 +7,18 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import com.rideshare.AudioManager.AudioManager;
 import com.rideshare.Controllers.HomeController;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
+    AudioManager backgroundAudio;
     @Override
     public void start(Stage stage) throws IOException {
+        this.backgroundAudio = new AudioManager();
+        this.backgroundAudio.playBackgroundMusic("bg-fast");
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("home.fxml"));
         AnchorPane root = fxmlLoader.load();
         HomeController hc = fxmlLoader.getController();

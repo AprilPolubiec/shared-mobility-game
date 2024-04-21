@@ -13,7 +13,7 @@ public class ScoreKeeperTest {
         // scoreKeeper.co2Budget = 10; - it's a constant variable
         assertEquals(0, scoreKeeper.getMailboxesCompleted());
         assertEquals(10, scoreKeeper.getTotalMailboxes());
-        assertEquals(0, scoreKeeper.getCO2Used());
+        assertEquals(0, scoreKeeper.getCo2Used());
         assertEquals(0, scoreKeeper.getCO2Saved());
     }
 
@@ -58,6 +58,25 @@ public class ScoreKeeperTest {
 
     // Note: This is my version of calculating the score in other words not generalised
     // If we move with a different implementation this will have to be changed.
+    // this.mailboxesCompleted = this.getMailboxesCompleted();
+    // this.totalMailboxes = this.getTotalMailboxes();
+    // int CO2score = this.CO2Saved;
+
+    // double mailboxesRatio = (double) this.mailboxesCompleted / this.totalMailboxes;
+    // // mailboxesMultiplier = mailboxesRatio + 1;
+    // this.mailboxesMultiplier = mailboxesRatio;
+
+    // double scoreDouble = CO2score * this.mailboxesMultiplier;
+    // this.score = (int) Math.ceil(scoreDouble);
+
+    // this.exceededBudgetFlag = this.hasExceededBudget();
+    // if (this.exceededBudgetFlag == true) {
+    //     this.score = 0;
+    //     return this.score;
+    // }
+
+    // this.scoreText.setText(String.format("Score: %s", this.score));
+    // return this.score;
 
     @Test
     public void Test_CanCalculateScore() {
@@ -65,7 +84,7 @@ public class ScoreKeeperTest {
         scoreKeeper.totalMailboxes = 10;
         scoreKeeper.mailboxesCompleted = 5;
         scoreKeeper.incrementCO2Saved(25);
-        int result = scoreKeeper.calculateScore();
+        int result = scoreKeeper.calculateLevelScore();
 
         assertEquals(25, scoreKeeper.CO2Saved);
         assertEquals(10, scoreKeeper.getTotalMailboxes());
@@ -84,7 +103,7 @@ public class ScoreKeeperTest {
         scoreKeeper.incrementCO2Used(co2Budget + 1);
         scoreKeeper.incrementCO2Saved(20);
         
-        assertEquals(0, scoreKeeper.calculateScore());
+        assertEquals(0, scoreKeeper.calculateLevelScore());
 
     }
 }

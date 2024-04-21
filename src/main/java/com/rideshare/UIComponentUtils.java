@@ -7,9 +7,11 @@ import java.util.Set;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class UIComponentUtils {
-    public static final Set<String> UI_COLORS = new HashSet<String>(Arrays.asList("blue", "green", "grey", "red", "yellow"));
+    public static final Set<String> UI_COLORS = new HashSet<String>(
+            Arrays.asList("blue", "green", "grey", "red", "yellow"));
 
     static public AnchorPane createStyledDialog(double height, double width) {
         AnchorPane root = new AnchorPane();
@@ -40,5 +42,14 @@ public class UIComponentUtils {
         // Image image = new Image("batman.png");
         // return new ImageCursor(image);
         return null;
+    }
+
+    static public int[] getCenterStageCoordinates(Stage stage) {
+        // Get the center x coordinate
+        double centerX = stage.getX() + stage.getWidth() / 2;
+
+        // Get the center y coordinate
+        double centerY = stage.getY() + stage.getHeight() / 2;
+        return new int[] { (int) centerX, (int) centerY };
     }
 }

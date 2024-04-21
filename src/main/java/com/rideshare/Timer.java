@@ -1,6 +1,9 @@
 package com.rideshare;
 
 import javafx.util.Duration;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -80,7 +83,7 @@ public class Timer {
         System.out.println("Timer reset.");
     }
 
-    private void stop() {
+    public void stop() {
         state = TimerState.STOPPED;
         isPaused = false;
         _timeline.stop();
@@ -99,6 +102,7 @@ public class Timer {
     public static double secondsToGameMinutes(double seconds) {
         return seconds * 6.0;
     }
+
     // 1 minute = 1/6 seconds
     public static double gameMinutesToSeconds(double minutes) {
         return minutes / 6.0;
@@ -120,6 +124,26 @@ public class Timer {
         timeModalRoot.getChildren().add(_clockText);
 
         root.getChildren().add(timeModalRoot);
+    }
+
+    public String getTimeElapsedString() {
+        long minutesElapsed = MINUTES.between(DAY_START, currentInGameTime);
+        int hours   = (int)minutesElapsed / 60;
+        int minutes = (int)minutesElapsed % 60;
+
+        // Left pad minutes with 0
+        String minutesString = Integer.toString(minutes);
+        while (minutesString.length() < 2) {
+            minutesString = String.format("0%s", minutesString);
+        }
+        
+        return String.format("%s:%s", hours, minutesString);
+    }
+
+    public long getMinutesLeft() {
+        long minutesLeft = MINUTES.between(DAY_END, currentInGameTime);
+        Utils.print(String.format("%s minutes left on timer", minutesLeft));
+        return minutesLeft;
     }
 
 }

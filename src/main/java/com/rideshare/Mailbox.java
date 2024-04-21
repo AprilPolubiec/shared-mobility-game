@@ -1,9 +1,12 @@
 package com.rideshare;
+
 import java.util.TimerTask;
 
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -14,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class Mailbox {
    private int _row;
@@ -24,8 +28,9 @@ public class Mailbox {
    ImageView _mailboxTile;
    int _mailboxTileImageIdx;
    int _houseTileId;
-   int _duration; // In seconds
-   int _timeLeft; // In seconds
+   Integer _duration; // In seconds
+   Integer _timeLeft = 0; // In seconds
+   Timeline _timeline;
    // DateTime startTime; // Maybe
    MediaPlayer mailboxWaitingAudio;
    MediaPlayer mailboxCompletedAudio;
@@ -52,12 +57,11 @@ public class Mailbox {
       _mailboxTileImageIdx = 0;
       this._mailboxTile = _tileManager.drawTile(_houseTileId + TileUtils.FLAG_HOUSE_OFFSET + _mailboxTileImageIdx, _row,
             _col);
-      
+
       _mailboxTile.setOnMouseClicked(event -> {
          if (status.get() == MailboxStatus.WAITING) {
             markSelected();
          }
-         // Set all other mailboxes to unselected?
       });
 
       _mailboxTile.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -71,17 +75,21 @@ public class Mailbox {
          public void handle(MouseEvent event) {
             _mailboxTile.setCursor(Cursor.DEFAULT);
          }
-         
       });
       status.set(MailboxStatus.READY);
    }
 
    public void setDuration(int duration) {
       _duration = duration;
+      _timeLeft = _duration;
    }
 
    public MailboxStatus getStatus() {
       return this.status.get();
+   }
+
+   public int getTimeLeft() {
+      return this._timeLeft;
    }
 
    public void addStatusListener(ChangeListener<? super MailboxStatus> listener) {
@@ -97,25 +105,30 @@ public class Mailbox {
       if (this.status.get() != MailboxStatus.WAITING) {
          mailboxWaitingAudio.play();
          markWaiting();
-         // TODO: what if they just never disappear?
-         // TODO: insead of timer we need to be able to track time past
-         // java.util.Timer timer = new java.util.Timer();
-         // timer.schedule(new TimerTask() {
-         //    @Override
-         //    public void run() {
-         //       if (status.get() != MailboxStatus.COMPLETED) {
-         //          Platform.runLater(() -> {
-         //             // Code to update the UI goes here
-         //             markFailed();
-         //          });
-         //       }
-         //       timer.cancel();
-         //    }
-         // }, _duration * 1000); // Convert seconds to milliseconds
+         if (_duration != null) {
+            setTimer();
+         }
       }
 
       this._isVisible = true;
       this._mailboxTile.setOpacity(1);
+   }
+
+   public void setTimer() {
+      _timeline = new Timeline(new KeyFrame(Duration.seconds(1.0), event -> {
+         Utils.print(String.format("%s seconds left", _timeLeft));
+         _timeLeft -= 1;
+         if (status.get() == MailboxStatus.COMPLETED) { // Mailbox completed - stop the timer
+            _timeline.stop();
+         }
+         if (_timeLeft == 0 && status.get() != MailboxStatus.COMPLETED) {
+            markFailed();
+            _timeline.stop();
+         }
+
+      }));
+      _timeline.setCycleCount(Timeline.INDEFINITE);
+      _timeline.play();
    }
 
    public void hide() {
@@ -133,6 +146,7 @@ public class Mailbox {
    public void markSelected() {
       this.status.set(MailboxStatus.SELECTED);
    }
+
    public void markInProgress() {
       this.status.set(MailboxStatus.IN_PROGRESS);
    }

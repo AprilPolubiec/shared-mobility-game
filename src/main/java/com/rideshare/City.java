@@ -2,7 +2,6 @@ package com.rideshare;
 
 import java.util.ArrayList;
 
-import javafx.geometry.Point2D;
 
 /**
  * Description: A city represents a location which can be visualized as a map.

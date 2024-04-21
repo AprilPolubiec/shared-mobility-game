@@ -44,7 +44,7 @@ import com.rideshare.TileManager.TileUtils;
     private ArrayList<TransportationNode> _nodeList = new ArrayList<>();
     private TripType tripType;
 
-    private int _score;
+    // private int _score;
     private ArrayList<Trip> legs = new ArrayList<>();
 
     public Trip(TransportationNode endNode, TransportationNode startNode, TripType tripType) {
@@ -83,9 +83,9 @@ import com.rideshare.TileManager.TileUtils;
         return _nodeList;
     }
 
-    public int getScore() {
-        return this._score;
-    }
+    // public int getScore() {
+    //     return this._score;
+    // }
     public TripType getTripType() {
         return this.tripType;
     }
