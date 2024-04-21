@@ -91,6 +91,29 @@ public class ScoreKeeper {
         root.getChildren().add(scorekeeperPane);
     }
 
+    public void renderProgressBar(AnchorPane root) {
+        AnchorPane progressBarPane = new AnchorPane();
+        AnchorPane.setTopAnchor(progressBarPane, 600.0);
+        AnchorPane.setRightAnchor(progressBarPane, 300.0);
+        progressBarPane.setStyle("-fx-background-color: grey;");
+        progressBarPane.setPrefSize(300, 30);
+
+        VBox progressBarVbox = new VBox();
+
+        progressBar.setPrefWidth(300);
+        progressBar.setPrefHeight(30);
+        progressBar.setProgress(0.00);
+        progressBar.setStyle("-fx-accent: #fa8132;");
+        progressBarVbox.getChildren().add(progressBar);
+
+        progressBarPane.getChildren().add(progressBarVbox);
+
+        root.getChildren().add(progressBarPane);
+     }
+    
+
+
+
     public int getMailboxesCompleted() {
         return this.mailboxesCompleted;
     }
@@ -180,6 +203,19 @@ public class ScoreKeeper {
     public void setScore(int score) {
         this.score = score;
     }
+
+    public void updateProgressBar() {
+        double progress = (double) mailboxesCompleted/ totalMailboxes;
+        progressBar.setProgress(progress);
+
+    }
+
+    public ProgressBar getProgressBar() {
+        return this.progressBar;}
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;}
+
 
     // Faster you get a mailbox, the more it is worth
     public void updateScore(Mailbox mailbox, Trip trip) {

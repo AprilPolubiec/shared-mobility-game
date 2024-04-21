@@ -117,6 +117,7 @@ public class Game {
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         // this._saveLoad = new SaveLoad(this._player.getScoreKeeper());
         this._player.getScoreKeeper().render(_root);
+        this._player.getScoreKeeper().renderProgressBar(_root);
     }
 
     private void initializeTripChooser() {
