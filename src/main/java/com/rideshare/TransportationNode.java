@@ -24,18 +24,19 @@ public class TransportationNode {
         this.row = row;
         this.routeMatrix = routeNodeMatrix;
         this.transportationType = transportationType;
+        String name = routeNodeMatrix.getRouteName();
         switch (transportationType) {
             case BUS:
-                modeOfTransport = new BusTransportationMode("39A");
+                modeOfTransport = new BusTransportationMode(name);
                 break;
             case CAR:
-                modeOfTransport = new CarTransportationMode("Honda Civic");
+                modeOfTransport = new CarTransportationMode(name);
                 break;
             case TRAIN:
-                modeOfTransport = new TrainTransportationMode("B");  
+                modeOfTransport = new TrainTransportationMode(name);  
                 break;
             case WALKING:
-                modeOfTransport = new WalkingTransportationMode("");
+                modeOfTransport = new WalkingTransportationMode(name);
                 break;
             default:
                 break;
@@ -86,11 +87,6 @@ public class TransportationNode {
 
     public void setAsChecked() {
         checked = true;
-    }
-
-    public void setAsPath() {
-    //    button.setStyle("-fx-background-color: #04d457;");
-    // TODO: do something
     }
 
     public void getCost(TransportationNode startNode, TransportationNode endNode, TripType tripType) {

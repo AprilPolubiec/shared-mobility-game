@@ -35,10 +35,6 @@ public class TileManager {
 
     public void draw() {
         _tileGrid = new GridPane();
-        // TODO: maybe change
-        // AnchorPane.setTopAnchor(tileGrid, 0.0);
-        // AnchorPane.setLeftAnchor(tileGrid, 0.0);
-
         // Add the GridPane to the AnchorPane
         for (TiledMapLayer layer : _layers) {
             int[][] matrix = MapLoader.arrayToMatrix(layer.data, _height, _width);

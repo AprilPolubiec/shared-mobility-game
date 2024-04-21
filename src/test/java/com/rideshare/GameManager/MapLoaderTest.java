@@ -52,7 +52,9 @@ public class MapLoaderTest {
     void Test_GetWalkingRoute() throws Exception {
         MapJson map = MapLoader.getMapDataFromFile("test-map");
         int[][] matrix = MapLoader.arrayToMatrix(map.layers[1].data, map.height, map.width);
-        Route walkingRoute = MapLoader.getRoutes(map, "Walking", TransportationType.WALKING, "");
+        ArrayList<Route> walkingRoutes = MapLoader.getRoutes(map, "Walking", TransportationType.WALKING);
+        assertEquals(1, walkingRoutes.size());
+        Route walkingRoute = walkingRoutes.get(0);
         assertEquals(TransportationType.WALKING, walkingRoute.getTransportationType());
         RouteNodeMatrix routeNodeMatrix = walkingRoute.getRouteNodeMatrix();
         for (int i = 0; i < matrix.length; i++) {
@@ -70,11 +72,14 @@ public class MapLoaderTest {
             }
         }
     }
+
     @Test
     void Test_GetCarRoute() throws Exception {
         MapJson map = MapLoader.getMapDataFromFile("test-map");
         int[][] matrix = MapLoader.arrayToMatrix(map.layers[2].data, map.height, map.width);
-        Route carRoute = MapLoader.getRoutes(map, "Roads", TransportationType.CAR, "");
+        ArrayList<Route> carRoutes = MapLoader.getRoutes(map, "Roads", TransportationType.CAR);
+        assertEquals(1, carRoutes.size());
+        Route carRoute = carRoutes.get(0);
         assertEquals(TransportationType.CAR, carRoute.getTransportationType());
         RouteNodeMatrix routeNodeMatrix = carRoute.getRouteNodeMatrix();
         for (int i = 0; i < matrix.length; i++) {
@@ -98,7 +103,10 @@ public class MapLoaderTest {
     void Test_GetTrainRoute() throws Exception {
         MapJson map = MapLoader.getMapDataFromFile("test-map");
         int[][] matrix = MapLoader.arrayToMatrix(map.layers[4].data, map.height, map.width);
-        Route trainRoute = MapLoader.getRoutes(map, "Train", TransportationType.TRAIN, "A train");
+        
+        ArrayList<Route> trainRoutes = MapLoader.getRoutes(map, "Train", TransportationType.TRAIN);
+        assertEquals(1, trainRoutes.size());
+        Route trainRoute = trainRoutes.get(0);
         assertEquals(TransportationType.TRAIN, trainRoute.getTransportationType());
         
         RouteNodeMatrix routeNodeMatrix = trainRoute.getRouteNodeMatrix();
@@ -125,7 +133,9 @@ public class MapLoaderTest {
     void Test_GetBusRoute() throws Exception {
         MapJson map = MapLoader.getMapDataFromFile("test-map");
         int[][] matrix = MapLoader.arrayToMatrix(map.layers[3].data, map.height, map.width);
-        Route busRoute = MapLoader.getRoutes(map, "Bus", TransportationType.BUS, "39A");
+        ArrayList<Route> busRoutes = MapLoader.getRoutes(map, "Bus", TransportationType.BUS);
+        assertEquals(1, busRoutes.size());
+        Route busRoute = busRoutes.get(0);
         assertEquals(TransportationType.BUS, busRoute.getTransportationType());
         
         RouteNodeMatrix routeNodeMatrix = busRoute.getRouteNodeMatrix();
@@ -148,6 +158,20 @@ public class MapLoaderTest {
                 }
             }
         }
+    }
+
+    @Test
+    void Test_GetMultipleBusRoutes() throws Exception {
+        MapJson map = MapLoader.getMapDataFromFile("level-2");
+        ArrayList<Route> busRoutes = MapLoader.getRoutes(map, "Bus", TransportationType.BUS);
+        assertEquals(2, busRoutes.size());
+        Route busRoute1 = busRoutes.get(0);
+        assertEquals("39A", busRoute1.name);
+        assertEquals("39A", busRoute1.getRouteNodeMatrix().getNode(0, 0).modeOfTransport.getName());
+        Route busRoute2 = busRoutes.get(1);
+        assertEquals("119", busRoute2.name);
+        assertEquals("119", busRoute2.getRouteNodeMatrix().getNode(0, 0).modeOfTransport.getName());
+
     }
     
 }

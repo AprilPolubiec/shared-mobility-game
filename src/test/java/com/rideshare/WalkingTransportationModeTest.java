@@ -11,7 +11,7 @@ public class WalkingTransportationModeTest {
         TransportationMode tm = new WalkingTransportationMode(displayName);
         
         assertEquals(0, tm.getEmissionRate());
-        assertEquals(5, tm.getSpeed()); // TODO: decide how to measure speed
+        assertEquals(5, tm.getSpeed());
         assertEquals(displayName, tm.getName());
         assertEquals(false, tm.hasStops());
     }

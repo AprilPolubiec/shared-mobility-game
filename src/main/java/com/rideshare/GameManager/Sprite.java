@@ -36,7 +36,7 @@ public abstract class Sprite {
     private String direction = "down";
     private int spriteIdx;
     private int spriteTimer;
-    private boolean isMoving;
+    protected boolean isMoving;
     private String spriteName;
     private String currentSprite;
 
@@ -117,7 +117,9 @@ public abstract class Sprite {
         return loop;
     }
 
-    public void moveOnRoute(ArrayList<TransportationNode> nodes) {
+    public abstract void moveOnRoute(ArrayList<TransportationNode> nodes);
+
+    protected SequentialTransition getRouteAnimation(ArrayList<TransportationNode> nodes) {
         SequentialTransition sequentialTransition = new SequentialTransition();
 
         for (int i = 0; i < nodes.size() - 1; i++) {
@@ -198,15 +200,13 @@ public abstract class Sprite {
             });
             sequentialTransition.getChildren().add(transition);
         }
-        isMoving = true;
-        sequentialTransition.play();
-        sequentialTransition.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                isMoving = false;
-                load(spriteName);
-            }
-        });
+        return sequentialTransition;
+    }
+
+
+    protected void onRouteCompleted() {
+        isMoving = false;
+        load(spriteName);
     }
 
     private void animate() {
@@ -220,6 +220,10 @@ public abstract class Sprite {
         }
         imageView.setImage(icons.get(this.direction).get(spriteIdx));
         spriteTimer++;
+    }
+
+    public boolean isMoving() {
+        return this.isMoving;
     }
 
     public String getSpriteName() {

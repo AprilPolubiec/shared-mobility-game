@@ -8,7 +8,10 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -51,12 +54,28 @@ public class Mailbox {
             _col);
       
       _mailboxTile.setOnMouseClicked(event -> {
-         markInProgress();
+         if (status.get() == MailboxStatus.WAITING) {
+            markSelected();
+         }
+         // Set all other mailboxes to unselected?
+      });
+
+      _mailboxTile.setOnMouseEntered(new EventHandler<MouseEvent>() {
+         @Override
+         public void handle(MouseEvent event) {
+            _mailboxTile.setCursor(Cursor.HAND);
+         }
+      });
+      _mailboxTile.setOnMouseExited(new EventHandler<MouseEvent>() {
+         @Override
+         public void handle(MouseEvent event) {
+            _mailboxTile.setCursor(Cursor.DEFAULT);
+         }
+         
       });
       status.set(MailboxStatus.READY);
    }
 
-   // TODO: actually just deduce from the house id
    public void setDuration(int duration) {
       _duration = duration;
    }
@@ -76,6 +95,7 @@ public class Mailbox {
    // TODO: show a countdown above the mailbox instead
    public void show() {
       if (this.status.get() != MailboxStatus.WAITING) {
+         mailboxWaitingAudio.play();
          markWaiting();
          // TODO: what if they just never disappear?
          // TODO: insead of timer we need to be able to track time past
@@ -107,9 +127,12 @@ public class Mailbox {
       _tileManager.drawTile(202, _row - 1, _col);
       _tileManager.replaceTileImage(_mailboxTile, TileUtils.COMPLETED_FLAG_IDS[0]);
       this.status.set(MailboxStatus.COMPLETED);
-      // mailboxCompletedAudio.play();
+      mailboxCompletedAudio.play();
    }
 
+   public void markSelected() {
+      this.status.set(MailboxStatus.SELECTED);
+   }
    public void markInProgress() {
       this.status.set(MailboxStatus.IN_PROGRESS);
    }
@@ -121,7 +144,6 @@ public class Mailbox {
 
    public void markWaiting() {
       this.status.set(MailboxStatus.WAITING);
-      // mailboxWaitingAudio.play();
    }
 
 }

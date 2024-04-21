@@ -15,152 +15,132 @@ import javafx.scene.layout.AnchorPane;
 
 public class TripCalculatorTest {
     private City createTestCity() {
-        AnchorPane ap = new AnchorPane();
-        Scene s = new Scene(ap);
-        MapLoader ml = new MapLoader(s);
-        ml.load("test-map");
-        City city = ml.getCity();
-        return city;
+        try {
+            MapJson mapJson = MapLoader.getMapDataFromFile("level-2");
+            City c = MapLoader.createCityFromMapData(mapJson);
+            return c;
+        } catch (Exception e) {
+            System.out.println("Failed to make test city");
+            return null;
+        }
     }
    
     @Test
     public void Test_CanCreateTripCalculator() {
         City c = createTestCity();
-        // GameController gc = new GameController();
-        // TripCalculator calc = new TripCalculator(c, gc);
+        TripCalculator calc = new TripCalculator(c);
+        assertEquals(30, calc.cityHeight);
+        assertEquals(30, calc.cityWidth);
+        assertEquals(c, calc.city);
     }
 
     @Test
-    public void Test_ReturnsEmptyListIfNoRoutesAvailable() {
-        City city = createTestCity();
-        GameController gc = new GameController();
-        TripCalculator calc = new TripCalculator(city, gc);
-        ArrayList<Trip> trips = calc.calculateTrips(0, 0, 0, 0);
-        assertEquals(0, trips.size());
+    public void Test_CanGetStartNode() {
+        City c = createTestCity();
+        TripCalculator calc = new TripCalculator(c);
+        TransportationNode startNode = calc.getStartNode(0, 0);
+        assertEquals(TransportationType.WALKING, startNode.transportationType);
     }
 
     @Test
-    public void Test_Foo() {
-        City city = createTestCity();
-        TripCalculator calc = new TripCalculator(city);
-        ArrayList<Trip> trips = calc.calculateTrips(0, 0, 0, 0);
-        assertEquals(0, trips.size());
+    public void Test_CanGetGoalNode() {
+        // Given a house position, should be able to get the goal node
+        City c = createTestCity();
+        TripCalculator calc = new TripCalculator(c);
+
+        // For the house at 12,16, the goal node is to the left
+        TransportationNode goalNode = calc.getGoalNode(12, 16);
+        assertEquals(12, goalNode.row);
+        assertEquals(15, goalNode.col);
+
+        // For the house at 10,13, the goal node is below
+        goalNode = calc.getGoalNode(10, 13);
+        assertEquals(11, goalNode.row);
+        assertEquals(13, goalNode.col);
     }
 
     @Test
-    public void Test_CanGetShortestWalkingOnlyTrip() {
-        int[] positionA = { 0, 0 };
-        int[] positionB = { 2, 2 };
-        City city = new City();
-        /**
-         * TODO: city should look like
-         * [
-         *  [0,0,0],
-         *  [0,0,0],
-         *  [0,0,0]
-         * ]
-         */
-        TripCalculator calc = new TripCalculator();
-        Trip[] trips = calc.calculateTrips(positionA, positionB, city);
-        assertEquals(1, trips.length);
-        // TODO: not sure how we represent trips yet, but it should be (0,0), (1,2), (2,2)
-        throw new UnsupportedOperationException("Need to implement routes/trips");
+    public void Test_CanGetClosestStartStation() {
+        // Can get the closest start station to [15,15]
+        City c = createTestCity();
+        TripCalculator calc = new TripCalculator(c);
+        Route busRoute = c.routes.get(2);
+        assertEquals(TransportationType.BUS, busRoute.getTransportationType());
+        assertEquals("39A", busRoute.name);
+        TransportationNode startNode = calc.getStartNode(15, 15);
+
+        TransportationNode startStation = calc.getClosestStation(startNode, null, null);
+        assertEquals(TransportationType.BUS, startStation.transportationType);
+        assertEquals("39A", startStation.modeOfTransport.getName());
+        assertEquals(16, startStation.row);
+        assertEquals(15, startStation.col);
     }
 
     @Test
-    public void Test_CanGetSingleBusTrip() {
-        int[] positionA = { 0, 0 };
-        int[] positionB = { 2, 2 };
-        City city = new City();
-        /**
-         * TODO:
-         * Route should be a single bus route that looks like
-         * [
-         *  [1, 1, 1],
-         *  [1, 0, 0],
-         *  [1, 0, 0],
-         * ]
-         * And has stops at 0,0 and 2,2
-         */
-        Route[] routes = { new Route() };
-        city.addRoutes(routes);
-        TripCalculator calc = new TripCalculator();
-        Trip[] trips = calc.calculateTrips(positionA, positionB, city);
-        assertEquals(1, trips.length);
+    public void Test_CanGetClosestEndStation() {
+        // Can get the closest start station to [15,15]
+        City c = createTestCity();
+        TripCalculator calc = new TripCalculator(c);
+        Route busRoute = c.routes.get(2);
+        assertEquals(TransportationType.BUS, busRoute.getTransportationType());
+        assertEquals("39A", busRoute.name);
+        TransportationNode goalNode = calc.getGoalNode(19, 16);
+
+        TransportationNode endStation = calc.getClosestStation(goalNode, TransportationType.BUS, "39A");
+        assertEquals(TransportationType.BUS, endStation.transportationType);
+        assertEquals("39A", endStation.modeOfTransport.getName());
+        assertEquals(16, endStation.row);
+        assertEquals(15, endStation.col);
     }
 
+    // This test is based on a real coordinates from  a bug I've been hitting
+    // which has been producing this node list:
+    // Trip node list: 
+    // [20, 19] WALKING
+    // [20, 18] WALKING
+    // [20, 17] WALKING
+    // [20, 16] BUS
+    // [18, 3] BUS // Not the big jump here!
+    // [18, 3] BUS
+    // [18, 2] WALKING
+    // [17, 2] WALKING
+    // [16, 2] WALKING
+    // [15, 2] WALKING
+    // [14, 2] WALKING
+    // [13, 2] WALKING
+    // [12, 2] WALKING
+    // [12, 3] WALKING
+    // And claiming [20,16] is a stop for 39A when it is not
+    // Mailbox at [11, 4]
+    // Starting search from [20, 19] to [12, 3]
     @Test
-    public void Test_ExcludesRoutesWithNoValidStops() {
-        int[] positionA = { 0, 0 };
-        int[] positionB = { 2, 2 };
-        City city = new City();
-        /**
-         * TODO:
-         * busRoute should be a bus route that looks like
-         * [
-         *  [1, 1, 1],
-         *  [1, 0, 0],
-         *  [1, 0, 0],
-         * ]
-         * And has stops at 0,0 and 1,2 (player can get on but not off)
-         */
-        Route busRoute = new Route();
+    public void Test_CanGetStartAndEndStationAcrossBusRoutes() {
+        City c = createTestCity();
+        TripCalculator calc = new TripCalculator(c);
 
-        /**
-         * TODO:
-         * trainRoute should be a train route that looks like
-         * [
-         *  [1, 1, 1],
-         *  [1, 0, 0],
-         *  [1, 0, 0],
-         * ]
-         * And has stops at 0,2 and 2,2 (player can get off but not on)
-         */
-        Route trainRoute = new Route();
-        // Player can always go on walking route
-        Route walkingRoute = new Route(); // Do we even create a Route for these?
-        Route[] routes = { busRoute, trainRoute, walkingRoute };
-        city.addRoutes(routes);
-        TripCalculator calc = new TripCalculator();
-        Trip[] trips = calc.calculateTrips(positionA, positionB, city);
-        assertEquals(1, trips.length); // Only the walking route
+        // House is at 11, 3; target tile is 12, 3
+        TransportationNode goalNode = calc.getGoalNode(11, 3);
+        assertEquals(12, goalNode.row);
+        assertEquals(3, goalNode.col);
+        assertEquals(TransportationType.WALKING, goalNode.transportationType);
+
+        TransportationNode startNode = calc.getStartNode(20, 19);
+        assertEquals(20, startNode.row);
+        assertEquals(19, startNode.col);
+        assertEquals(TransportationType.WALKING, startNode.transportationType);
+        
+        TransportationNode startStation = calc.getClosestStation(startNode, null, null);
+        assertEquals(20, startStation.row);
+        assertEquals(16, startStation.col);
+        assertEquals("119", startStation.modeOfTransport.getName());
+        
+        
+        TransportationNode endStation = calc.getClosestStation(goalNode, startStation.transportationType, startStation.modeOfTransport.getName());
+        assertEquals(20, endStation.row);
+        assertEquals(16, endStation.col);
+        assertEquals("119", endStation.modeOfTransport.getName());
+        
     }
 
-    @Test
-    public void Test_MergesRoutesBasedOnValidStops() {
-        throw;
-        int[] positionA = { 0, 0 };
-        int[] positionB = { 2, 2 };
-        City city = new City();
-        /**
-         * TODO:
-         * busRoute should be a bus route that looks like
-         * [
-         *  [1, 1, 1],
-         *  [1, 0, 0],
-         *  [1, 0, 0],
-         * ]
-         * And has stops at 0,0 and 1,2 (player can get on but not off)
-         */
-        Route busRoute = new Route();
 
-        /**
-         * TODO:
-         * trainRoute should be a train route that looks like
-         * [
-         *  [1, 1, 1],
-         *  [1, 0, 0],
-         *  [1, 0, 0],
-         * ]
-         * And has stops at 0,2 and 2,2 (player can get off but not on)
-         */
-        Route trainRoute = new Route();
-        // Player can always go on walking route
-        Route walkingRoute = new Route();
-        Route[] routes = { busRoute, trainRoute, walkingRoute };
-        city.addRoutes(routes);
-        TripCalculator calc = new TripCalculator();
-        Trip[] trips = calc.calculateTrips(positionA, positionB, city);
-        assertEquals(1, trips.length); // Only the walking route
-    }
 }
