@@ -251,4 +251,12 @@ public abstract class Sprite {
     public boolean isMoving() {
         return this.isMoving;
     }
+
+    public String getSpriteName() {
+        return this.spriteName;
+    }
+
+    public void setSpriteName(String spriteName) {
+        this.spriteName = spriteName;
+    }
 }

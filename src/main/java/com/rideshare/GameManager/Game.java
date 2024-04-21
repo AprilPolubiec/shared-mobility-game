@@ -17,7 +17,6 @@ import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
 import com.rideshare.Utils;
 import com.rideshare.SaveManager.SaveLoad;
-import com.rideshare.SaveManager.DataStorage;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -40,6 +39,7 @@ public class Game {
     private ChooseTripComponent _tripChooser;
     private SaveLoad _saveLoad;
     private int mailboxesLeft;
+    private ScoreKeeper scoreKeeper;
 
     // TODO: a constructor for loading from a saved game
     public Game(SaveLoad savedGame) {
@@ -71,7 +71,7 @@ public class Game {
         // TODO - unless its being loaded?
         this._player.getScoreKeeper().setLevel(0);
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
-        this._saveLoad = new SaveLoad(this._player.getScoreKeeper());
+        // this._saveLoad = new SaveLoad(this._player.getScoreKeeper());
         this._player.getScoreKeeper().render(_root);
     }
 
@@ -144,6 +144,8 @@ public class Game {
     }
 
     public int getMailboxesLeft() {
+        int numMailboxes = _city.getMailboxes().size();
+        int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
         return mailboxesLeft;
     }
 
@@ -160,8 +162,7 @@ public class Game {
     private void handleLevelCompleted() {
         Utils.print(String.format("Level completed"));
         if (isLevelOver()) {
-            // TODO: hook up the saveloader
-            // _saveLoad.save("game_state.dat", ds);
+            _saveLoad.save("game_state.dat");
             _timeline.stop();
             this._level += 1;
             // dosomething()
@@ -172,9 +173,8 @@ public class Game {
 
     private void handleLevelFailed() {
         Utils.print(String.format("Level failed"));
-        // TODO
         if (isLevelOver()) {
-            // _saveLoad.save("game_state.dat", ds);
+            _saveLoad.save("game_state.dat");
             _timeline.stop();
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
@@ -266,15 +266,7 @@ public class Game {
     }
 
     private boolean isLevelOver() {
-        int mailboxesLeft = getMailboxesLeft();
-        if (mailboxesLeft == 0) {
-            return true;
-        } else if (getTimer().getState() == TimerState.STOPPED) {
-            return true;
-        } else {
-            // The level is not over
-            System.out.println("Level incomplete");
-            return false;
-        }
+        return getMailboxesLeft() == 0 || getTimer().getState() == TimerState.STOPPED;
     }
+
 }

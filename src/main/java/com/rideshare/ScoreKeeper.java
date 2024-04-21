@@ -95,11 +95,12 @@ public class ScoreKeeper {
     public int getTotalMailboxes() {
         return this.totalMailboxes;
     }
+
     public void setTotalMailboxes(int total) {
         this.totalMailboxes = total;
     }
 
-    public int getLevel(){
+    public int getLevel() {
         return this.level;
     }
 
@@ -124,14 +125,15 @@ public class ScoreKeeper {
         if (incrementValue < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
-        this.hasExceededBudget(); 
+        this.hasExceededBudget();
 
         this.CO2Used += incrementValue;
         this.co2Text.setText(String.format("CO2 Used: %s/%s",this.CO2Used, this.maxCo2Budget));
         return this.CO2Used;
     }
 
-    // Don't know if we need this so I'll just leave it here. I imagine level incrementer
+    // Don't know if we need this so I'll just leave it here. I imagine level
+    // incrementer
     public int setLevel(int newLevel) {
         if (newLevel < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
@@ -163,7 +165,7 @@ public class ScoreKeeper {
             this.CO2Used = this.co2Budget;
             this.exceededBudgetFlag = false;
             return this.co2Budget;
-        } 
+        }
         return this.CO2Used;
     }
 
@@ -193,6 +195,7 @@ public class ScoreKeeper {
     public void setScore(int score) {
         this.score = score;
     }
+
     public void setCO2Saved(int C02Saved) {
         this.CO2Saved = C02Saved;
     }

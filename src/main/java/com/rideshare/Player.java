@@ -87,4 +87,11 @@ public class Player extends Sprite {
     public PlayerStatus getStatus() {
         return status.get();
      }
+    public String getPlayerName() {
+        return this.name;
+    }
+
+    public void setPlayerName(String name) {
+        this.name = name;
+    }
 }
