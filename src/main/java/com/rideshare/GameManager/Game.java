@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.rideshare.ChooseTripComponent;
 import com.rideshare.City;
+import com.rideshare.GameOverPopup;
 import com.rideshare.GridPanePosition;
 import com.rideshare.LevelCompletePopup;
 import com.rideshare.Mailbox;
@@ -59,7 +60,7 @@ public class Game {
         this._player = player;
         this._city = city;
         this._root = root;
-        
+
         this._tripCalculator = new TripCalculator(this._city);
 
         this._level = 0; // TODO: or pull in from the loader
@@ -68,35 +69,40 @@ public class Game {
         initializeScoreKeeper();
         initializeTripChooser();
         initializeGameLoop();
-        // TODO: remove me this is just for testing
-        renderLevelCompleted();
     }
 
     private void renderLevelCompleted() {
         LevelCompletePopup l = new LevelCompletePopup();
-        // l.setScore(this._player.getScoreKeeper().calculateScore());
-        l.setScore(1290);
-        l.setEmission(this._player.getScoreKeeper().getCO2Used());
+        l.setScore(this._player.getScoreKeeper().calculateLevelScore((int) _timer.getMinutesLeft()));
+        l.setEmission(this._player.getScoreKeeper().getCo2Used());
         l.setTime(this._timer.getTimeElapsedString());
         l.render(this._root);
 
         l.onNextLevelSelected(new ChangeListener<Boolean>() {
-
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 // TODO Auto-generated method stub
                 Utils.print("listener triggered!");
             }
-            
         });
         l.onRepeatLevelSelected(new ChangeListener<Boolean>() {
-
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 // TODO Auto-generated method stub
                 Utils.print("listener triggered!");
             }
-            
+        });
+    }
+
+    private void renderGameOver() {
+        GameOverPopup gameOverPopup = new GameOverPopup();
+        gameOverPopup.render(this._root);
+        gameOverPopup.onRepeatLevelSelected(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                // TODO Auto-generated method stub
+                Utils.print("listener triggered!");
+            }
         });
     }
 
@@ -130,17 +136,10 @@ public class Game {
         _tripChooser.clear();
     }
 
-    // TODO: this will take in whatever is loaded by the loader and initialize from
-    // there
-    // public void loadExisting() {
-    //     this._player.loadExisting();
-    //     return;
-    // }
-
     private void initializeGameLoop() {
         Utils.print(String.format("Starting game loop"));
         _timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
-            
+
             // Get the mailboxes that have not been rendered yet
             int numMailboxes = _city.getMailboxes().size();
             int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
@@ -150,11 +149,13 @@ public class Game {
             // No more mailboxes are left - we've completed the level
             if (mailboxesLeft == 0) {
                 handleLevelCompleted();
-            // If timer has stopped with mailboxes left over or the player exceeded CO2, level failed
+                // If timer has stopped with mailboxes left over or the player exceeded CO2,
+                // level failed
             } else if ((_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0)
                     || _player.getScoreKeeper().hasExceededBudget()) {
+                _timer.stop();
                 handleLevelFailed();
-            // If the timer is running, we can show a random mailbox
+                // If the timer is running, we can show a random mailbox
             } else if (_timer.getState() == TimerState.RUNNING) {
                 int numUninitializedMailboxes = _city.getUninitializedMailboxes().size();
                 int randomMailboxIndex = new Random().nextInt(numUninitializedMailboxes);
@@ -200,8 +201,8 @@ public class Game {
     private void handleLevelCompleted() {
         Utils.print(String.format("Level completed"));
         if (isLevelOver()) {
-            renderLevelCompleted();
             _timeline.stop();
+            renderLevelCompleted();
             this._level += 1;
             // dosomething()
         } else {
@@ -214,11 +215,7 @@ public class Game {
         if (isLevelOver()) {
             // Show game over popup
             // _saveLoad.save("game_state.dat");
-            // AnchorPane gameOverModal = UIComponentUtils.createStyledDialog(300, 450);
-            // ImageView gameOverImage = new ImageView(
-            //     new Image(getClass().getResourceAsStream("/images/ui/instructions/GAME OVER.png")));
-            // gameOverModal.getChildren().add(gameOverImage);
-            // this._root.getChildren().add(gameOverModal);
+            renderGameOver();
             _timeline.stop();
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
@@ -236,7 +233,8 @@ public class Game {
             @Override
             public void changed(ObservableValue<? extends MailboxStatus> observable, MailboxStatus oldStatus,
                     MailboxStatus newStatus) {
-                System.out.println("Status changed: " + newStatus);
+                System.out.println(String.format("Status changed for [%s %s]: %s ", mailbox.getGridPanePosition().row,
+                        mailbox.getGridPanePosition().col, newStatus));
                 if (newStatus == MailboxStatus.SELECTED) {
                     handleMailboxSelected(mailbox);
                 }
@@ -250,7 +248,8 @@ public class Game {
         });
     }
 
-    // TODO: handle switching between selecting different mailboxes - right now the trip selector renders on top of each other,need to hide
+    // TODO: handle switching between selecting different mailboxes - right now the
+    // trip selector renders on top of each other,need to hide
     private void handleMailboxSelected(Mailbox mailbox) {
         Utils.print(String.format("Mailbox selected"));
 
@@ -259,7 +258,7 @@ public class Game {
         }
 
         if (_currentMailbox != null && _currentMailbox != mailbox) {
-            _currentMailbox.markWaiting();
+            mailbox.markWaiting();
         }
         _currentMailbox = mailbox;
 
@@ -281,7 +280,7 @@ public class Game {
             public void changed(ObservableValue<? extends PlayerStatus> observable, PlayerStatus oldValue,
                     PlayerStatus newValue) {
                 if (newValue == PlayerStatus.ON_TRIP) {
-                    mailbox.markInProgress();
+                    _currentMailbox.markInProgress();
                 }
                 if (newValue == PlayerStatus.IDLE) {
                     // Mailbox is compeleted - this could be so much better :')
@@ -302,6 +301,7 @@ public class Game {
         ScoreKeeper scoreKeeper = _player.getScoreKeeper();
         scoreKeeper.setMailboxesCompleted(scoreKeeper.getMailboxesCompleted() + 1);
         scoreKeeper.incrementCO2Used((int) _currentTrip.getEmission());
+        scoreKeeper.updateScore(_currentMailbox, _currentTrip);
         scoreKeeper.print();
         scoreKeeper.updateProgressBar();
         

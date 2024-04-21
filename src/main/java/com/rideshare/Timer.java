@@ -83,7 +83,7 @@ public class Timer {
         System.out.println("Timer reset.");
     }
 
-    private void stop() {
+    public void stop() {
         state = TimerState.STOPPED;
         isPaused = false;
         _timeline.stop();
@@ -138,6 +138,12 @@ public class Timer {
         }
         
         return String.format("%s:%s", hours, minutesString);
+    }
+
+    public long getMinutesLeft() {
+        long minutesLeft = MINUTES.between(DAY_END, currentInGameTime);
+        Utils.print(String.format("%s minutes left on timer", minutesLeft));
+        return minutesLeft;
     }
 
 }

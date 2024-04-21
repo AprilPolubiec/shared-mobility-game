@@ -191,7 +191,7 @@ public abstract class Sprite {
                 xPos += TileUtils.TILE_SIZE_IN_PIXELS;
             }
 
-            Utils.print(String.format("Now at [%s, %s]", getGridPanePosition().row, getGridPanePosition().col));
+            // Utils.print(String.format("Now at [%s, %s]", getGridPanePosition().row, getGridPanePosition().col));
             final TransportationNode nextNextNode = i + 2 < nodes.size() ? nodes.get(i + 2) : null;
 
             transition.setOnFinished(e -> {
