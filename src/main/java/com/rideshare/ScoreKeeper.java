@@ -64,6 +64,7 @@ public class ScoreKeeper {
         this.level = 0;
         this.exceededBudgetFlag = false;
         this.amountOverBudget = 0;
+        this.progressBar = new ProgressBar();
     }
 
     public void render(AnchorPane root) {
@@ -93,18 +94,18 @@ public class ScoreKeeper {
 
     public void renderProgressBar(AnchorPane root) {
         AnchorPane progressBarPane = new AnchorPane();
-        AnchorPane.setTopAnchor(progressBarPane, 600.0);
-        AnchorPane.setRightAnchor(progressBarPane, 300.0);
+        AnchorPane.setBottomAnchor(progressBarPane, 450.0);
+        AnchorPane.setRightAnchor(progressBarPane, 140.0);
         progressBarPane.setStyle("-fx-background-color: grey;");
         progressBarPane.setPrefSize(300, 30);
 
         VBox progressBarVbox = new VBox();
 
-        progressBar.setPrefWidth(300);
-        progressBar.setPrefHeight(30);
-        progressBar.setProgress(0.00);
-        progressBar.setStyle("-fx-accent: #fa8132;");
-        progressBarVbox.getChildren().add(progressBar);
+        this.progressBar.setPrefWidth(300);
+        this.progressBar.setPrefHeight(30);
+        this.progressBar.setProgress(0.00);
+        this.progressBar.setStyle("-fx-accent: #fa8132;");
+        progressBarVbox.getChildren().add(this.progressBar);
 
         progressBarPane.getChildren().add(progressBarVbox);
 
