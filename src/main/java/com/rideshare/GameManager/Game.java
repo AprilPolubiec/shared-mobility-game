@@ -6,6 +6,7 @@ import java.util.Random;
 import com.rideshare.ChooseTripComponent;
 import com.rideshare.City;
 import com.rideshare.GridPanePosition;
+import com.rideshare.LevelCompletePopup;
 import com.rideshare.Mailbox;
 import com.rideshare.MailboxStatus;
 import com.rideshare.Player;
@@ -15,15 +16,20 @@ import com.rideshare.Timer;
 import com.rideshare.TimerState;
 import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
+import com.rideshare.UIComponentUtils;
 import com.rideshare.Utils;
 import com.rideshare.SaveManager.SaveLoad;
+import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class Game {
@@ -60,6 +66,36 @@ public class Game {
         initializeScoreKeeper();
         initializeTripChooser();
         initializeGameLoop();
+        // TODO: remove me this is just for testing
+        renderLevelCompleted();
+    }
+
+    private void renderLevelCompleted() {
+        LevelCompletePopup l = new LevelCompletePopup();
+        // l.setScore(this._player.getScoreKeeper().calculateScore());
+        l.setScore(1290);
+        l.setEmission(this._player.getScoreKeeper().getCO2Used());
+        l.setTime(this._timer.getTimeElapsedString());
+        l.render(this._root);
+
+        l.onNextLevelSelected(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                // TODO Auto-generated method stub
+                Utils.print("listener triggered!");
+            }
+            
+        });
+        l.onRepeatLevelSelected(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                // TODO Auto-generated method stub
+                Utils.print("listener triggered!");
+            }
+            
+        });
     }
 
     private void initializeTimer() {
@@ -162,7 +198,7 @@ public class Game {
     private void handleLevelCompleted() {
         Utils.print(String.format("Level completed"));
         if (isLevelOver()) {
-            _saveLoad.save("game_state.dat");
+            renderLevelCompleted();
             _timeline.stop();
             this._level += 1;
             // dosomething()
@@ -174,7 +210,13 @@ public class Game {
     private void handleLevelFailed() {
         Utils.print(String.format("Level failed"));
         if (isLevelOver()) {
-            _saveLoad.save("game_state.dat");
+            // Show game over popup
+            // _saveLoad.save("game_state.dat");
+            // AnchorPane gameOverModal = UIComponentUtils.createStyledDialog(300, 450);
+            // ImageView gameOverImage = new ImageView(
+            //     new Image(getClass().getResourceAsStream("/images/ui/instructions/GAME OVER.png")));
+            // gameOverModal.getChildren().add(gameOverImage);
+            // this._root.getChildren().add(gameOverModal);
             _timeline.stop();
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
