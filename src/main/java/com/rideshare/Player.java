@@ -32,4 +32,12 @@ public class Player extends Sprite {
     public ScoreKeeper getScoreKeeper() {
         return scoreKeeper;
     }
+
+    public String getPlayerName() {
+        return this.name;
+    }
+
+    public void setPlayerName(String name) {
+        this.name = name;
+    }
 }
