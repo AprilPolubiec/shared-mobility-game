@@ -148,6 +148,7 @@ public class Game {
 
             // No more mailboxes are left - we've completed the level
             if (mailboxesLeft == 0) {
+                _timer.stop();
                 handleLevelCompleted();
                 // If timer has stopped with mailboxes left over or the player exceeded CO2,
                 // level failed
