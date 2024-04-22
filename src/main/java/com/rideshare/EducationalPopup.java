@@ -91,7 +91,8 @@ public class EducationalPopup {
                     carIndex++;
                     break;
                 }
-            case TRANSIT_ONLY:
+            case BUS:
+            case TRAIN:
                 if (transitIdx < transitFacts.length) {
                     fact = transitFacts[transitIdx];
                     title = "TRANSIT FACT";
