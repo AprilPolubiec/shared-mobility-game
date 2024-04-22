@@ -48,7 +48,7 @@ public class ScoreKeeper {
     boolean exceededBudgetFlag;
     int amountOverBudget;
     private String playerName;
-    private ProgressBar progressBar;
+    private ProgressBar emissionsProgressBar;
 
     private Text scoreText;
     private Text mailboxText;
@@ -62,7 +62,6 @@ public class ScoreKeeper {
         this.level = 0;
         this.exceededBudgetFlag = false;
         this.amountOverBudget = 0;
-        this.progressBar = new ProgressBar();
     }
 
     public void setPlayerName(String name) {
@@ -106,38 +105,18 @@ public class ScoreKeeper {
         return this.mailboxesCompleted;
     }
 
-    public void renderProgressBar(AnchorPane root) {
-        AnchorPane progressBarPane = new AnchorPane();
-        AnchorPane.setBottomAnchor(progressBarPane, 450.0);
-        AnchorPane.setRightAnchor(progressBarPane, 140.0);
-        progressBarPane.setStyle("-fx-background-color: grey;");
-        progressBarPane.setPrefSize(300, 30);
+    public void renderEmissionsProgressBar(AnchorPane root) {
+        this.emissionsProgressBar = new ProgressBar(0);
+        emissionsProgressBar.setProgress(1);
 
-        VBox progressBarVbox = new VBox();
-
-        this.progressBar.setPrefWidth(300);
-        this.progressBar.setPrefHeight(30);
-        this.progressBar.setProgress(0.00);
-        this.progressBar.setStyle("-fx-accent: #fa8132;");
-        progressBarVbox.getChildren().add(this.progressBar);
-
-        progressBarPane.getChildren().add(progressBarVbox);
-
-        root.getChildren().add(progressBarPane);
-    }
-
-    public void updateProgressBar() {
-        double progress = (double) mailboxesCompleted / totalMailboxes;
-        progressBar.setProgress(progress);
-
-    }
-
-    public ProgressBar getProgressBar() {
-        return this.progressBar;
-    }
-
-    public void setProgressBar(ProgressBar progressBar) {
-        this.progressBar = progressBar;
+        VBox vBox = new VBox(emissionsProgressBar);
+        emissionsProgressBar.setPrefWidth(TileUtils.TILE_SIZE_IN_PIXELS * 30);
+        emissionsProgressBar.setPrefHeight(50);
+        
+        emissionsProgressBar.setStyle("-fx-accent: #fa8132;");
+        AnchorPane.setBottomAnchor(vBox, 0.0);
+    
+        root.getChildren().add(vBox);
     }
 
     public void setMailboxesCompleted(int numCompleted) {
@@ -176,7 +155,14 @@ public class ScoreKeeper {
 
         this.co2Used += incrementValue;
         this.co2Text.setText(String.format("CO2 Used: %s/%s", this.co2Used, this.maxCo2Budget));
+
+        // Update progress bar
+        updateProgressBar();
         return this.co2Used;
+    }
+
+    public void updateProgressBar() {
+        emissionsProgressBar.setProgress(1.0 - ((double)co2Used / (double)co2Budget));
     }
 
     // Don't know if we need this so I'll just leave it here. I imagine level
