@@ -184,6 +184,7 @@ public class SaveLoad {
 
             Player loadedPlayer = new Player(playerName, ds.spriteName);
             loadedPlayer.getScoreKeeper().setLevel(lastLevelCompleted + 1); // Start on the next level
+            loadedPlayer.getScoreKeeper().setPlayerName(playerName);
             return loadedPlayer;
         } catch (Exception e) {
             e.printStackTrace();

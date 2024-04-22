@@ -99,6 +99,7 @@ public class Player extends Sprite {
 
     public void setPlayerName(String name) {
         this.name = name;
+        this.scoreKeeper.setPlayerName(name);
     }
 
     public String getAvatarName() {
