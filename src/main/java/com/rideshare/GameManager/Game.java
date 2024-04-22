@@ -91,10 +91,11 @@ public class Game {
 
     private void renderGameOver() {
         GameOverPopup gameOverPopup = new GameOverPopup();
-        gameOverPopup.render(this._root);
+        gameOverPopup.render(this._root); 
         gameOverPopup.onRepeatLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                // TODO:  this doesn't work = why?
                 _player.getScoreKeeper().setLevel(_player.getScoreKeeper().getLevel());
                 loadMap();
             }
@@ -165,7 +166,7 @@ public class Game {
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
 
             // No more mailboxes are left - we've completed the level
-            if (mailboxesLeft == 29) {
+            if (mailboxesLeft == 0) {
                 _timer.stop();
                 handleLevelCompleted();
                 // If timer has stopped with mailboxes left over
