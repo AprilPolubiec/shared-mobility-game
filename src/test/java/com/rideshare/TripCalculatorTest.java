@@ -172,4 +172,12 @@ public class TripCalculatorTest {
         Trip middleLeg = calc.runPathFinding(TripType.TRANSIT_ONLY, startStation, startStation, endStation);
         assertEquals(31, middleLeg.getNodeList().size());
     }
+
+    @Test
+    public void Test_TransitStationIsAlsoGoalNode() {
+        City c = createTestCity();
+        TripCalculator calc = new TripCalculator(c);
+        ArrayList<Trip> trips = calc.calculateTrips(20, 17, 27, 18);
+        assertEquals(14, trips.get(0).getNodeList().size());
+    }
 }

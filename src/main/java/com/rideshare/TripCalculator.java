@@ -1,4 +1,5 @@
 package com.rideshare;
+
 import java.util.ArrayList;
 import javafx.scene.Scene;
 
@@ -59,7 +60,7 @@ public class TripCalculator {
 
         // Option 3: Most efficient trip
         Trip mostEfficientTrip = runPathFinding(TripType.EFFICIENT, this._startNode,
-        this._currentNode, this._goalNode);
+                this._currentNode, this._goalNode);
         mostEfficientTrip.print();
         trips.add(mostEfficientTrip);
         return trips;
@@ -208,7 +209,8 @@ public class TripCalculator {
         }
 
         TransportationNode closestStation = null;
-        // TODO: this actually doesn't take into account the walking distance, its just x,y coords
+        // TODO: this actually doesn't take into account the walking distance, its just
+        // x,y coords
         for (RouteNodeMatrix routeNodeMatrix : transitMatrices) {
             TransportationNode[][] matrix = routeNodeMatrix.get();
             for (int i = 0; i < matrix.length; i++) {
@@ -237,23 +239,37 @@ public class TripCalculator {
         if (startStation == null) { // No stations available!
             return null;
         }
-        Utils.print(String.format("Start station: %s [%s, %s]", startStation.modeOfTransport.getName(), startStation.row, startStation.col));
+        Utils.print(String.format("Start station: %s [%s, %s]", startStation.modeOfTransport.getName(),
+                startStation.row, startStation.col));
         TransportationNode endStation = getClosestStation(goalNode, startStation.transportationType,
                 startStation.modeOfTransport.getName());
-        Utils.print(String.format("End station: %s [%s, %s]", endStation.modeOfTransport.getName(), endStation.row, endStation.col));
+        Utils.print(String.format("End station: %s [%s, %s]", endStation.modeOfTransport.getName(), endStation.row,
+                endStation.col));
 
         // TODO: handle if start and end are the same, we can just skip this path finder
         if (startStation == endStation) {
             return null;
         }
-        Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStation);
+        Trip baseLeg;
+
+        TransportationNode startStationEntryNode = getStartNode(startStation.row, startStation.col);
+        TransportationNode endStationEntryNode = getStartNode(endStation.row, endStation.col);
+        Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStationEntryNode);
         Trip middleLeg = runPathFinding(TripType.TRANSIT_ONLY, startStation, startStation, endStation);
-        Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStation, endStation, goalNode);
-        firstLeg.appendTrip(middleLeg);
-        firstLeg.appendTrip(lastLeg);
-        firstLeg.setTripType(TripType.TRANSIT_ONLY);
-        firstLeg.print();
-        return firstLeg;
+        Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStationEntryNode, endStationEntryNode, goalNode);
+
+        baseLeg = firstLeg == null ? middleLeg : firstLeg;
+        if (firstLeg == null) { // Start at the middle leg
+            baseLeg = middleLeg;
+        } else {
+            baseLeg = firstLeg;
+            baseLeg.appendTrip(middleLeg);
+        }
+
+        baseLeg.appendTrip(lastLeg);
+        baseLeg.setTripType(TripType.TRANSIT_ONLY);
+        baseLeg.print();
+        return baseLeg;
     }
 
     private void closeNonTransitNodes(TransportationNode startNode) {
@@ -279,6 +295,9 @@ public class TripCalculator {
             TransportationNode goalNode) {
         if (tripType == TripType.TRANSIT_ONLY) {
             closeNonTransitNodes(startNode);
+        }
+        if (startNode == goalNode || currentNode == goalNode) {
+            return null;
         }
         while (goalReached == false) {
             int col = currentNode.col;
@@ -346,12 +365,17 @@ public class TripCalculator {
 
         if (isCheckableNode) {
             if (currentNode.modeOfTransport.hasStops()) {
-                // We are currently on a form of public transportation - the only nodes we can open are nodes on the same path
-                if (!currentNode.canStop && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName())) return;
+                // We are currently on a form of public transportation - the only nodes we can
+                // open are nodes on the same path
+                if (!currentNode.canStop
+                        && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName()))
+                    return;
             }
             if (node.modeOfTransport.hasStops()) {
-                // If the node we are checking is a public transit - it has to either be a valid stop or be on the transit path
-                if (!node.canStop && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName())) return;
+                // If the node we are checking is a public transit - it has to either be a valid
+                // stop or be on the transit path
+                if (!node.canStop && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName()))
+                    return;
             }
             node.setAsOpen();
             node.parent = currentNode;
