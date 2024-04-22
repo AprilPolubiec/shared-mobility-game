@@ -49,16 +49,27 @@
             </TextField>
          </children>
       </AnchorPane>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="618.0" layoutY="658.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="750.0" layoutY="658.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/ui/green_button00.png" />
          </image>
       </ImageView>
-      <Text fill="WHITE" layoutX="687.0" layoutY="691.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+      <Text fill="WHITE" layoutX="819.0" layoutY="691.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
          <font>
             <Font name="Futura Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="startButton" layoutX="617.0" layoutY="656.0" mnemonicParsing="false" onAction="#onStartButtonClicked" opacity="0.0" prefHeight="51.0" prefWidth="200.0" />
+      <Button fx:id="startButton" layoutX="749.0" layoutY="656.0" mnemonicParsing="false" onAction="#onStartButtonClicked" opacity="0.0" prefHeight="51.0" prefWidth="200.0" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="501.0" layoutY="659.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/ui/grey_button00.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="570.0" layoutY="693.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Back">
+         <font>
+            <Font name="Futura Bold" size="24.0" />
+         </font>
+      </Text>
+      <Button fx:id="backButton" layoutX="500.0" layoutY="657.0" mnemonicParsing="false" onAction="#onBackButtonClicked" opacity="0.0" prefHeight="51.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

@@ -27,7 +27,8 @@ public class NewLoadController {
     private Stage _stage;
 
     private void setScene(boolean isFullScreen) throws IOException {
-        Scene scene = new Scene(_root);
+        Scene scene = this._stage.getScene();
+        scene.setRoot(this._root);
         _stage.setScene(scene);
         _stage.setFullScreen(isFullScreen);
     }

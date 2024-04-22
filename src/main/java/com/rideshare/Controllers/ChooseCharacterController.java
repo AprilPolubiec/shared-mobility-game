@@ -10,6 +10,7 @@ import com.rideshare.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -25,11 +26,25 @@ public class ChooseCharacterController {
     public ImageView leftButton;
     @FXML
     public TextField nameInput;
+    @FXML
+    public Button backButton;
 
     private int currentSpriteIdx = 0;
     private final String[] sprites = { "girl-1", "girl-2", "girl-3", "guy-1", "guy-2", "guy-3", "orc-1" };
     private Player newPlayer;
 
+    @FXML
+    public void onBackButtonClicked() {
+        // Go back to previous screen
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("newLoad.fxml"));
+            AnchorPane root = loader.load();
+            NewLoadController nlc = loader.getController();
+            nlc.load(root, stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     public void onRightButtonClicked() {
         Utils.print("Right clicked");
