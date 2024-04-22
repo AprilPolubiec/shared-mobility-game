@@ -51,20 +51,13 @@ public class Game {
     private int mailboxesLeft;
     private ScoreKeeper scoreKeeper;
 
-    // TODO: a constructor for loading from a saved game
-    public Game(SaveLoad savedGame) {
-        this._saveLoad = savedGame;
-    }
-
     public Game(AnchorPane root, City city, Player player) {
         Utils.print(String.format("Creating a game"));
         this._player = player;
         this._city = city;
         this._root = root;
-
         this._tripCalculator = new TripCalculator(this._city);
-        
-        this._level = 0; // TODO: or pull in from the loader
+        _saveLoad = new SaveLoad();
 
         initializeTimer();
         initializeScoreKeeper();
@@ -114,11 +107,9 @@ public class Game {
     }
 
     private void initializeScoreKeeper() {
-        // TODO - unless its being loaded?
-        this._player.getScoreKeeper().setLevel(0);
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
-        // this._saveLoad = new SaveLoad(this._player.getScoreKeeper());
         this._player.getScoreKeeper().render(_root);
+        this._level = this._player.getScoreKeeper().getLevel();
     }
 
     private void intializeEducationalContentContainer() {
@@ -212,6 +203,7 @@ public class Game {
         if (isLevelOver()) {
             _timeline.stop();
             renderLevelCompleted();
+            _saveLoad.save(_player);
             this._level += 1;
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
@@ -222,8 +214,6 @@ public class Game {
         // TODO: block user from clicking anything
         Utils.print(String.format("Level failed"));
         if (isLevelOver()) {
-            // Show game over popup
-            // _saveLoad.save("game_state.dat");
             renderGameOver();
             _timeline.stop();
         } else {

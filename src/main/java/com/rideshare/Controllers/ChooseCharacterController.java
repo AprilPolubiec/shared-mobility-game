@@ -45,7 +45,7 @@ public class ChooseCharacterController {
     @FXML
     public void onStartButtonClicked() {
         Utils.print("Start clicked");
-        this.newPlayer.setPlayerName("Todo");
+        this.newPlayer.setPlayerName(nameInput.getText());
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
             AnchorPane root = loader.load();

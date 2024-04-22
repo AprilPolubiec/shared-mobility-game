@@ -46,6 +46,7 @@ public class ScoreKeeper {
     int level;
     boolean exceededBudgetFlag;
     int amountOverBudget;
+    private String playerName;
 
     private Text scoreText;
     private Text mailboxText;
@@ -61,14 +62,26 @@ public class ScoreKeeper {
         this.amountOverBudget = 0;
     }
 
+    public void setPlayerName(String name) {
+        this.playerName = name;
+    }
+
     public void render(AnchorPane root) {
-        AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(150.0, 300.0);
+        AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(200.0, 300.0);
         AnchorPane.setBottomAnchor(scorekeeperPane, 150.0);
         AnchorPane.setLeftAnchor(scorekeeperPane, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);
 
         VBox scoreVbox = new VBox();
         AnchorPane.setTopAnchor(scoreVbox, 50.0);
         AnchorPane.setLeftAnchor(scoreVbox, 30.0);
+
+        Text playerNameText = new Text(String.format("Player: %s", playerName));
+        playerNameText.setFont(Font.font("Futura Bold", 21));
+        scoreVbox.getChildren().add(playerNameText);
+
+        Text levelText = new Text(String.format("Level: %s", level));
+        levelText.setFont(Font.font("Futura Bold", 21));
+        scoreVbox.getChildren().add(levelText);
 
         this.mailboxText = new Text(String.format("%s/%s Mailboxes", this.mailboxesCompleted, this.totalMailboxes));
         this.mailboxText.setFont(Font.font("Futura Bold", 21));
@@ -180,12 +193,13 @@ public class ScoreKeeper {
     // Faster you get a mailbox, the more it is worth
     public void updateScore(Mailbox mailbox, Trip trip) {
         int timeLeftOnMailbox = mailbox.getTimeLeft(); // This we want as high as possible
-        int tripEmission = (int)trip.getEmission(); // This we want as low as possible
+        int tripEmission = (int) trip.getEmission(); // This we want as low as possible
         // 100 points per second left on the mailbox
         // Plus the proportion of the total budget that was unused
-        this.score += (timeLeftOnMailbox * 100) + (int)((1.0 - ((double)tripEmission / co2Budget)) * 100);
+        this.score += (timeLeftOnMailbox * 100) + (int) ((1.0 - ((double) tripEmission / co2Budget)) * 100);
         this.scoreText.setText(String.format("Score: %s", this.score));
-        Utils.print(String.format("Updating score: (%s * 100) + (int)((1.0 - (%s / %s)) * 100) = %s", timeLeftOnMailbox, tripEmission, co2Budget, this.score));
+        Utils.print(String.format("Updating score: (%s * 100) + (int)((1.0 - (%s / %s)) * 100) = %s", timeLeftOnMailbox,
+                tripEmission, co2Budget, this.score));
     }
 
     public int getCurrentScore(int score) {
