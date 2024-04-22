@@ -2,6 +2,7 @@ package com.rideshare;
 
 import com.rideshare.TileManager.TileUtils;
 
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
@@ -9,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class EducationalPopup {
     private final String[] walkingFacts = {
@@ -60,7 +62,9 @@ public class EducationalPopup {
     public void render(AnchorPane root) {
         contentContainer = new ScrollPane();
         contentContainer.setStyle("-fx-background-color:transparent;");
+        contentContainer.setPrefWidth(300);
         factStack = new VBox();
+        factStack.setPrefHeight(UIComponentUtils.getStageHeight(root) - 20);
         AnchorPane.setLeftAnchor(contentContainer, (TileUtils.TILE_SIZE_IN_PIXELS * 30.0) + 300); // 300 = width of the
                                                                                                   // trip chooser - not
                                                                                                   // ideal!
@@ -106,7 +110,7 @@ public class EducationalPopup {
                 }
         }
 
-        AnchorPane factPane = UIComponentUtils.createStyledDialog(100, 200);
+        AnchorPane factPane = UIComponentUtils.createStyledDialog(100, 280);
         Text titleText = new Text(title);
         titleText.setFont(new Font("Futura Bold", 14));
         titleText.setFill(Color.WHITE);
@@ -116,13 +120,18 @@ public class EducationalPopup {
         factPane.getChildren().add(titleText);
 
         Text f = new Text(fact);
-        f.setWrappingWidth(180);
+        f.setWrappingWidth(260);
         f.setFont(new Font("Futura Bold", 10));
         AnchorPane.setTopAnchor(f, 30.0);
         AnchorPane.setLeftAnchor(f, 10.0);
 
         factPane.getChildren().add(f);
         VBox.setMargin(factPane, new Insets(5, 0, 0, 0));
-        factStack.getChildren().add(factPane);
+    
+        factStack.getChildren().add(0, factPane);
+        factPane.setTranslateY(-factStack.getHeight());
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), factPane);
+        transition.setToY(0);
+        transition.play();
     }
 }
