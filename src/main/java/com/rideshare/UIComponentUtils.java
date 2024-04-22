@@ -52,4 +52,12 @@ public class UIComponentUtils {
         double centerY = stage.getY() + stage.getHeight() / 2;
         return new int[] { (int) centerX, (int) centerY };
     }
+
+    static public double getStageHeight(AnchorPane root) {
+        return root.getScene().getWindow().getHeight();
+    }
+
+    static public double getStageWidth(AnchorPane root) {
+        return root.getScene().getWindow().getWidth();
+    }
 }
