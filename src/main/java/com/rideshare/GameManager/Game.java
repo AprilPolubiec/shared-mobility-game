@@ -274,10 +274,11 @@ public class Game {
         Utils.print(String.format("Mailbox selected"));
 
         if (_player.getStatus() == PlayerStatus.ON_TRIP) {
+            mailbox.markWaiting();
             return;
         }
 
-        if (_currentMailbox != null && _currentMailbox.getStatus() == MailboxStatus.WAITING) {
+        if (_currentMailbox != null && _currentMailbox.getStatus() == MailboxStatus.SELECTED) {
             _currentMailbox.markWaiting();
         }
         _currentMailbox = mailbox;
