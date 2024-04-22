@@ -1,10 +1,6 @@
 package com.rideshare;
 
 import com.rideshare.TileManager.TileUtils;
-
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -16,9 +12,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class LevelCompletePopup {
-    ObjectProperty<Boolean> shouldGoToNextLevel = new SimpleObjectProperty<>(false);
-    ObjectProperty<Boolean> shouldRepeatLevel = new SimpleObjectProperty<>(false);
-
+    private Button repeatLevelButton;
+    private Button nextLevelButton;
     private AnchorPane dialogRoot;
     private Font font;
     private Font smallFont;
@@ -40,33 +35,17 @@ public class LevelCompletePopup {
         AnchorPane.setLeftAnchor(this.dialogRoot, left);
 
         // Add buttons
-        Button repeatLevelButton = new Button();
+        repeatLevelButton = new Button();
         repeatLevelButton.setPrefSize(108, 108);
         repeatLevelButton.setOpacity(0.0);
         repeatLevelButton.setTranslateY(255);
         repeatLevelButton.setTranslateX(25);
 
-        repeatLevelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Utils.print("repeat level clicked!");
-                shouldRepeatLevel.set(true);
-            }
-        });
-
-        Button nextLevelButton = new Button();
+        nextLevelButton = new Button();
         nextLevelButton.setPrefSize(108, 108);
         nextLevelButton.setOpacity(0.0);
         nextLevelButton.setTranslateY(255);
         nextLevelButton.setTranslateX(135);
-
-        nextLevelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Utils.print("next level clicked!");
-                shouldGoToNextLevel.set(true);
-            }
-        });
 
         for (Button button : new Button[] { nextLevelButton, repeatLevelButton }) {
             button.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -109,12 +88,12 @@ public class LevelCompletePopup {
         root.getChildren().add(this.dialogRoot);
     }
 
-    public void onNextLevelSelected(ChangeListener<? super Boolean> listener) {
-        this.shouldGoToNextLevel.addListener(listener);
+    public void onNextLevelSelected(EventHandler<ActionEvent> listener) {
+        nextLevelButton.setOnAction(listener);
     }
 
-    public void onRepeatLevelSelected(ChangeListener<? super Boolean> listener) {
-        this.shouldRepeatLevel.addListener(listener);
+    public void onRepeatLevelSelected(EventHandler<ActionEvent> listener) {
+        repeatLevelButton.setOnAction(listener);
     }
 
     public void hide() {
