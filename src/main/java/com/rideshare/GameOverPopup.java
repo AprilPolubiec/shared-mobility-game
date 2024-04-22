@@ -19,8 +19,7 @@ public class GameOverPopup {
     private final int imageHeight = 362;
     private final double top = ((TileUtils.TILE_SIZE_IN_PIXELS * 30.0) / 2) - (imageHeight / 2);
     private final double left = ((TileUtils.TILE_SIZE_IN_PIXELS * 30.0) / 2) - (imageWidth / 2);
-    ObjectProperty<Boolean> shouldRepeatLevel = new SimpleObjectProperty<>(false);
-
+    Button repeatLevelButton = new Button();
 
     public GameOverPopup() {
         this.dialogRoot = new AnchorPane();
@@ -32,20 +31,11 @@ public class GameOverPopup {
         AnchorPane.setLeftAnchor(this.dialogRoot, left);
 
        // Add buttons
-       Button repeatLevelButton = new Button();
        repeatLevelButton.setPrefSize(108, 108);
        repeatLevelButton.setOpacity(0.0);
        repeatLevelButton.setTranslateY(255);
-       repeatLevelButton.setTranslateX(25);
-
-       repeatLevelButton.setOnAction(new EventHandler<ActionEvent>() {
-           @Override
-           public void handle(ActionEvent event) {
-               Utils.print("repeat level clicked!");
-               shouldRepeatLevel.set(true);
-           }
-       });
-
+       repeatLevelButton.setTranslateX(150);
+       this.dialogRoot.getChildren().add(repeatLevelButton);
        repeatLevelButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
@@ -58,7 +48,11 @@ public class GameOverPopup {
         root.getChildren().add(this.dialogRoot);
     }
 
-    public void onRepeatLevelSelected(ChangeListener<? super Boolean> listener) {
-        this.shouldRepeatLevel.addListener(listener);
+    public void onRepeatLevelSelected(EventHandler<ActionEvent> listener) {
+        repeatLevelButton.setOnAction(listener);
+    }
+
+    public void hide() {
+        this.dialogRoot.setVisible(false);
     }
 }

@@ -26,6 +26,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -71,17 +73,18 @@ public class Game {
         l.setTime(this._timer.getTimeElapsedString());
         l.render(this._root);
 
-        l.onNextLevelSelected(new ChangeListener<Boolean>() {
+        l.onNextLevelSelected(new EventHandler<ActionEvent>() {
             @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            public void handle(ActionEvent event) {
+                Utils.print("next level clicked!");
                 loadMap();
                 l.hide();
-                Utils.print("listener triggered!");
             }
         });
-        l.onRepeatLevelSelected(new ChangeListener<Boolean>() {
+        l.onRepeatLevelSelected(new EventHandler<ActionEvent>() {
             @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            public void handle(ActionEvent event) {
+                Utils.print("next level clicked!");
                 _player.getScoreKeeper().setLevel(_player.getScoreKeeper().getLevel() - 1);
                 loadMap();
                 l.hide();
@@ -92,12 +95,13 @@ public class Game {
     private void renderGameOver() {
         GameOverPopup gameOverPopup = new GameOverPopup();
         gameOverPopup.render(this._root); 
-        gameOverPopup.onRepeatLevelSelected(new ChangeListener<Boolean>() {
+        gameOverPopup.onRepeatLevelSelected(new EventHandler<ActionEvent>() {
             @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // TODO:  this doesn't work = why?
+            public void handle(ActionEvent event) {
+                Utils.print("repeat level clicked!");
                 _player.getScoreKeeper().setLevel(_player.getScoreKeeper().getLevel());
                 loadMap();
+                gameOverPopup.hide();
             }
         });
     }
