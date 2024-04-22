@@ -29,7 +29,7 @@ public class Mailbox {
    int _mailboxTileImageIdx;
    int _houseTileId;
    Integer _duration; // In seconds
-   Integer _timeLeft = 0; // In seconds
+   Integer _timeLeft = 10; // In seconds; this is for scoring purposes
    Timeline _timeline;
    // DateTime startTime; // Maybe
    MediaPlayer mailboxWaitingAudio;
@@ -105,9 +105,7 @@ public class Mailbox {
       if (this.status.get() != MailboxStatus.WAITING) {
          mailboxWaitingAudio.play();
          markWaiting();
-         if (_duration != null) {
-            setTimer();
-         }
+         setTimer();
       }
 
       this._isVisible = true;
@@ -117,13 +115,17 @@ public class Mailbox {
    public void setTimer() {
       _timeline = new Timeline(new KeyFrame(Duration.seconds(1.0), event -> {
          Utils.print(String.format("%s seconds left", _timeLeft));
-         _timeLeft -= 1;
-         if (status.get() == MailboxStatus.COMPLETED) { // Mailbox completed - stop the timer
-            _timeline.stop();
+         if (_timeLeft >= 0) {
+            _timeLeft -= 1;
          }
-         if (_timeLeft == 0 && status.get() != MailboxStatus.COMPLETED) {
-            markFailed();
-            _timeline.stop();
+         if (_duration != null) {
+            if (status.get() == MailboxStatus.COMPLETED) { // Mailbox completed - stop the timer
+               _timeline.stop();
+            }
+            if (_timeLeft == 0 && status.get() != MailboxStatus.COMPLETED) {
+               markFailed();
+               _timeline.stop();
+            }
          }
 
       }));
