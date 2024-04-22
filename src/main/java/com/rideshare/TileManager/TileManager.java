@@ -13,7 +13,7 @@ public class TileManager {
     AnchorPane _root;
     int _height;
     int _width;
-    GridPane _tileGrid = new GridPane();
+    GridPane _tileGrid;
 
     public TileManager(AnchorPane root, TiledMapLayer[] layers, int height, int width) {
         _layers = layers;
@@ -33,7 +33,7 @@ public class TileManager {
     }
 
     public void draw() {
-        // _tileGrid = new GridPane();
+        this._tileGrid = new GridPane();
         // Add the GridPane to the AnchorPane
         for (TiledMapLayer layer : _layers) {
             int[][] matrix = MapLoader.arrayToMatrix(layer.data, _height, _width);
@@ -52,6 +52,9 @@ public class TileManager {
         _root.getChildren().add(0, _tileGrid);
     }
 
+    public void clear() {
+        _root.getChildren().remove(_tileGrid);
+    }
 
     public ImageView drawTile(int tileId, int rowIdx, int colIdx) {
         String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();

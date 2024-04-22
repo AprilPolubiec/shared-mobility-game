@@ -104,11 +104,12 @@ public class Game {
 
     private void loadNextMap() {
         System.out.println(this._player.getScoreKeeper().getMapName());
-        this._player.getScoreKeeper().updateLevel();
         String nextMap = this._player.getScoreKeeper().getMapName();
         System.out.println(nextMap);
+
         MapLoader loader = new MapLoader(_root.getScene());
         loader.load(nextMap);
+        this._city.clear();
         this._city = loader.getCity();
     }
 
@@ -122,7 +123,7 @@ public class Game {
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         this._player.getScoreKeeper().render(_root);
         this._level = this._player.getScoreKeeper().getLevel();
-        // this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
+        this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
     }
 
     private void intializeEducationalContentContainer() {
@@ -158,7 +159,7 @@ public class Game {
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
 
             // No more mailboxes are left - we've completed the level
-            if (mailboxesLeft == 0) {
+            if (mailboxesLeft == 29) { // TODO: remove
                 _timer.stop();
                 handleLevelCompleted();
                 // If timer has stopped with mailboxes left over
@@ -265,9 +266,9 @@ public class Game {
             return;
         }
 
-        if (_currentMailbox != null && _currentMailbox != mailbox) {
-            _currentMailbox.markWaiting();
-        }
+        // if (_currentMailbox != null && _currentMailbox != mailbox) {
+        //     _currentMailbox.markWaiting();
+        // }
         _currentMailbox = mailbox;
 
         // Pause the clock
