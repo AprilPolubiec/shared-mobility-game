@@ -18,21 +18,15 @@ import com.rideshare.Timer;
 import com.rideshare.TimerState;
 import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
-import com.rideshare.TripType;
-import com.rideshare.UIComponentUtils;
 import com.rideshare.Utils;
 import com.rideshare.SaveManager.SaveLoad;
-import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class Game {
@@ -122,6 +116,7 @@ public class Game {
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         this._player.getScoreKeeper().render(_root);
         this._level = this._player.getScoreKeeper().getLevel();
+        this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
     }
 
     private void intializeEducationalContentContainer() {
