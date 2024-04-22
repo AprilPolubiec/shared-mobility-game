@@ -273,9 +273,9 @@ public class Game {
             return;
         }
 
-        // if (_currentMailbox != null && _currentMailbox != mailbox) {
-        //     _currentMailbox.markWaiting();
-        // }
+        if (_currentMailbox != null && _currentMailbox.getStatus() == MailboxStatus.WAITING) {
+            _currentMailbox.markWaiting();
+        }
         _currentMailbox = mailbox;
 
         // Pause the clock
