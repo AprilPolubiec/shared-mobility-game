@@ -129,7 +129,6 @@ public class Game {
         _player.moveOnRoute(selectedTrip.getNodeList());
         _tripChooser.clear();
         _educationalContent.renderFact(selectedTrip.getTripType());
-        // Show a fun fact
     }
 
     private void initializeGameLoop() {
@@ -249,7 +248,7 @@ public class Game {
         }
 
         if (_currentMailbox != null && _currentMailbox != mailbox) {
-            mailbox.markWaiting();
+            _currentMailbox.markWaiting();
         }
         _currentMailbox = mailbox;
 
@@ -262,6 +261,7 @@ public class Game {
         Utils.print(String.format("Found trips!"));
 
         // Render the trips in the trip chooser
+        _tripChooser.clear(); // Clear any existing trips in there
         _tripChooser.setTrips(trips);
         _tripChooser.render();
 
