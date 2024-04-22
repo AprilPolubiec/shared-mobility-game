@@ -115,6 +115,7 @@ public class Game {
     private void intializeEducationalContentContainer() {
         _educationalContent = new EducationalPopup();
         _educationalContent.render(_root);
+        this._player.getScoreKeeper().renderProgressBar(_root);
     }
 
     private void initializeTripChooser() {

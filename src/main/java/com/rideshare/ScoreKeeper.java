@@ -2,6 +2,7 @@ package com.rideshare;
 
 import com.rideshare.TileManager.TileUtils;
 
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -47,6 +48,7 @@ public class ScoreKeeper {
     boolean exceededBudgetFlag;
     int amountOverBudget;
     private String playerName;
+    private ProgressBar progressBar;
 
     private Text scoreText;
     private Text mailboxText;
@@ -60,6 +62,7 @@ public class ScoreKeeper {
         this.level = 0;
         this.exceededBudgetFlag = false;
         this.amountOverBudget = 0;
+        this.progressBar = new ProgressBar();
     }
 
     public void setPlayerName(String name) {
@@ -101,6 +104,40 @@ public class ScoreKeeper {
 
     public int getMailboxesCompleted() {
         return this.mailboxesCompleted;
+    }
+
+    public void renderProgressBar(AnchorPane root) {
+        AnchorPane progressBarPane = new AnchorPane();
+        AnchorPane.setBottomAnchor(progressBarPane, 450.0);
+        AnchorPane.setRightAnchor(progressBarPane, 140.0);
+        progressBarPane.setStyle("-fx-background-color: grey;");
+        progressBarPane.setPrefSize(300, 30);
+
+        VBox progressBarVbox = new VBox();
+
+        this.progressBar.setPrefWidth(300);
+        this.progressBar.setPrefHeight(30);
+        this.progressBar.setProgress(0.00);
+        this.progressBar.setStyle("-fx-accent: #fa8132;");
+        progressBarVbox.getChildren().add(this.progressBar);
+
+        progressBarPane.getChildren().add(progressBarVbox);
+
+        root.getChildren().add(progressBarPane);
+    }
+
+    public void updateProgressBar() {
+        double progress = (double) mailboxesCompleted / totalMailboxes;
+        progressBar.setProgress(progress);
+
+    }
+
+    public ProgressBar getProgressBar() {
+        return this.progressBar;
+    }
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
     }
 
     public void setMailboxesCompleted(int numCompleted) {
