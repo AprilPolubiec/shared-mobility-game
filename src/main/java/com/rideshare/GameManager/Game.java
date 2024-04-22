@@ -111,6 +111,14 @@ public class Game {
         loader.load(nextMap);
         this._city.clear();
         this._city = loader.getCity();
+        this._tripCalculator = new TripCalculator(this._city);
+
+        initializeTimer();
+        initializeScoreKeeper();
+        initializeTripChooser();
+        initializeGameLoop();
+        intializeEducationalContentContainer();
+        this.start();
     }
 
 
@@ -120,8 +128,9 @@ public class Game {
     }
 
     private void initializeScoreKeeper() {
-        this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         this._player.getScoreKeeper().render(_root);
+        this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
+        this._player.getScoreKeeper().setMailboxesCompleted(0);
         this._level = this._player.getScoreKeeper().getLevel();
         this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
     }
