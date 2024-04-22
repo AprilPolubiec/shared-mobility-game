@@ -181,7 +181,7 @@ public class ScoreKeeper {
         int tripEmission = (int)trip.getEmission(); // This we want as low as possible
         // 100 points per second left on the mailbox
         // Plus the proportion of the total budget that was unused
-        this.score = (timeLeftOnMailbox * 100) + (int)((1.0 - ((double)tripEmission / co2Budget)) * 100);
+        this.score += (timeLeftOnMailbox * 100) + (int)((1.0 - ((double)tripEmission / co2Budget)) * 100);
         this.scoreText.setText(String.format("Score: %s", this.score));
         Utils.print(String.format("Updating score: (%s * 100) + (int)((1.0 - (%s / %s)) * 100) = %s", timeLeftOnMailbox, tripEmission, co2Budget, this.score));
     }
