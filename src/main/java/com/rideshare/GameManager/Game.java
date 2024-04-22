@@ -63,7 +63,7 @@ public class Game {
         this._root = root;
 
         this._tripCalculator = new TripCalculator(this._city);
-
+        
         this._level = 0; // TODO: or pull in from the loader
 
         initializeTimer();

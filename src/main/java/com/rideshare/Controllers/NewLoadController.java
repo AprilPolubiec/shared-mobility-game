@@ -1,15 +1,15 @@
 
 package com.rideshare.Controllers;
 
-
 import java.io.IOException;
 
 import com.rideshare.App;
 import com.rideshare.Player;
 import com.rideshare.SaveManager.SaveLoad;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +25,6 @@ public class NewLoadController {
 
     private AnchorPane _root;
     private Stage _stage;
-    private SaveLoad saveLoad; // Assuming you intended to use SaveLoad here
 
     private void setScene(boolean isFullScreen) throws IOException {
         Scene scene = new Scene(_root);
@@ -46,16 +45,24 @@ public class NewLoadController {
 
     @FXML
     public void handleLoadButtonPressed(ActionEvent event) {
-        Player existingPlayer = saveLoad.load();
-        try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
-            AnchorPane root = loader.load();
-            GameController controller = loader.getController();
-            controller.load(root, _stage);
-            controller.setPlayer(existingPlayer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SaveLoad gameLoader = new SaveLoad();
+        gameLoader.renderExistingGames(_root);
+        gameLoader.onPlayerSelected(new ChangeListener<Player>() {
+            @Override
+            public void changed(ObservableValue<? extends Player> observable, Player oldValue, Player newValue) {
+                // Player has been selected!
+                try {
+                    FXMLLoader loader = new FXMLLoader(App.class.getResource("game.fxml"));
+                    AnchorPane root = loader.load();
+                    GameController controller = loader.getController();
+                    controller.load(root, _stage);
+                    controller.setPlayer(newValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
     }
 
     @FXML

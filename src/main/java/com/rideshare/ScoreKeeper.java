@@ -42,6 +42,7 @@ public class ScoreKeeper {
     private int minutesLeft;
     double mailboxesMultiplier;
     int score;
+    Integer scoreWithTimeBonus;
     int level;
     boolean exceededBudgetFlag;
     int amountOverBudget;
@@ -168,7 +169,8 @@ public class ScoreKeeper {
     public int calculateLevelScore(int minutesLeft) {
         // For each minute thats left - get 10 more points
         Utils.print(String.format("Adding %s for minutes left", 10 * minutesLeft));
-        return this.score + (10 * minutesLeft);
+        scoreWithTimeBonus = this.score + (10 * minutesLeft);
+        return scoreWithTimeBonus;
     }
 
     public void setScore(int score) {
@@ -186,8 +188,15 @@ public class ScoreKeeper {
         Utils.print(String.format("Updating score: (%s * 100) + (int)((1.0 - (%s / %s)) * 100) = %s", timeLeftOnMailbox, tripEmission, co2Budget, this.score));
     }
 
-    public int getScore(int score) {
+    public int getCurrentScore(int score) {
         return this.score;
+    }
+
+    public Integer getFinalLevelScore() {
+        if (this.scoreWithTimeBonus == null) {
+            throw new IllegalArgumentException("Final level score has not been calculated yet!");
+        }
+        return this.scoreWithTimeBonus;
     }
 
     public void setCo2Used(int setC02Used) {

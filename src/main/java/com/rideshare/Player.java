@@ -26,6 +26,7 @@ public class Player extends Sprite {
 
     public Player(String name, String avatar) {
         super(avatar);
+        this.avatarName = avatar;
         this.name = name;
         this.scoreKeeper = new ScoreKeeper();
         status.set(PlayerStatus.IDLE);
