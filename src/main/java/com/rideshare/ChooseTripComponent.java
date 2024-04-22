@@ -30,8 +30,8 @@ public class ChooseTripComponent {
 
     public ChooseTripComponent(AnchorPane root) {
         _root = root;
-        AnchorPane.setLeftAnchor(component, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);        
-        AnchorPane.setTopAnchor(component, 25.0);        
+        AnchorPane.setLeftAnchor(component, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);
+        AnchorPane.setTopAnchor(component, 25.0);
         _root.getChildren().add(component);
         return;
     }
@@ -58,7 +58,7 @@ public class ChooseTripComponent {
                     tripAnchor.setEffect(new ColorAdjust(0, 0, -0.2, 0));
                 }
             });
-    
+
             tripAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent me) {
@@ -73,9 +73,9 @@ public class ChooseTripComponent {
                 public void handle(MouseEvent event) {
                     selectedTrip.set(trip);
                 }
-                
+
             });
-    
+
             // Put header (ie: FAST, EFFICIENT, TRANSIT ONLY)
             Text label = new Text("");
             switch (trip.getTripType()) {
@@ -85,13 +85,16 @@ public class ChooseTripComponent {
                 case FAST:
                     label = new Text(String.format("DRIVE"));
                     break;
-                case TRANSIT_ONLY:
-                    label = new Text(String.format("PUBLIC TRANSIT"));
+                case BUS:
+                    label = new Text(String.format("BUS"));
+                    break;
+                case TRAIN:
+                    label = new Text(String.format("TRAIN"));
                     break;
                 default:
                     break;
             }
-            
+
             label.setFill(Color.WHITE);
             label.setFont(Font.font("Futura Bold", 21));
             label.setX((300 - label.getBoundsInLocal().getWidth()) / 2);
@@ -107,7 +110,7 @@ public class ChooseTripComponent {
             GridPane speedStats = createStatSection("Speed", trip);
             GridPane efficiencyStats = createStatSection("Efficiency", trip);
             statsVbox.getChildren().addAll(speedStats, efficiencyStats);
-            
+
             tripAnchor.getChildren().add(statsVbox);
             component.getChildren().add(tripAnchor);
         }
@@ -122,24 +125,31 @@ public class ChooseTripComponent {
 
         Text label = new Text(stat);
         label.setFont(Font.font("Futura Bold", 13));
-        GridPane.setMargin(label, new Insets(0,10,0,0));
+        GridPane.setMargin(label, new Insets(0, 10, 0, 0));
         stats.add(label, 0, 0);
-        
+
         int numFullCircles = 0;
         switch (trip.getTripType()) {
             case EFFICIENT:
+                // Emission = 0, Speed = 5
                 numFullCircles = stat.equals("Speed") ? 1 : 5;
                 break;
             case FAST:
+                // Emission = 192, Speed = 48
                 numFullCircles = stat.equals("Speed") ? 5 : 1;
                 break;
-            case TRANSIT_ONLY:
-                numFullCircles = stat.equals("Speed") ? 3 : 3;
+            case BUS:
+                // Emission 105, Speed = 40
+                numFullCircles = stat.equals("Speed") ? 4 : 2;
+                break;
+            case TRAIN:
+                // Emission = 35, Speed = 30
+                numFullCircles = stat.equals("Speed") ? 3 : 4;
                 break;
             default:
                 break;
         }
-    
+
         for (int i = 1; i < 6; i++) {
             ImageView imgView = i <= numFullCircles ? new ImageView(fullCircle) : new ImageView(emptyCircle);
             imgView.setFitHeight(17.0);
@@ -147,7 +157,8 @@ public class ChooseTripComponent {
             GridPane.setMargin(imgView, new Insets(1));
             stats.add(imgView, i, 0);
         }
-        String amtLabel = stat.equals("Speed") ? String.format("%s min", (int)trip.getDuration()) : String.format("%s g", (int)trip.getEmission());
+        String amtLabel = stat.equals("Speed") ? String.format("%s min", (int) trip.getDuration())
+                : String.format("%s g", (int) trip.getEmission());
         Text amountText = new Text(amtLabel);
         amountText.setFont(Font.font("Futura", 13));
         stats.add(amountText, 7, 0);

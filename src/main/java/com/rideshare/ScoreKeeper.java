@@ -34,13 +34,8 @@ import javafx.util.Duration;
  */
 
 public class ScoreKeeper {
-    // All relevant attributes initialised
-    // The CO2 budget is just a random value here.
-    private final int maxCo2Budget = 85000; // NOTE: budget - average driver does about 160km per day, electric vehicle
+    private final int maxCo2Budget = 8500; // NOTE: budget - average driver does about 160km per day, electric vehicle
                                            // emits 53 per km. budget = 160*53 = 8480
-    // co2Budget here is a 'more local variable' allowed to go into the negatives in
-    // order to check if the budget has been exceeded
-    int co2Budget = 85000;
     int co2Used;
     private int mailboxesCompleted;
     private int totalMailboxes;
@@ -116,10 +111,10 @@ public class ScoreKeeper {
         VBox vBox = new VBox(emissionsProgressBar);
         emissionsProgressBar.setPrefWidth(TileUtils.TILE_SIZE_IN_PIXELS * 30);
         emissionsProgressBar.setPrefHeight(50);
-        
+
         emissionsProgressBar.setStyle("-fx-accent: #fa8132;");
         AnchorPane.setBottomAnchor(vBox, 0.0);
-    
+
         root.getChildren().add(vBox);
     }
 
@@ -160,9 +155,9 @@ public class ScoreKeeper {
         if (incrementValue < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
-    
+
+        this.co2Used += incrementValue;
         if (!this.hasExceededBudget()) {
-            this.co2Used += incrementValue;
             this.co2Text.setText(String.format("CO2 Used: %s/%s", this.co2Used, this.maxCo2Budget));
             updateProgressBar();
         }
@@ -172,7 +167,8 @@ public class ScoreKeeper {
 
     public void updateProgressBar() {
         Timeline timeline = new Timeline();
-        KeyValue keyValue = new KeyValue(emissionsProgressBar.progressProperty(), 1.0 - ((double)co2Used / (double)co2Budget));
+        KeyValue keyValue = new KeyValue(emissionsProgressBar.progressProperty(),
+                1.0 - ((double) co2Used / (double) maxCo2Budget));
         KeyFrame keyFrame = new KeyFrame(new Duration(1000), keyValue);
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
@@ -191,27 +187,7 @@ public class ScoreKeeper {
 
     // budget checkers
     public boolean hasExceededBudget() {
-        if (this.co2Used > this.co2Budget) {
-            this.exceededBudgetFlag = true;
-        }
-        return this.exceededBudgetFlag;
-    }
-
-    public int getAmountOverBudget() {
-        if (this.hasExceededBudget()) {
-            return this.co2Used - this.co2Budget;
-        } else {
-            return 0;
-        }
-    }
-
-    public int resetOverBudget() {
-        if (this.hasExceededBudget()) {
-            this.co2Used = this.co2Budget;
-            this.exceededBudgetFlag = false;
-            return this.co2Budget;
-        }
-        return this.co2Used;
+        return this.co2Used > this.maxCo2Budget;
     }
 
     public int calculateLevelScore(int minutesLeft) {
@@ -231,10 +207,10 @@ public class ScoreKeeper {
         int tripEmission = (int) trip.getEmission(); // This we want as low as possible
         // 100 points per second left on the mailbox
         // Plus the proportion of the total budget that was unused
-        this.score += (timeLeftOnMailbox * 100) + (int) ((1.0 - ((double) tripEmission / co2Budget)) * 100);
+        this.score += (timeLeftOnMailbox * 100) + (int) ((1.0 - ((double) tripEmission / maxCo2Budget)) * 100);
         this.scoreText.setText(String.format("Score: %s", this.score));
         Utils.print(String.format("Updating score: (%s * 100) + (int)((1.0 - (%s / %s)) * 100) = %s", timeLeftOnMailbox,
-                tripEmission, co2Budget, this.score));
+                tripEmission, maxCo2Budget, this.score));
     }
 
     public int getCurrentScore(int score) {
@@ -255,7 +231,7 @@ public class ScoreKeeper {
     public void print() {
         Utils.print("SCOREKEEPER");
         Utils.print(String.format("Mailboxes completed: %s/%s", mailboxesCompleted, totalMailboxes));
-        Utils.print(String.format("CO2 used: %s/%s", co2Used, co2Budget));
+        Utils.print(String.format("CO2 used: %s/%s", co2Used, maxCo2Budget));
         Utils.print(String.format("Score: %s", this.score));
     }
 }

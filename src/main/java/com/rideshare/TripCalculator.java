@@ -45,11 +45,18 @@ public class TripCalculator {
         print(String.format("Starting search from [%s, %s] to [%s, %s]", startRow, startCol, _goalNode.row,
                 _goalNode.col));
 
-        // Option 1: Public transit trip
-        Trip publicTransitTrip = runTransitPathFinding(this._startNode, this._goalNode);
-        if (publicTransitTrip != null) {
-            trips.add(publicTransitTrip);
-            publicTransitTrip.print();
+        // Option 1: Bus
+        Trip busTrip = runTransitPathFinding(this._startNode, this._goalNode, TransportationType.BUS);
+        if (busTrip != null) {
+            trips.add(busTrip);
+            busTrip.print();
+        }
+    
+        // Option 2: Train
+        Trip trainTrip = runTransitPathFinding(this._startNode, this._goalNode, TransportationType.TRAIN);
+        if (trainTrip != null) {
+            trips.add(trainTrip);
+            trainTrip.print();
         }
 
         // Option 2: Fastest trip
@@ -199,11 +206,7 @@ public class TripCalculator {
         ArrayList<RouteNodeMatrix> transitMatrices = new ArrayList<RouteNodeMatrix>();
         // First - find the closest train to our starting nodes and ending nodes
         for (Route route : city.routes) {
-            Boolean isTransit = route.getTransportationType() == TransportationType.TRAIN
-                    || route.getTransportationType() == TransportationType.BUS;
-
-            if ((transportationType == null && isTransit)
-                    || (route.getTransportationType() == transportationType && route.name.equals(routeName))) {
+            if (route.getTransportationType() == transportationType && (routeName == null || route.name.equals(routeName))) {
                 transitMatrices.add(route.getRouteNodeMatrix());
             }
         }
@@ -234,14 +237,15 @@ public class TripCalculator {
         return closestStation;
     }
 
-    public Trip runTransitPathFinding(TransportationNode startNode, TransportationNode goalNode) {
-        TransportationNode startStation = getClosestStation(startNode, null, null);
+    public Trip runTransitPathFinding(TransportationNode startNode, TransportationNode goalNode,
+            TransportationType transportationType) {
+        TransportationNode startStation = getClosestStation(startNode, transportationType, null);
         if (startStation == null) { // No stations available!
             return null;
         }
         Utils.print(String.format("Start station: %s [%s, %s]", startStation.modeOfTransport.getName(),
                 startStation.row, startStation.col));
-        TransportationNode endStation = getClosestStation(goalNode, startStation.transportationType,
+        TransportationNode endStation = getClosestStation(goalNode, transportationType,
                 startStation.modeOfTransport.getName());
         Utils.print(String.format("End station: %s [%s, %s]", endStation.modeOfTransport.getName(), endStation.row,
                 endStation.col));
@@ -252,10 +256,11 @@ public class TripCalculator {
         }
         Trip baseLeg;
 
+        TripType tripType = transportationType == TransportationType.TRAIN ? TripType.TRAIN : TripType.BUS;
         TransportationNode startStationEntryNode = getStartNode(startStation.row, startStation.col);
         TransportationNode endStationEntryNode = getStartNode(endStation.row, endStation.col);
         Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStationEntryNode);
-        Trip middleLeg = runPathFinding(TripType.TRANSIT_ONLY, startStation, startStation, endStation);
+        Trip middleLeg = runPathFinding(tripType, startStation, startStation, endStation);
         Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStationEntryNode, endStationEntryNode, goalNode);
 
         baseLeg = firstLeg == null ? middleLeg : firstLeg;
@@ -267,12 +272,13 @@ public class TripCalculator {
         }
 
         baseLeg.appendTrip(lastLeg);
-        baseLeg.setTripType(TripType.TRANSIT_ONLY);
+        baseLeg.setTripType(tripType);
         baseLeg.print();
         return baseLeg;
     }
 
-    private void closeNonTransitNodes(TransportationNode startNode) {
+    // Given a transit node, closes all nodes that are not on the same line
+    private void closeNodesNotOnTransitRoute(TransportationNode startNode) {
         for (Route route : this.city.routes) {
             TransportationNode[][] nodeMatrix = route.getRouteNodeMatrix().get();
 
@@ -280,9 +286,7 @@ public class TripCalculator {
                 int rowIdx = i;
                 for (int j = 0; j < nodeMatrix[rowIdx].length; j++) {
                     TransportationNode n = nodeMatrix[i][j];
-                    if ((route.getTransportationType() != TransportationType.TRAIN
-                            && route.getTransportationType() != TransportationType.BUS)
-                            || !route.name.equals(startNode.modeOfTransport.getName())) {
+                    if (!route.name.equals(startNode.modeOfTransport.getName())) {
                         n.setAsChecked();
                         checkedList.add(n);
                     }
@@ -293,8 +297,8 @@ public class TripCalculator {
 
     public Trip runPathFinding(TripType tripType, TransportationNode startNode, TransportationNode currentNode,
             TransportationNode goalNode) {
-        if (tripType == TripType.TRANSIT_ONLY) {
-            closeNonTransitNodes(startNode);
+        if (tripType == TripType.BUS || tripType == TripType.TRAIN) {
+            closeNodesNotOnTransitRoute(startNode);
         }
         if (startNode == goalNode || currentNode == goalNode) {
             return null;
