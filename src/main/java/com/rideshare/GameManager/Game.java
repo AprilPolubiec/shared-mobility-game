@@ -27,6 +27,7 @@ import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Game {
@@ -134,7 +135,6 @@ public class Game {
     private void initializeGameLoop() {
         Utils.print(String.format("Starting game loop"));
         _timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
-
             // Get the mailboxes that have not been rendered yet
             int numMailboxes = _city.getMailboxes().size();
             int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
@@ -145,11 +145,8 @@ public class Game {
             if (mailboxesLeft == 0) {
                 _timer.stop();
                 handleLevelCompleted();
-                // If timer has stopped with mailboxes left over or the player exceeded CO2,
-                // level failed
-            } else if ((_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0)
-                    || _player.getScoreKeeper().hasExceededBudget()) {
-                _timer.stop();
+                // If timer has stopped with mailboxes left over
+            } else if (_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0) {
                 handleLevelFailed();
                 // If the timer is running, we can show a random mailbox
             } else if (_timer.getState() == TimerState.RUNNING) {
@@ -285,16 +282,23 @@ public class Game {
         });
     }
 
+    // Player state has changed to idle and stopped at the destination - mark mailbox completed
     private void handleTripCompleted() {
         _currentMailbox.markComplete();
         // _currentTrip.getEmission();
         // progressBar.setEmission();
     }
 
+    // Mailbox state has changed to completed
     private void handleMailboxCompleted() {
         ScoreKeeper scoreKeeper = _player.getScoreKeeper();
-        scoreKeeper.setMailboxesCompleted(scoreKeeper.getMailboxesCompleted() + 1);
         scoreKeeper.incrementCO2Used((int) _currentTrip.getEmission());
+        if (scoreKeeper.hasExceededBudget()) {
+            _timer.stop();
+            handleLevelFailed();
+            return;
+        }
+        scoreKeeper.setMailboxesCompleted(scoreKeeper.getMailboxesCompleted() + 1);
         scoreKeeper.updateScore(_currentMailbox, _currentTrip);
         scoreKeeper.print();
     }
