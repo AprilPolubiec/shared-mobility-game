@@ -29,7 +29,7 @@ public class UIComponentUtils {
         return root;
     }
 
-    static private ImageView getPanel(String color) {
+    static public ImageView getPanel(String color) {
         if (!UI_COLORS.contains(color)) {
             throw new IllegalArgumentException(color + " is not a valid UI color");
         }

@@ -18,6 +18,7 @@ import com.rideshare.Timer;
 import com.rideshare.TimerState;
 import com.rideshare.Trip;
 import com.rideshare.TripCalculator;
+import com.rideshare.TripType;
 import com.rideshare.UIComponentUtils;
 import com.rideshare.Utils;
 import com.rideshare.SaveManager.SaveLoad;
@@ -62,7 +63,7 @@ public class Game {
         this._root = root;
 
         this._tripCalculator = new TripCalculator(this._city);
-
+        
         this._level = 0; // TODO: or pull in from the loader
 
         initializeTimer();
@@ -218,6 +219,7 @@ public class Game {
     }
 
     private void handleLevelFailed() {
+        // TODO: block user from clicking anything
         Utils.print(String.format("Level failed"));
         if (isLevelOver()) {
             // Show game over popup
