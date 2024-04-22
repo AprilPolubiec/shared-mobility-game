@@ -138,6 +138,11 @@ public class ScoreKeeper {
         return this.level;
     }
 
+    public int updateLevel() {
+        this.level += 1;
+        return this.level;
+    }
+
     public String getMapName() {
         return String.format("level-%s", this.level + 1);
     }

@@ -63,7 +63,7 @@ public class LevelCompletePopup {
         nextLevelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Utils.print("repeat level clicked!");
+                Utils.print("next level clicked!");
                 shouldGoToNextLevel.set(true);
             }
         });
@@ -116,4 +116,9 @@ public class LevelCompletePopup {
     public void onRepeatLevelSelected(ChangeListener<? super Boolean> listener) {
         this.shouldRepeatLevel.addListener(listener);
     }
+
+    public void hide() {
+        this.dialogRoot.setVisible(false);
+    }
+
 }

@@ -33,7 +33,7 @@ import javafx.util.Duration;
 public class Game {
     private Player _player;
     private Timer _timer;
-    private int _level;
+    private int _level; // TODO: remove me - lets just use the scorekeeper
     private City _city;
     private TripCalculator _tripCalculator;
     private AnchorPane _root;
@@ -59,6 +59,9 @@ public class Game {
         initializeTripChooser();
         initializeGameLoop();
         intializeEducationalContentContainer();
+
+        // cl
+        System.out.println(this._player.getScoreKeeper().getMapName());
     }
 
     private void renderLevelCompleted() {
@@ -71,30 +74,51 @@ public class Game {
         l.onNextLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // TODO Auto-generated method stub
+                loadMap();
+                l.hide();
                 Utils.print("listener triggered!");
             }
         });
         l.onRepeatLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // TODO Auto-generated method stub
-                Utils.print("listener triggered!");
+                _player.getScoreKeeper().setLevel(_player.getScoreKeeper().getLevel() - 1);
+                loadMap();
+                l.hide();
             }
         });
     }
 
     private void renderGameOver() {
         GameOverPopup gameOverPopup = new GameOverPopup();
-        gameOverPopup.render(this._root);
+        gameOverPopup.render(this._root); 
         gameOverPopup.onRepeatLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // TODO Auto-generated method stub
-                Utils.print("listener triggered!");
+                // TODO:  this doesn't work = why?
+                _player.getScoreKeeper().setLevel(_player.getScoreKeeper().getLevel());
+                loadMap();
             }
         });
     }
+
+    private void loadMap() {
+        String nextMap = this._player.getScoreKeeper().getMapName();
+
+        MapLoader loader = new MapLoader(_root.getScene());
+        loader.load(nextMap);
+        this._city.clear();
+        this._city = loader.getCity();
+        this._tripCalculator = new TripCalculator(this._city);
+
+        initializeTimer();
+        initializeScoreKeeper();
+        initializeTripChooser();
+        initializeGameLoop();
+        intializeEducationalContentContainer();
+        this.start();
+    }
+
 
     private void initializeTimer() {
         this._timer = new Timer();
@@ -102,8 +126,9 @@ public class Game {
     }
 
     private void initializeScoreKeeper() {
-        this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         this._player.getScoreKeeper().render(_root);
+        this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
+        this._player.getScoreKeeper().setMailboxesCompleted(0);
         this._level = this._player.getScoreKeeper().getLevel();
         this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
     }
@@ -194,9 +219,10 @@ public class Game {
         Utils.print(String.format("Level completed"));
         if (isLevelOver()) {
             _timeline.stop();
+            this._level += 1;
+            this._player.getScoreKeeper().updateLevel();
             renderLevelCompleted();
             _saveLoad.save(_player);
-            this._level += 1;
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
         }
@@ -247,7 +273,7 @@ public class Game {
             return;
         }
 
-        if (_currentMailbox != null && _currentMailbox != mailbox) {
+        if (_currentMailbox != null && _currentMailbox.getStatus() == MailboxStatus.WAITING) {
             _currentMailbox.markWaiting();
         }
         _currentMailbox = mailbox;

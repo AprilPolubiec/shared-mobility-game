@@ -38,6 +38,7 @@ public class MapLoader {
             MapJson map = getMapDataFromFile(mapName);
             _tileManager = new TileManager(this.root, map.layers, map.height, map.width);
             _city = createCityFromMapData(map);
+            _city.setTileManager(_tileManager);
             _tileManager.draw();
             // _city.showAllMailboxes();
         } catch (Exception e) {
