@@ -13,7 +13,7 @@ public class TileManager {
     AnchorPane _root;
     int _height;
     int _width;
-    GridPane _tileGrid;
+    GridPane _tileGrid = new GridPane();
 
     public TileManager(AnchorPane root, TiledMapLayer[] layers, int height, int width) {
         _layers = layers;
@@ -33,7 +33,7 @@ public class TileManager {
     }
 
     public void draw() {
-        _tileGrid = new GridPane();
+        // _tileGrid = new GridPane();
         // Add the GridPane to the AnchorPane
         for (TiledMapLayer layer : _layers) {
             int[][] matrix = MapLoader.arrayToMatrix(layer.data, _height, _width);

@@ -116,4 +116,9 @@ public class LevelCompletePopup {
     public void onRepeatLevelSelected(ChangeListener<? super Boolean> listener) {
         this.shouldRepeatLevel.addListener(listener);
     }
+
+    public void hide() {
+        this.dialogRoot.setVisible(false);
+    }
+
 }

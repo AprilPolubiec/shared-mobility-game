@@ -57,20 +57,6 @@ public class GameController {
         _city = loader.getCity();
     }
 
-    private void loadProgressModal() {
-        ProgressBar progressBar = new ProgressBar(0);
-        progressBar.setProgress(0.5);
-
-        VBox vBox = new VBox(progressBar);
-        progressBar.setPrefWidth(TileUtils.TILE_SIZE_IN_PIXELS * 30);
-        progressBar.setPrefHeight(50);
-        
-        progressBar.setStyle("-fx-accent: #fa8132;");
-        AnchorPane.setBottomAnchor(vBox, 0.0);
-        
-        _root.getChildren().add(vBox);
-    }
-
     @FXML
     public void start() {
         System.out.println("Starting");

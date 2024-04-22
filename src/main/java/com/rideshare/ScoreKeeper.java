@@ -36,11 +36,11 @@ import javafx.util.Duration;
 public class ScoreKeeper {
     // All relevant attributes initialised
     // The CO2 budget is just a random value here.
-    private final int maxCo2Budget = 8500; // NOTE: budget - average driver does about 160km per day, electric vehicle
+    private final int maxCo2Budget = 85000; // NOTE: budget - average driver does about 160km per day, electric vehicle
                                            // emits 53 per km. budget = 160*53 = 8480
     // co2Budget here is a 'more local variable' allowed to go into the negatives in
     // order to check if the budget has been exceeded
-    int co2Budget = 8500;
+    int co2Budget = 85000;
     int co2Used;
     private int mailboxesCompleted;
     private int totalMailboxes;
@@ -140,6 +140,11 @@ public class ScoreKeeper {
     }
 
     public int getLevel() {
+        return this.level;
+    }
+
+    public int updateLevel() {
+        this.level += 1;
         return this.level;
     }
 

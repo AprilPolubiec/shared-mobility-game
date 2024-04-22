@@ -58,6 +58,9 @@ public class Game {
         initializeTripChooser();
         initializeGameLoop();
         intializeEducationalContentContainer();
+
+        // cl
+        System.out.println(this._player.getScoreKeeper().getMapName());
     }
 
     private void renderLevelCompleted() {
@@ -70,8 +73,10 @@ public class Game {
         l.onNextLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                
                 loadNextMap();
                 initializeGameLoop();
+                l.hide();
                 // PUT THE LOAD NEXT MAP FUNCTION HERE AND THEN ALSO THE INITIALIZE GAME LOOP???
                 Utils.print("listener triggered!");
 
@@ -99,6 +104,10 @@ public class Game {
     }
 
     private void loadNextMap() {
+        System.out.println(this._player.getScoreKeeper().getMapName());
+
+        this._player.getScoreKeeper().updateLevel();
+        
         String nextMap = this._player.getScoreKeeper().getMapName();
         System.out.println(nextMap);
         MapLoader loader = new MapLoader(_root.getScene());
@@ -116,7 +125,7 @@ public class Game {
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         this._player.getScoreKeeper().render(_root);
         this._level = this._player.getScoreKeeper().getLevel();
-        this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
+        // this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
     }
 
     private void intializeEducationalContentContainer() {
@@ -213,6 +222,7 @@ public class Game {
             renderLevelCompleted();
             _saveLoad.save(_player);
             this._level += 1;
+            
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
         }
