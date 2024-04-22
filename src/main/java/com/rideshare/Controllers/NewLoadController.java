@@ -62,7 +62,6 @@ public class NewLoadController {
                     e.printStackTrace();
                 }
             }
-
         });
     }
 

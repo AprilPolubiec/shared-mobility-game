@@ -14,9 +14,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
 public class TripCalculatorTest {
-    private City createTestCity() {
+    private City createTestCity(String mapName) {
         try {
-            MapJson mapJson = MapLoader.getMapDataFromFile("level-1");
+            MapJson mapJson = MapLoader.getMapDataFromFile("level-2");
             City c = MapLoader.createCityFromMapData(mapJson);
             return c;
         } catch (Exception e) {
@@ -27,7 +27,7 @@ public class TripCalculatorTest {
    
     @Test
     public void Test_CanCreateTripCalculator() {
-        City c = createTestCity();
+        City c = createTestCity("level-1");
         TripCalculator calc = new TripCalculator(c);
         assertEquals(30, calc.cityHeight);
         assertEquals(30, calc.cityWidth);
@@ -36,7 +36,7 @@ public class TripCalculatorTest {
 
     @Test
     public void Test_CanGetStartNode() {
-        City c = createTestCity();
+        City c = createTestCity("level-1");
         TripCalculator calc = new TripCalculator(c);
         TransportationNode startNode = calc.getStartNode(0, 0);
         assertEquals(TransportationType.WALKING, startNode.transportationType);
@@ -45,7 +45,7 @@ public class TripCalculatorTest {
     @Test
     public void Test_CanGetGoalNode() {
         // Given a house position, should be able to get the goal node
-        City c = createTestCity();
+        City c = createTestCity("level-1");
         TripCalculator calc = new TripCalculator(c);
 
         // For the house at 12,16, the goal node is to the left
@@ -62,7 +62,7 @@ public class TripCalculatorTest {
     @Test
     public void Test_CanGetClosestStartStation() {
         // Can get the closest start station to [15,15]
-        City c = createTestCity();
+        City c = createTestCity("level-1");
         TripCalculator calc = new TripCalculator(c);
         Route busRoute = c.routes.get(2);
         assertEquals(TransportationType.BUS, busRoute.getTransportationType());
@@ -79,7 +79,7 @@ public class TripCalculatorTest {
     @Test
     public void Test_CanGetClosestEndStation() {
         // Can get the closest start station to [15,15]
-        City c = createTestCity();
+        City c = createTestCity("level-1");
         TripCalculator calc = new TripCalculator(c);
         Route busRoute = c.routes.get(2);
         assertEquals(TransportationType.BUS, busRoute.getTransportationType());
@@ -115,7 +115,7 @@ public class TripCalculatorTest {
     // Starting search from [20, 19] to [12, 3]
     @Test
     public void Test_CanGetStartAndEndStationAcrossBusRoutes() {
-        City c = createTestCity();
+        City c = createTestCity("level-1");
         TripCalculator calc = new TripCalculator(c);
 
         // House is at 11, 3; target tile is 12, 3
@@ -143,7 +143,7 @@ public class TripCalculatorTest {
 
     @Test
     public void Test_CanPassAStop() {
-        City c = createTestCity();
+        City c = createTestCity("level-1");
         TripCalculator calc = new TripCalculator(c);
 
         // House is at 21, 10; target tile is 22, 10
@@ -175,7 +175,7 @@ public class TripCalculatorTest {
 
     @Test
     public void Test_TransitStationIsAlsoGoalNode() {
-        City c = createTestCity();
+        City c = createTestCity("level-1");
         TripCalculator calc = new TripCalculator(c);
         ArrayList<Trip> trips = calc.calculateTrips(20, 17, 27, 18);
         assertEquals(14, trips.get(0).getNodeList().size());

@@ -51,7 +51,6 @@ public class GameController {
     }
 
     private void loadMap(String mapName) {
-        // TODO: should be able to load different maps eventually
         MapLoader loader = new MapLoader(_stage.getScene());
         loader.load(mapName);
         _city = loader.getCity();
