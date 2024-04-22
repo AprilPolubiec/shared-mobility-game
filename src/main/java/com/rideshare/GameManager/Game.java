@@ -247,7 +247,7 @@ public class Game {
             return;
         }
 
-        if (_currentMailbox != null && _currentMailbox != mailbox) {
+        if (_currentMailbox != null && _currentMailbox.getStatus() == MailboxStatus.WAITING) {
             _currentMailbox.markWaiting();
         }
         _currentMailbox = mailbox;
