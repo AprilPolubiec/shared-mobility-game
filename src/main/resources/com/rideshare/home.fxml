@@ -67,5 +67,20 @@
             <Button fx:id="startGameButton" layoutY="2.0" mnemonicParsing="false" onAction="#handleStartButtonPressed" prefHeight="52.0" prefWidth="200.0" style="-fx-background-color: transparent;" />
          </children>
       </AnchorPane>
+      <AnchorPane layoutX="658.0" layoutY="282.0">
+         <children>
+            <ImageView fitHeight="56.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/ui/green_circle.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="4.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/ui/sound_off.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="muteButton" layoutX="-3.0" layoutY="-2.0" mnemonicParsing="false" onAction="#handleMuteButtonPressed" prefHeight="60.0" prefWidth="74.0" style="-fx-background-color: transparent;" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

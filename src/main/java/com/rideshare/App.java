@@ -18,11 +18,11 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         this.backgroundAudio = new AudioManager();
-        // this.backgroundAudio.playBackgroundMusic("bg-fast");
+        this.backgroundAudio.playBackgroundMusic("bg-fast");
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("home.fxml"));
         AnchorPane root = fxmlLoader.load();
         HomeController hc = fxmlLoader.getController();
-        hc.load(stage, root);
+        hc.load(stage, root, backgroundAudio);
     }
 
     public static void main(String[] args) {

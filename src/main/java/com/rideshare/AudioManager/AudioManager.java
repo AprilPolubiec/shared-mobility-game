@@ -7,6 +7,7 @@ import javafx.scene.media.MediaPlayer;
 
 public class AudioManager {
     MediaPlayer mainMediaPlayer;
+    private boolean muted = false;
 
     public AudioManager() {
     }
@@ -40,5 +41,18 @@ public class AudioManager {
         }
         mainMediaPlayer.setMute(shouldMute);
     }
+
+
+    public boolean isMuted() {
+        return muted;
+    }
+
+    public void toggleMute(Boolean shouldMute) {
+        muted = shouldMute;
+        if (mainMediaPlayer != null) {
+            mainMediaPlayer.setMute(muted);
+        }
+    }
+
 
 }
