@@ -213,7 +213,7 @@ public abstract class Sprite {
                             load("car");
                             break;
                         case BUS:
-                            if (nextNode.row == nextNextNode.row && nextNextNode.col == nextNextNode.col) {
+                            if (nextNode.row == nextNextNode.row && nextNode.col == nextNextNode.col) {
                                 load(spriteName);
                             } else {
                                 load("bus");

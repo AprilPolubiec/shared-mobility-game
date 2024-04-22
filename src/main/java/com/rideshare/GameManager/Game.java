@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.rideshare.ChooseTripComponent;
 import com.rideshare.City;
+import com.rideshare.EducationalPopup;
 import com.rideshare.GameOverPopup;
 import com.rideshare.GridPanePosition;
 import com.rideshare.LevelCompletePopup;
@@ -44,6 +45,7 @@ public class Game {
     private Mailbox _currentMailbox;
     private Timeline _timeline;
     private ChooseTripComponent _tripChooser;
+    private EducationalPopup _educationalContent;
     private SaveLoad _saveLoad;
     private int mailboxesLeft;
     private ScoreKeeper scoreKeeper;
@@ -67,6 +69,7 @@ public class Game {
         initializeScoreKeeper();
         initializeTripChooser();
         initializeGameLoop();
+        intializeEducationalContentContainer();
     }
 
     private void renderLevelCompleted() {
@@ -117,6 +120,11 @@ public class Game {
         this._player.getScoreKeeper().render(_root);
     }
 
+    private void intializeEducationalContentContainer() {
+        _educationalContent = new EducationalPopup();
+        _educationalContent.render(_root);
+    }
+
     private void initializeTripChooser() {
         _tripChooser = new ChooseTripComponent(_root);
         _tripChooser.onSelectedTripChanged(new ChangeListener<Trip>() {
@@ -132,6 +140,8 @@ public class Game {
         _timer.resume();
         _player.moveOnRoute(selectedTrip.getNodeList());
         _tripChooser.clear();
+        _educationalContent.renderFact(selectedTrip.getTripType());
+        // Show a fun fact
     }
 
     private void initializeGameLoop() {
@@ -202,7 +212,6 @@ public class Game {
             _timeline.stop();
             renderLevelCompleted();
             this._level += 1;
-            // dosomething()
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
         }
@@ -218,7 +227,6 @@ public class Game {
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
         }
-        // Render game over!
     }
 
     private void showMailbox(Mailbox mailbox) {

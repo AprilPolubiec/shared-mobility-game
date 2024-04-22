@@ -107,6 +107,9 @@ import com.rideshare.TileManager.TileUtils;
     }
 
     public Trip appendTrip(Trip trip) {
+        if (trip == null) {
+            return this; // Do nothing
+        }
         legs.add(trip);
         this._nodeList.addAll(trip.getNodeList());
         this.tripDistance += trip.tripDistance;
