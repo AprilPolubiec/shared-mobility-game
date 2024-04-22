@@ -2,11 +2,15 @@ package com.rideshare;
 
 import com.rideshare.TileManager.TileUtils;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 /**
  * Description: A ScoreKeeper is an object whose main function is to store
@@ -151,18 +155,22 @@ public class ScoreKeeper {
         if (incrementValue < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
-        this.hasExceededBudget();
+    
+        if (!this.hasExceededBudget()) {
+            this.co2Used += incrementValue;
+            this.co2Text.setText(String.format("CO2 Used: %s/%s", this.co2Used, this.maxCo2Budget));
+            updateProgressBar();
+        }
 
-        this.co2Used += incrementValue;
-        this.co2Text.setText(String.format("CO2 Used: %s/%s", this.co2Used, this.maxCo2Budget));
-
-        // Update progress bar
-        updateProgressBar();
         return this.co2Used;
     }
 
     public void updateProgressBar() {
-        emissionsProgressBar.setProgress(1.0 - ((double)co2Used / (double)co2Budget));
+        Timeline timeline = new Timeline();
+        KeyValue keyValue = new KeyValue(emissionsProgressBar.progressProperty(), 1.0 - ((double)co2Used / (double)co2Budget));
+        KeyFrame keyFrame = new KeyFrame(new Duration(1000), keyValue);
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
     }
 
     // Don't know if we need this so I'll just leave it here. I imagine level
@@ -180,7 +188,6 @@ public class ScoreKeeper {
     public boolean hasExceededBudget() {
         if (this.co2Used > this.co2Budget) {
             this.exceededBudgetFlag = true;
-            // CO2Used = co2Budget;
         }
         return this.exceededBudgetFlag;
     }
