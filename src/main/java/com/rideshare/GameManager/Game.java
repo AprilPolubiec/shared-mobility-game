@@ -33,7 +33,7 @@ import javafx.util.Duration;
 public class Game {
     private Player _player;
     private Timer _timer;
-    private int _level;
+    private int _level; // TODO: remove me - lets just use the scorekeeper
     private City _city;
     private TripCalculator _tripCalculator;
     private AnchorPane _root;
@@ -74,18 +74,17 @@ public class Game {
         l.onNextLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                loadNextMap();
-                initializeGameLoop();
+                loadMap();
                 l.hide();
-                // PUT THE LOAD NEXT MAP FUNCTION HERE AND THEN ALSO THE INITIALIZE GAME LOOP???
                 Utils.print("listener triggered!");
             }
         });
         l.onRepeatLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // TODO Auto-generated method stub
-                Utils.print("listener triggered!");
+                _player.getScoreKeeper().setLevel(_player.getScoreKeeper().getLevel() - 1);
+                loadMap();
+                l.hide();
             }
         });
     }
@@ -96,16 +95,14 @@ public class Game {
         gameOverPopup.onRepeatLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // TODO Auto-generated method stub
-                Utils.print("listener triggered!");
+                _player.getScoreKeeper().setLevel(_player.getScoreKeeper().getLevel());
+                loadMap();
             }
         });
     }
 
-    private void loadNextMap() {
-        System.out.println(this._player.getScoreKeeper().getMapName());
+    private void loadMap() {
         String nextMap = this._player.getScoreKeeper().getMapName();
-        System.out.println(nextMap);
 
         MapLoader loader = new MapLoader(_root.getScene());
         loader.load(nextMap);
@@ -168,7 +165,7 @@ public class Game {
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
 
             // No more mailboxes are left - we've completed the level
-            if (mailboxesLeft == 29) { // TODO: remove
+            if (mailboxesLeft == 29) {
                 _timer.stop();
                 handleLevelCompleted();
                 // If timer has stopped with mailboxes left over
@@ -221,10 +218,10 @@ public class Game {
         Utils.print(String.format("Level completed"));
         if (isLevelOver()) {
             _timeline.stop();
+            this._level += 1;
             this._player.getScoreKeeper().updateLevel();
             renderLevelCompleted();
             _saveLoad.save(_player);
-            this._level += 1;
         } else {
             System.out.println("Level is incomplete, cannot save game state!");
         }
