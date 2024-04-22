@@ -16,7 +16,7 @@ import javafx.scene.layout.AnchorPane;
 public class TripCalculatorTest {
     private City createTestCity() {
         try {
-            MapJson mapJson = MapLoader.getMapDataFromFile("level-2");
+            MapJson mapJson = MapLoader.getMapDataFromFile("level-1");
             City c = MapLoader.createCityFromMapData(mapJson);
             return c;
         } catch (Exception e) {
@@ -139,8 +139,37 @@ public class TripCalculatorTest {
         assertEquals(20, endStation.row);
         assertEquals(16, endStation.col);
         assertEquals("119", endStation.modeOfTransport.getName());
-        
     }
 
+    @Test
+    public void Test_CanPassAStop() {
+        City c = createTestCity();
+        TripCalculator calc = new TripCalculator(c);
 
+        // House is at 21, 10; target tile is 22, 10
+        TransportationNode goalNode = calc.getGoalNode(21, 10);
+        assertEquals(22, goalNode.row);
+        assertEquals(10, goalNode.col);
+        assertEquals(TransportationType.WALKING, goalNode.transportationType);
+
+        TransportationNode startNode = calc.getStartNode(10, 28);
+        assertEquals(10, startNode.row);
+        assertEquals(28, startNode.col);
+        assertEquals(TransportationType.WALKING, startNode.transportationType);
+        
+        TransportationNode startStation = calc.getClosestStation(startNode, null, null);
+        assertEquals(8, startStation.row);
+        assertEquals(21, startStation.col);
+        assertEquals("Blue Line", startStation.modeOfTransport.getName());
+        
+        
+        TransportationNode endStation = calc.getClosestStation(goalNode, startStation.transportationType, startStation.modeOfTransport.getName());
+        assertEquals(23, endStation.row);
+        assertEquals(8, endStation.col);
+        assertEquals("Blue Line", endStation.modeOfTransport.getName());
+        
+        calc.currentRouteMatrix = startNode.routeMatrix;
+        Trip middleLeg = calc.runPathFinding(TripType.TRANSIT_ONLY, startStation, startStation, endStation);
+        assertEquals(31, middleLeg.getNodeList().size());
+    }
 }

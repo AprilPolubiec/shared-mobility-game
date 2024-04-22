@@ -140,7 +140,7 @@ public class Game {
         _timer.resume();
         _player.moveOnRoute(selectedTrip.getNodeList());
         _tripChooser.clear();
-
+        _educationalContent.renderFact(selectedTrip.getTripType());
         // Show a fun fact
     }
 

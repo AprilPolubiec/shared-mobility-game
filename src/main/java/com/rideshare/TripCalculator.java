@@ -208,7 +208,7 @@ public class TripCalculator {
         }
 
         TransportationNode closestStation = null;
-
+        // TODO: this actually doesn't take into account the walking distance, its just x,y coords
         for (RouteNodeMatrix routeNodeMatrix : transitMatrices) {
             TransportationNode[][] matrix = routeNodeMatrix.get();
             for (int i = 0; i < matrix.length; i++) {

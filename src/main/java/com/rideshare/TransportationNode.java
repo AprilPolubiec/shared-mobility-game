@@ -107,13 +107,10 @@ public class TransportationNode {
                 this.hCost -= this.speed; // Weighted by speed
                 break;
             case TRANSIT_ONLY:
-                if(!modeOfTransport.hasStops() && transportationType != TransportationType.WALKING) {
-                    setAsSolid(); // Prioritize train
-                }
                 // TODO: turn off car nodes??
-                if (transportationType == TransportationType.TRAIN) {
-                    this.hCost -= 1000;
-                }
+                // if (transportationType == TransportationType.TRAIN) {
+                //     this.hCost -= 1000;
+                // }
                 break;
             default:
                 break;
