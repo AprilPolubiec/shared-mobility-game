@@ -76,7 +76,7 @@ public class Timer {
         return currentInGameTime.equals(DAY_END);
     }
 
-    private void resetTimer() {
+    public void resetTimer() {
         currentInGameTime = DAY_START;
         isPaused = false;
         _timeline.stop();

@@ -76,8 +76,11 @@ public class Game {
         l.onNextLevelSelected(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // TODO Auto-generated method stub
+                loadNextMap();
+                initializeGameLoop();
+                // PUT THE LOAD NEXT MAP FUNCTION HERE AND THEN ALSO THE INITIALIZE GAME LOOP???
                 Utils.print("listener triggered!");
+
             }
         });
         l.onRepeatLevelSelected(new ChangeListener<Boolean>() {
@@ -100,6 +103,15 @@ public class Game {
             }
         });
     }
+
+    private void loadNextMap() {
+        String nextMap = this._player.getScoreKeeper().getMapName();
+        System.out.println(nextMap);
+        MapLoader loader = new MapLoader(_root.getScene());
+        loader.load(nextMap);
+        this._city = loader.getCity();
+    }
+
 
     private void initializeTimer() {
         this._timer = new Timer();

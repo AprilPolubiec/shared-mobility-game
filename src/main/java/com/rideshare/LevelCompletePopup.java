@@ -63,7 +63,7 @@ public class LevelCompletePopup {
         nextLevelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Utils.print("repeat level clicked!");
+                Utils.print("next level clicked!");
                 shouldGoToNextLevel.set(true);
             }
         });
