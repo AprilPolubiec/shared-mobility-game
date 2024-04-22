@@ -2,6 +2,8 @@ package com.rideshare;
 
 import java.util.ArrayList;
 
+import com.rideshare.TileManager.TileManager;
+
 
 /**
  * Description: A city represents a location which can be visualized as a map.
@@ -27,11 +29,19 @@ public class City {
   ArrayList<Route> routes;
   ArrayList<Mailbox> mailboxes;
   int size;
+  TileManager _tileManager;
 
   public City(int size, ArrayList<Route> routes, ArrayList<Mailbox> mailboxes) {
     this.routes = routes;
     this.size = size;
     this.mailboxes = mailboxes;
+  }
+
+  public void setTileManager(TileManager tm) {
+    this._tileManager = tm;
+  }
+  public void clear() {
+    this._tileManager.clear();
   }
 
   public ArrayList<Mailbox> getMailboxes() {

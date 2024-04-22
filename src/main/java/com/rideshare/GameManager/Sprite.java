@@ -100,6 +100,9 @@ public abstract class Sprite {
 
     protected void render(AnchorPane root, GridPanePosition startPosition) {
         // Place on the screen
+        if (imageView != null) {
+            root.getChildren().remove(imageView);
+        }
         imageView = new ImageView(icons.get("down").get(0));
         if (this.spriteSize == null) {
             imageView.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
@@ -112,7 +115,7 @@ public abstract class Sprite {
         yPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.col;
         imageView.setX(xPos);
         imageView.setY(yPos);
-
+        
         root.getChildren().add(imageView);
         spriteLoop().playFromStart();
     }
