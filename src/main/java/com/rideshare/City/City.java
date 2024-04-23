@@ -7,7 +7,6 @@ import com.rideshare.TileManager.TileManager;
 import com.rideshare.TransportationMode.TransportationType;
 import com.rideshare.Trip.TransportationNode;
 
-
 /**
  * Description: A city represents a location which can be visualized as a map.
  * It contains various modes of transportation which can navigate on various
@@ -29,20 +28,36 @@ import com.rideshare.Trip.TransportationNode;
  */
 
 public class City {
-  ArrayList<Route> routes;
-  ArrayList<Mailbox> mailboxes;
-  int size;
-  TileManager _tileManager;
+  private ArrayList<Route> routes;
+  private ArrayList<Mailbox> mailboxes;
+  private int size;
+  private TileManager _tileManager;
 
-  public City(int size, ArrayList<Route> routes, ArrayList<Mailbox> mailboxes) {
-    this.routes = routes;
+  public City(int size) {
     this.size = size;
+  }
+
+  // TODO: do we really need to store size in city?
+  public int getSize() {
+    return this.size;
+  }
+
+  public void setRoutes(ArrayList<Route> routes) {
+    this.routes = routes;
+  }
+
+  public void setMailboxes(ArrayList<Mailbox> mailboxes) {
     this.mailboxes = mailboxes;
   }
 
   public void setTileManager(TileManager tm) {
     this._tileManager = tm;
   }
+
+  public ArrayList<Route> getRoutes() {
+    return routes;
+  }
+
   public void clear() {
     this._tileManager.clear();
   }
@@ -98,10 +113,6 @@ public class City {
       }
       mailbox.show();
     }
-  }
-
-  public ArrayList<Route> getRoutes() {
-    return routes;
   }
 
   /**

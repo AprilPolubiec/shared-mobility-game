@@ -2,7 +2,9 @@ package com.rideshare.Trip;
 
 import java.util.ArrayList;
 
+import com.rideshare.Utils;
 import com.rideshare.City.City;
+import com.rideshare.City.Route;
 import com.rideshare.City.RouteNodeMatrix;
 import com.rideshare.City.Mailbox;
 import com.rideshare.TileManager.GridPanePosition;
@@ -31,8 +33,8 @@ public class TripCalculator {
 
     public TripCalculator(City city) {
         this.city = city;
-        this.cityHeight = this.city.size;
-        this.cityWidth = this.city.size;
+        this.cityHeight = this.city.getSize();
+        this.cityWidth = this.city.getSize();
     }
 
     public ArrayList<Trip> calculateTrips(int startRow, int startCol, int endRow, int endCol) {
@@ -147,7 +149,7 @@ public class TripCalculator {
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 // Check all of the surrounding route options!
-                for (Route route : this.city.routes) {
+                for (Route route : this.city.getRoutes()) {
                     openNode(route.getRouteNodeMatrix().getNode(row - 1, col), currentNode);
                 }
             }
@@ -158,7 +160,7 @@ public class TripCalculator {
             openNode(this.currentRouteMatrix.getNode(row, col - 1), currentNode);
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
-                for (Route route : this.city.routes) {
+                for (Route route : this.city.getRoutes()) {
                     openNode(route.getRouteNodeMatrix().getNode(row, col - 1), currentNode);
                 }
             }
@@ -169,7 +171,7 @@ public class TripCalculator {
             openNode(this.currentRouteMatrix.getNode(row + 1, col), currentNode);
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
-                for (Route route : this.city.routes) {
+                for (Route route : this.city.getRoutes()) {
                     openNode(route.getRouteNodeMatrix().getNode(row + 1, col), currentNode);
                 }
             }
@@ -180,7 +182,7 @@ public class TripCalculator {
             openNode(this.currentRouteMatrix.getNode(row, col + 1), currentNode);
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
-                for (Route route : this.city.routes) {
+                for (Route route : this.city.getRoutes()) {
                     openNode(route.getRouteNodeMatrix().getNode(row, col + 1), currentNode);
                 }
             }
@@ -193,7 +195,7 @@ public class TripCalculator {
         node.setAsChecked();
         checkedList.add(node);
         openList.remove(node);
-        for (Route route : this.city.routes) {
+        for (Route route : this.city.getRoutes()) {
             TransportationNode n = route.getRouteNodeMatrix().getNode(row, col);
             n.setAsChecked();
             checkedList.add(n);
@@ -212,7 +214,7 @@ public class TripCalculator {
             String routeName) {
         ArrayList<RouteNodeMatrix> transitMatrices = new ArrayList<RouteNodeMatrix>();
         // First - find the closest train to our starting nodes and ending nodes
-        for (Route route : city.routes) {
+        for (Route route : city.getRoutes()) {
             if (route.getTransportationType() == transportationType && (routeName == null || route.name.equals(routeName))) {
                 transitMatrices.add(route.getRouteNodeMatrix());
             }
@@ -286,7 +288,7 @@ public class TripCalculator {
 
     // Given a transit node, closes all nodes that are not on the same line
     private void closeNodesNotOnTransitRoute(TransportationNode startNode) {
-        for (Route route : this.city.routes) {
+        for (Route route : this.city.getRoutes()) {
             TransportationNode[][] nodeMatrix = route.getRouteNodeMatrix().get();
 
             for (int i = 0; i < nodeMatrix.length; i++) {

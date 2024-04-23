@@ -52,6 +52,8 @@ public class MapLoader {
     }
 
     public static City createCityFromMapData(MapJson map) throws Exception {
+        City city = new City(map.height);
+    
         ArrayList<Route> routes = new ArrayList<Route>();
         ArrayList<Route> walkingRoute = getRoutes(map, "Walking", TransportationType.WALKING);
         ArrayList<Route> drivingRoute = getRoutes(map, "Roads", TransportationType.CAR);
@@ -63,7 +65,8 @@ public class MapLoader {
         routes.addAll(trainRoute);
 
         ArrayList<Mailbox> mailboxes = getMailboxes(map);
-        City city = new City(map.height, routes, mailboxes);
+        city.setMailboxes(mailboxes);
+        city.setRoutes(routes);
         return city;
     }
 
