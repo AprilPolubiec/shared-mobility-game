@@ -6,7 +6,12 @@ import java.util.Set;
 
 import com.rideshare.App;
 
+import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
+import javafx.scene.Node;
+import javafx.event.EventHandler;
+
+import javafx.scene.input.MouseEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -37,6 +42,21 @@ public class UIComponentUtils {
         }
         String panelUrl = App.class.getResource(String.format("/images/ui/%s_panel.png", color)).toString();
         return new ImageView(panelUrl);
+    }
+
+    static public void addHoverCursor(Node node) {
+        node.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+               node.setCursor(Cursor.HAND);
+            }
+         });
+         node.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+               node.setCursor(Cursor.DEFAULT);
+            }
+         });
     }
 
     static public ImageCursor getCursor() {

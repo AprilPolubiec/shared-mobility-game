@@ -1,5 +1,9 @@
 package com.rideshare.City;
 
+// TODO: it would be nice to set this as "default"
+// however we currently need it for when we create
+// mailbox status listeners (addStatusListener) -
+// could think of a way to encapsulate this further.
 public enum MailboxStatus {
     // Mailbox object has been constructed
     UNINITIALIZED,

@@ -6,7 +6,12 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class AudioManager {
-    MediaPlayer mainMediaPlayer;
+    // Media players are static so we can initialize as many AudioManagers as we
+    // want and only ever load in the media once
+    private static MediaPlayer mainMediaPlayer;
+    private static MediaPlayer mailboxWaitingAudio;
+    private static MediaPlayer mailboxCompleteAudio;
+
     private boolean muted = false;
 
     public AudioManager() {
@@ -15,7 +20,7 @@ public class AudioManager {
     public void playBackgroundMusic(String mediaName) {
         if (mainMediaPlayer == null) {
             Media media = new Media(App.class.getResource(String.format("/images/audio/%s.mp3",
-            mediaName)).toString());
+                    mediaName)).toString());
             mainMediaPlayer = new MediaPlayer(media);
             mainMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
@@ -42,6 +47,32 @@ public class AudioManager {
         mainMediaPlayer.setMute(shouldMute);
     }
 
+    public void playMailboxWaitingAudio() {
+        try {
+            if (mailboxWaitingAudio == null) {
+                Media waitingMedia = new Media(App.class.getResource("/images/audio/question_003.mp3").toString());
+                mailboxWaitingAudio = new MediaPlayer(waitingMedia);
+            }
+            mailboxWaitingAudio.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void playMailboxCompletedAudio() {
+        try {
+            if (mailboxCompleteAudio == null) {
+                Media completedMedia = new Media(
+                        App.class.getResource("/images/audio/confirmation_001.mp3").toString());
+                mailboxCompleteAudio = new MediaPlayer(completedMedia);
+            }
+            mailboxCompleteAudio.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public boolean isMuted() {
         return muted;
@@ -53,6 +84,5 @@ public class AudioManager {
             mainMediaPlayer.setMute(muted);
         }
     }
-
 
 }
