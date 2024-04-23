@@ -4,6 +4,7 @@ import com.rideshare.App;
 import com.rideshare.City.City;
 import com.rideshare.City.Route;
 import com.rideshare.City.Mailbox;
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
@@ -83,7 +84,7 @@ public class MapLoader {
                 int colIdx = j;
                 int value = mailboxMatrix[rowIdx][colIdx];
                 if (Arrays.asList(TileUtils.HOUSE_TILE_IDS).contains(value)) {
-                    Mailbox mailbox = new Mailbox(rowIdx, colIdx, value, _tileManager);
+                    Mailbox mailbox = new Mailbox(new GridPanePosition(rowIdx, colIdx), value, _tileManager);
                     // mailbox.setDuration(5); // TODO!
                     mailboxes.add(mailbox);
                 }

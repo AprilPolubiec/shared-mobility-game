@@ -1,6 +1,5 @@
 package com.rideshare.City;
 
-import com.rideshare.App;
 import com.rideshare.Utils;
 import com.rideshare.AudioManager.AudioManager;
 import com.rideshare.TileManager.GridPanePosition;
@@ -13,17 +12,11 @@ import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 public class Mailbox {
-   private int _row;
-   private int _col;
+   private GridPanePosition position;
    private ObjectProperty<MailboxStatus> status = new SimpleObjectProperty<>();
    private TileManager _tileManager;
    private ImageView _mailboxTile;
@@ -34,16 +27,15 @@ public class Mailbox {
    private Timeline _timeline;
    private AudioManager audio = new AudioManager();
 
-   // TODO: remove housetileid maybe?
-   public Mailbox(int row, int col, int houseTileId, TileManager tileManager) {
-      _row = row;
-      _col = col + 1; // Render a mailbox to the right of the house
+   public Mailbox(GridPanePosition position, int houseTileId, TileManager tileManager) {
+      position = new GridPanePosition(position.row, position.col + 1);
       _tileManager = tileManager;
       _houseTileId = houseTileId;
       status.set(MailboxStatus.UNINITIALIZED);
    }
 
    // #region STATIC FUNCTIONS
+
    /**
     * Given the row and column of a mailbox, returns the position of the related
     * house (it is always the tile to the left)
@@ -59,7 +51,7 @@ public class Mailbox {
    // #endregion
 
    public void render() {
-      this._mailboxTile = _tileManager.drawMailbox(_houseTileId, new GridPanePosition(_row, _col));
+      this._mailboxTile = _tileManager.drawMailbox(_houseTileId, position);
       _mailboxTile.setOnMouseClicked(event -> {
          if (status.get() == MailboxStatus.WAITING) {
             markSelected();
@@ -131,7 +123,7 @@ public class Mailbox {
    }
 
    public void markComplete() {
-      _tileManager.drawTile(202, _row - 1, _col);
+      _tileManager.drawTile(202, new GridPanePosition(position.row - 1, position.col));
       _tileManager.replaceTileImage(_mailboxTile, TileUtils.COMPLETED_FLAG_IDS[0]);
       this.status.set(MailboxStatus.COMPLETED);
       audio.playMailboxCompletedAudio();
@@ -146,7 +138,7 @@ public class Mailbox {
    }
 
    public void markFailed() {
-      _tileManager.drawTile(201, _row - 1, _col);
+      _tileManager.drawTile(201, new GridPanePosition(position.row - 1, position.col));
       this.status.set(MailboxStatus.FAILED);
    }
 
@@ -155,7 +147,7 @@ public class Mailbox {
    }
 
    public GridPanePosition getGridPanePosition() {
-      return new GridPanePosition(_row, _col);
+      return position;
    }
    // #endregion
 
