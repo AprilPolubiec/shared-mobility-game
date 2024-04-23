@@ -1,7 +1,7 @@
 package com.rideshare.GameManager;
 
 import com.rideshare.Utils;
-import com.rideshare.City.City.Mailbox;
+import com.rideshare.City.Mailbox;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.Trip.Trip;
 import com.rideshare.UI.UIComponentUtils;

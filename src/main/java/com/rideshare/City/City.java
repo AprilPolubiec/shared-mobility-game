@@ -2,8 +2,7 @@ package com.rideshare.City;
 
 import java.util.ArrayList;
 
-import com.rideshare.City.City.Mailbox;
-import com.rideshare.City.City.MailboxStatus;
+import com.rideshare.City.City;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TransportationMode.TransportationType;
 import com.rideshare.Trip.TransportationNode;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.rideshare.City.City;
 import com.rideshare.City.RouteNodeMatrix;
-import com.rideshare.City.City.Mailbox;
+import com.rideshare.City.Mailbox;
 import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TransportationMode.TransportationType;
 

@@ -7,6 +7,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.KeyFrame;
