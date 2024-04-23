@@ -3,6 +3,7 @@ package com.rideshare;
 import java.util.ArrayList;
 
 import com.rideshare.TileManager.TileUtils;
+import com.rideshare.Trip.Trip;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

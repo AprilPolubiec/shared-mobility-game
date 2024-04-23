@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.Trip;
 
 import java.util.ArrayList;
 import java.util.Collections;

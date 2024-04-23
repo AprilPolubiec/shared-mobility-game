@@ -3,6 +3,7 @@ package com.rideshare;
 import java.util.ArrayList;
 
 import com.rideshare.GameManager.Sprite;
+import com.rideshare.Trip.TransportationNode;
 
 import javafx.animation.SequentialTransition;
 import javafx.beans.property.ObjectProperty;

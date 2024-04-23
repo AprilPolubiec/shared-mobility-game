@@ -1,6 +1,7 @@
 package com.rideshare;
 
 import com.rideshare.TileManager.TileUtils;
+import com.rideshare.Trip.Trip;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;

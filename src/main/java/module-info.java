@@ -12,4 +12,5 @@ module com.rideshare {
     exports com.rideshare.TileManager;
     exports com.rideshare.Controllers;
     exports com.rideshare.TransportationMode;
+    exports com.rideshare.Trip;
 }

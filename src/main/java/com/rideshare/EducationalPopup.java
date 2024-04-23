@@ -1,6 +1,7 @@
 package com.rideshare;
 
 import com.rideshare.TileManager.TileUtils;
+import com.rideshare.Trip.TripType;
 
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;

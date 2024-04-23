@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.Trip;
 
 public enum TripStatus {
     READY,

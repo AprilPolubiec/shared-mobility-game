@@ -16,10 +16,10 @@ import com.rideshare.PlayerStatus;
 import com.rideshare.ScoreKeeper;
 import com.rideshare.Timer;
 import com.rideshare.TimerState;
-import com.rideshare.Trip;
-import com.rideshare.TripCalculator;
 import com.rideshare.Utils;
 import com.rideshare.SaveManager.SaveLoad;
+import com.rideshare.Trip.Trip;
+import com.rideshare.Trip.TripCalculator;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;

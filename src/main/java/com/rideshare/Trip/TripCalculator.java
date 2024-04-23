@@ -1,7 +1,11 @@
-package com.rideshare;
+package com.rideshare.Trip;
 
 import java.util.ArrayList;
 
+import com.rideshare.City;
+import com.rideshare.GridPanePosition;
+import com.rideshare.Mailbox;
+import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationMode.TransportationType;
 
 import javafx.scene.Scene;

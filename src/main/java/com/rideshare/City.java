@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TransportationMode.TransportationType;
+import com.rideshare.Trip.TransportationNode;
 
 
 /**

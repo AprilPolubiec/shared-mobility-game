@@ -7,10 +7,10 @@ import java.util.List;
 import com.rideshare.App;
 import com.rideshare.GridPanePosition;
 import com.rideshare.Timer;
-import com.rideshare.TransportationNode;
 import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.TransportationMode.*;
+import com.rideshare.Trip.TransportationNode;
 
 import javafx.animation.Animation;
 import javafx.animation.SequentialTransition;

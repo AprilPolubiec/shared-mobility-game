@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.rideshare.TransportationMode.TransportationType;
+import com.rideshare.Trip.TransportationNode;
+import com.rideshare.Trip.Trip;
+import com.rideshare.Trip.TripType;
 
 public class TripTest {
     @Test

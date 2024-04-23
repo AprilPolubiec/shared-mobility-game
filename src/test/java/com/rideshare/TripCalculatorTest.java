@@ -10,6 +10,10 @@ import com.rideshare.GameManager.MapLoader;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TiledMapLayer;
 import com.rideshare.TransportationMode.TransportationType;
+import com.rideshare.Trip.TransportationNode;
+import com.rideshare.Trip.Trip;
+import com.rideshare.Trip.TripCalculator;
+import com.rideshare.Trip.TripType;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
