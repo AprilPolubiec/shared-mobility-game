@@ -1,5 +1,7 @@
 package com.rideshare;
 
+import com.rideshare.TransportationMode.TransportationType;
+
 /**
  * Description: A route is a way to get from point A to point B via a mode of transportation within a city. A route contains stops where a player can get on and off (eg: a bus stop). 
  * The route contains a data structure representing its path throughout the city.

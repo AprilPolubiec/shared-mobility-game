@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 import com.rideshare.Route;
 import com.rideshare.RouteNodeMatrix;
 import com.rideshare.TransportationNode;
-import com.rideshare.TransportationType;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileUtils;
+import com.rideshare.TransportationMode.TransportationType;
 
 public class MapLoaderTest {
     @Test

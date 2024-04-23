@@ -4,11 +4,11 @@ import com.rideshare.App;
 import com.rideshare.City;
 import com.rideshare.Mailbox;
 import com.rideshare.Route;
-import com.rideshare.TransportationType;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.TileManager.TiledMapLayer;
+import com.rideshare.TransportationMode.TransportationType;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;

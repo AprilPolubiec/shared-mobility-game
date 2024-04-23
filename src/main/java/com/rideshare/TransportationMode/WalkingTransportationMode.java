@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.TransportationMode;
 
 /*Source for CO2e/km estimate: https://www.nature.com/articles/s41598-020-66170-y
  * This source states that walking as a mode of transport has an average CO2 emissions (equivalent per km) rate of

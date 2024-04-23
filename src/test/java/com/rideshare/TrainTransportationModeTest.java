@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.TransportationMode.TrainTransportationMode;
+import com.rideshare.TransportationMode.TransportationMode;
+
 public class TrainTransportationModeTest {
     @Test 
     public void Test_CanCreateTrainTransportationMode(){;

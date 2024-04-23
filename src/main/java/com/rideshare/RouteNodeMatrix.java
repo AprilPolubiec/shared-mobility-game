@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.rideshare.TileManager.TileUtils;
+import com.rideshare.TransportationMode.TransportationType;
 
 // RouteNodeMatrix is a matrix of Transportation nodes for a given route
 public class RouteNodeMatrix {

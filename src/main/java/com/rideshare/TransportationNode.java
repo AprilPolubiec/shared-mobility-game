@@ -1,4 +1,5 @@
 package com.rideshare;
+import com.rideshare.TransportationMode.*;
 
 public class TransportationNode {
     TransportationNode parent;

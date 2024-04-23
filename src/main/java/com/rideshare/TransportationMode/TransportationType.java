@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.TransportationMode;
 
 public enum TransportationType {
     WALKING,

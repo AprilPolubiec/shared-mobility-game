@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.TransportationMode;
 
 /**
  * Description: A mode of transportation is a medium used to get around a city 
@@ -14,12 +14,12 @@ public class TransportationMode {
     protected final int co2EmissionRate;
     protected final int speed;
     protected final boolean hasStops;
+    
     public TransportationMode(String name, int co2eEmissionRate, int speed, boolean hasStops) {
         this.name = name;
         this.co2EmissionRate = co2eEmissionRate;
         this.speed = speed;
         this.hasStops = hasStops;
-
     }
     
     /** 

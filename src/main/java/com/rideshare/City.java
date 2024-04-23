@@ -3,6 +3,7 @@ package com.rideshare;
 import java.util.ArrayList;
 
 import com.rideshare.TileManager.TileManager;
+import com.rideshare.TransportationMode.TransportationType;
 
 
 /**

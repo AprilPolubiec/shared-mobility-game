@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.TransportationMode.TransportationMode;
+import com.rideshare.TransportationMode.TransportationMode.WalkingTransportationMode;
+
 public class RouteTest {
     @Test
     void Test_CanCreateRoute() {

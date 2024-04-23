@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.TransportationMode;
 
 /*Source for CO2e/km estimate: https://ourworldindata.org/travel-carbon-footprint
  * This source states that a train (national rail) as a mode of transport has an average CO2 emissions (equivalent per km) rate of

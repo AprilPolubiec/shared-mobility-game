@@ -1,6 +1,9 @@
 package com.rideshare;
 
 import java.util.ArrayList;
+
+import com.rideshare.TransportationMode.TransportationType;
+
 import javafx.scene.Scene;
 
 // https://www.youtube.com/watch?v=2JNEme00ZFA&list=RDCMUCS94AD0gxLakurK-6jnqV1w&index=6

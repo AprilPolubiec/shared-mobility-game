@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.TransportationMode.TransportationMode;
+import com.rideshare.TransportationMode.TransportationMode.WalkingTransportationMode;
+
 public class WalkingTransportationModeTest {
     @Test 
     public void Test_CanCreateWalkingTransportationMode(){;
