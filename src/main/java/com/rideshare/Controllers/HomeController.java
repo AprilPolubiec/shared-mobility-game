@@ -13,6 +13,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import com.rideshare.ScoreKeeper;
 import com.rideshare.SaveManager.SaveLoad;
+import com.rideshare.AudioManager.AudioManager;
+
 
 public class HomeController {
 
@@ -25,8 +27,12 @@ public class HomeController {
     @FXML
     public javafx.scene.control.Button instructionsButton;
 
+    @FXML
+    public javafx.scene.control.Button muteButton;
+
     private AnchorPane _root;
     private Stage _stage;
+    private AudioManager audioManager = new AudioManager();
 
     private void setScene(boolean isFullScreen) throws IOException {
         Scene scene = new Scene(_root);
@@ -34,7 +40,8 @@ public class HomeController {
         _stage.setFullScreen(isFullScreen);
     }
 
-    public void load(Stage stage, AnchorPane root) {
+
+    public void load(Stage stage, AnchorPane root, AudioManager audioManager) {
         try {
             _root = root;
             _stage = stage;
@@ -43,6 +50,7 @@ public class HomeController {
             _stage.centerOnScreen();
             setScene(false);
             _stage.show();
+            this.audioManager = audioManager;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,4 +96,9 @@ public class HomeController {
         // this.loadInstructionsScreen();
     }
 
+    public void handleMuteButtonPressed() {
+        boolean isMuted = audioManager.isMuted();
+        audioManager.toggleMute(!isMuted); // Toggle the mute state
+    }
+    
 }
