@@ -4,19 +4,21 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.TransportationMode.TransportationType;
 import com.rideshare.Trip.TransportationNode;
 
 // RouteNodeMatrix is a matrix of Transportation nodes for a given route
 public class RouteNodeMatrix {
-  private int[][] originalMatrix;
   private TransportationNode[][] matrix;
   private TransportationType transportationType;
   private String name;
 
-  // The value for stops
+  // For each transportation type, contains all tile ids where it is valid to
+  // enter/exit
   private static final Map<TransportationType, Integer[]> stopCodes = new HashMap<>();
+  // For each transportation type, contains all tile ids where it is valid to move
   private static final Map<TransportationType, Integer[]> openCodes = new HashMap<>();
 
   static {
@@ -35,8 +37,7 @@ public class RouteNodeMatrix {
 
   public RouteNodeMatrix(int[][] mapDataMatrix, TransportationType transportationType, String name) {
     this.name = name;
-    originalMatrix = mapDataMatrix.clone();
-    matrix = new TransportationNode[mapDataMatrix.length][mapDataMatrix[0].length];
+    this.matrix = new TransportationNode[mapDataMatrix.length][mapDataMatrix[0].length];
     this.transportationType = transportationType;
     for (int i = 0; i < mapDataMatrix.length; i++) {
       int rowIdx = i;
@@ -48,7 +49,8 @@ public class RouteNodeMatrix {
         if (isStopCode) {
           node.setAsValidStop();
         }
-        boolean isOpenCode = Arrays.asList(openCodes.get(transportationType)).contains(mapDataMatrix[rowIdx][colIdx]) || isStopCode;
+        boolean isOpenCode = Arrays.asList(openCodes.get(transportationType)).contains(mapDataMatrix[rowIdx][colIdx])
+            || isStopCode;
         if (!isOpenCode) {
           node.setAsSolid();
         }
@@ -61,11 +63,18 @@ public class RouteNodeMatrix {
     return this.name;
   }
 
-  public TransportationNode getNode(int rowIdx, int colIdx) {
-    if (rowIdx >= matrix.length || rowIdx < 0 || colIdx >= matrix[0].length || colIdx < 0) {
+  /**
+   * For a given row/col on the map, return the TransportationNode at that
+   * position
+   * 
+   * @param position
+   * @return TransportationNode
+   */
+  public TransportationNode getNode(GridPanePosition position) {
+    if (position.row >= matrix.length || position.row < 0 || position.col >= matrix[0].length || position.col < 0) {
       return null;
     }
-    return matrix[rowIdx][colIdx];
+    return matrix[position.row][position.col];
   }
 
   public TransportationNode[][] get() {
@@ -74,9 +83,5 @@ public class RouteNodeMatrix {
 
   public TransportationType getTransportationType() {
     return this.transportationType;
-  }
-
-  public int[][] getOriginalMatrix() {
-    return originalMatrix;
   }
 }

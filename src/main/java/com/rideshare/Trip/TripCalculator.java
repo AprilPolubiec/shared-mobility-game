@@ -10,26 +10,18 @@ import com.rideshare.City.Mailbox;
 import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TransportationMode.TransportationType;
 
-import javafx.scene.Scene;
-
 // https://www.youtube.com/watch?v=2JNEme00ZFA&list=RDCMUCS94AD0gxLakurK-6jnqV1w&index=6
 public class TripCalculator {
-    int startRow;
-    int startCol;
-    int endRow;
-    int endCol;
+    private int cityHeight;
+    private int cityWidth;
 
-    int cityHeight;
-    int cityWidth;
+    private boolean goalReached = false;
+    private City city;
 
-    boolean goalReached = false;
-    Scene scene;
-    City city;
-
-    TransportationNode _startNode, _goalNode, _currentNode;
-    RouteNodeMatrix currentRouteMatrix;
-    ArrayList<TransportationNode> openList = new ArrayList<>();
-    ArrayList<TransportationNode> checkedList = new ArrayList<>();
+    private TransportationNode _startNode, _goalNode, _currentNode;
+    private RouteNodeMatrix currentRouteMatrix;
+    private ArrayList<TransportationNode> openList = new ArrayList<>();
+    private ArrayList<TransportationNode> checkedList = new ArrayList<>();
 
     public TripCalculator(City city) {
         this.city = city;
@@ -37,21 +29,18 @@ public class TripCalculator {
         this.cityWidth = this.city.getSize();
     }
 
-    public ArrayList<Trip> calculateTrips(int startRow, int startCol, int endRow, int endCol) {
+    public ArrayList<Trip> calculateTrips(GridPanePosition startPosition, GridPanePosition endPosition) {
         ArrayList<Trip> trips = new ArrayList<Trip>();
-        this.startRow = startRow;
-        this.startCol = startCol;
-        this.endRow = endRow;
-        this.endCol = endCol;
 
-        this._startNode = getStartNode(startRow, startCol);
+        this._startNode = getStartNode(startPosition);
         this._currentNode = _startNode;
         this.currentRouteMatrix = this._currentNode.routeMatrix;
 
-        print(String.format("Mailbox at [%s, %s]", endRow, endCol));
-        GridPanePosition housePosition = Mailbox.getHousePosition(endRow, endCol);
-        this._goalNode = getGoalNode(housePosition.row, housePosition.col); // Col - 1 b/c that is where the house is
-        print(String.format("Starting search from [%s, %s] to [%s, %s]", startRow, startCol, _goalNode.row,
+        print(String.format("Mailbox at [%s, %s]", endPosition.row, endPosition.col));
+        GridPanePosition housePosition = Mailbox.getHousePosition(endPosition.row, endPosition.col);
+        this._goalNode = getGoalNode(housePosition);
+        print(String.format("Starting search from [%s, %s] to [%s, %s]", startPosition.row, startPosition.col,
+                _goalNode.row,
                 _goalNode.col));
 
         // Option 1: Bus
@@ -60,7 +49,7 @@ public class TripCalculator {
             trips.add(busTrip);
             busTrip.print();
         }
-    
+
         // Option 2: Train
         Trip trainTrip = runTransitPathFinding(this._startNode, this._goalNode, TransportationType.TRAIN);
         if (trainTrip != null) {
@@ -82,10 +71,10 @@ public class TripCalculator {
         return trips;
     }
 
-    public TransportationNode getStartNode(int startRow, int startCol) {
+    public TransportationNode getStartNode(GridPanePosition position) {
         // Start at the node with the lowest CO2 emissions
         TransportationNode startNode = null;
-        ArrayList<TransportationNode> startNodeOptions = city.getRouteNodes(startRow, startCol);
+        ArrayList<TransportationNode> startNodeOptions = city.getRouteNodes(position);
         int minEmissions = Integer.MAX_VALUE;
         for (TransportationNode transportationNode : startNodeOptions) {
             if (transportationNode.co2EmissionRate < minEmissions) {
@@ -96,12 +85,12 @@ public class TripCalculator {
         return startNode;
     }
 
-    public TransportationNode getGoalNode(int row, int col) {
+    public TransportationNode getGoalNode(GridPanePosition housePosition) {
         // The goal node is the walking path which is either in front, to the left or to
         // the
         // right
-        if (row + 1 < cityHeight) { // Prefer just below the house
-            ArrayList<TransportationNode> nodesBelow = city.getRouteNodes(row + 1, col);
+        if (housePosition.below().row < cityHeight) { // Prefer just below the house
+            ArrayList<TransportationNode> nodesBelow = city.getRouteNodes(housePosition.below());
             for (TransportationNode node : nodesBelow) {
                 if (node.transportationType == TransportationType.WALKING && !node.solid) {
                     return node;
@@ -109,8 +98,8 @@ public class TripCalculator {
             }
         }
 
-        if (col - 1 >= 0) {
-            ArrayList<TransportationNode> leftNodes = city.getRouteNodes(row, col - 1);
+        if (housePosition.toTheLeft().col >= 0) {
+            ArrayList<TransportationNode> leftNodes = city.getRouteNodes(housePosition.toTheLeft());
             for (TransportationNode node : leftNodes) {
                 if (node.transportationType == TransportationType.WALKING && !node.solid) {
                     return node;
@@ -118,8 +107,8 @@ public class TripCalculator {
             }
         }
 
-        if (col + 1 < cityWidth) {
-            ArrayList<TransportationNode> rightNodes = city.getRouteNodes(row, col + 1);
+        if (housePosition.toTheRight().col < cityWidth) {
+            ArrayList<TransportationNode> rightNodes = city.getRouteNodes(housePosition.toTheRight());
             for (TransportationNode node : rightNodes) {
                 if (node.transportationType == TransportationType.WALKING && !node.solid) {
                     return node;
@@ -127,8 +116,8 @@ public class TripCalculator {
             }
         }
 
-        if (row - 1 >= 0) {
-            ArrayList<TransportationNode> aboveNodes = city.getRouteNodes(row - 1, col);
+        if (housePosition.above().row >= 0) {
+            ArrayList<TransportationNode> aboveNodes = city.getRouteNodes(housePosition.above());
             for (TransportationNode node : aboveNodes) {
                 if (node.transportationType == TransportationType.WALKING && !node.solid) {
                     return node;
@@ -137,66 +126,67 @@ public class TripCalculator {
         }
 
         throw new IllegalArgumentException(
-                String.format("There are no walking nodes available around [%s, %s]", row, col)); // Not good
+                String.format("There are no walking nodes available around [%s, %s]", housePosition.row,
+                        housePosition.col)); // Not good
     }
 
-    private void openNeighbors(int row, int col, TransportationNode currentNode) {
+    private void openNeighbors(GridPanePosition position, TransportationNode currentNode) {
         // print(String.format("Opening all neighbors to [%s, %s]", row, col));
         // OPEN NODES
-        if (row - 1 >= 0) { // Node above
+        if (position.above().row >= 0) { // Node above
             // print(String.format("Opening nodes at [%s, %s]", row - 1, col));
-            openNode(this.currentRouteMatrix.getNode(row - 1, col), currentNode);
+            openNode(this.currentRouteMatrix.getNode(position.above()), currentNode);
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 // Check all of the surrounding route options!
                 for (Route route : this.city.getRoutes()) {
-                    openNode(route.getRouteNodeMatrix().getNode(row - 1, col), currentNode);
+                    openNode(route.getRouteNodeMatrix().getNode(position.above()), currentNode);
                 }
             }
         }
 
-        if (col - 1 >= 0) { // Node to the left
+        if (position.toTheLeft().col >= 0) { // Node to the left
             // print(String.format("Opening nodes at [%s, %s]", row, col - 1));
-            openNode(this.currentRouteMatrix.getNode(row, col - 1), currentNode);
+            openNode(this.currentRouteMatrix.getNode(position.toTheLeft()), currentNode);
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.getRoutes()) {
-                    openNode(route.getRouteNodeMatrix().getNode(row, col - 1), currentNode);
+                    openNode(route.getRouteNodeMatrix().getNode(position.toTheLeft()), currentNode);
                 }
             }
         }
 
-        if (row + 1 < this.cityHeight) { // Node below
-            // print(String.format("Opening nodes at [%s, %s]", row + 1, col));
-            openNode(this.currentRouteMatrix.getNode(row + 1, col), currentNode);
+        if (position.below().row < this.cityHeight) { // Node below
+            // print(String.format("Opening nodes at [%s, %s]", position.below(), col));
+            openNode(this.currentRouteMatrix.getNode(position.below()), currentNode);
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.getRoutes()) {
-                    openNode(route.getRouteNodeMatrix().getNode(row + 1, col), currentNode);
+                    openNode(route.getRouteNodeMatrix().getNode(position.below()), currentNode);
                 }
             }
         }
 
-        if (col + 1 < this.cityWidth) { // Node to the right
+        if (position.toTheRight().col < this.cityWidth) { // Node to the right
             // print(String.format("Opening nodes at [%s, %s]", row, col + 1));
-            openNode(this.currentRouteMatrix.getNode(row, col + 1), currentNode);
+            openNode(this.currentRouteMatrix.getNode(position.toTheRight()), currentNode);
             if (currentNode.canStop) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.getRoutes()) {
-                    openNode(route.getRouteNodeMatrix().getNode(row, col + 1), currentNode);
+                    openNode(route.getRouteNodeMatrix().getNode(position.toTheRight()), currentNode);
                 }
             }
         }
     }
 
     // Sets all transportation nodes to closed at row/col
-    private void closeAllNodes(int row, int col, TransportationNode node) {
+    private void closeAllNodes(GridPanePosition position, TransportationNode node) {
         // print(String.format("Closing all nodes at [%s, %s]", row, col));
         node.setAsChecked();
         checkedList.add(node);
         openList.remove(node);
         for (Route route : this.city.getRoutes()) {
-            TransportationNode n = route.getRouteNodeMatrix().getNode(row, col);
+            TransportationNode n = route.getRouteNodeMatrix().getNode(position);
             n.setAsChecked();
             checkedList.add(n);
             openList.remove(n);
@@ -215,7 +205,8 @@ public class TripCalculator {
         ArrayList<RouteNodeMatrix> transitMatrices = new ArrayList<RouteNodeMatrix>();
         // First - find the closest train to our starting nodes and ending nodes
         for (Route route : city.getRoutes()) {
-            if (route.getTransportationType() == transportationType && (routeName == null || route.name.equals(routeName))) {
+            if (route.getTransportationType() == transportationType
+                    && (routeName == null || route.name.equals(routeName))) {
                 transitMatrices.add(route.getRouteNodeMatrix());
             }
         }
@@ -266,8 +257,8 @@ public class TripCalculator {
         Trip baseLeg;
 
         TripType tripType = transportationType == TransportationType.TRAIN ? TripType.TRAIN : TripType.BUS;
-        TransportationNode startStationEntryNode = getStartNode(startStation.row, startStation.col);
-        TransportationNode endStationEntryNode = getStartNode(endStation.row, endStation.col);
+        TransportationNode startStationEntryNode = getStartNode(new GridPanePosition(startStation.row, startStation.col));
+        TransportationNode endStationEntryNode = getStartNode(new GridPanePosition(endStation.row, endStation.col));
         Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStationEntryNode);
         Trip middleLeg = runPathFinding(tripType, startStation, startStation, endStation);
         Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStationEntryNode, endStationEntryNode, goalNode);
@@ -313,11 +304,10 @@ public class TripCalculator {
             return null;
         }
         while (goalReached == false) {
-            int col = currentNode.col;
-            int row = currentNode.row;
+            GridPanePosition currentNodePosition = new GridPanePosition(currentNode.row, currentNode.col);
 
-            closeAllNodes(row, col, currentNode);
-            openNeighbors(row, col, currentNode);
+            closeAllNodes(currentNodePosition, currentNode);
+            openNeighbors(currentNodePosition, currentNode);
 
             // FIND BEST NODE
             int bestNodeIdx = 0;

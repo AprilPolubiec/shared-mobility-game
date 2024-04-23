@@ -3,6 +3,7 @@ package com.rideshare.City;
 import java.util.ArrayList;
 
 import com.rideshare.City.City;
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TransportationMode.TransportationType;
 import com.rideshare.Trip.TransportationNode;
@@ -137,11 +138,11 @@ public class City {
    * @return ArrayList<TransportationNode> list of transportation nodes which
    *         exist at these coordinates in the city
    */
-  public ArrayList<TransportationNode> getRouteNodes(int rowIdx, int colIdx) {
+  public ArrayList<TransportationNode> getRouteNodes(GridPanePosition position) {
     ArrayList<TransportationNode> nodes = new ArrayList<TransportationNode>();
     for (Route route : routes) {
       RouteNodeMatrix routeNodeMatrix = route.getRouteNodeMatrix();
-      TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+      TransportationNode node = routeNodeMatrix.getNode(position);
       nodes.add(node);
     }
     return nodes;
@@ -154,14 +155,14 @@ public class City {
    * @return ArrayList<TransportationNode> list of transportation nodes which
    *         exist at these coordinates in the city
    */
-  public TransportationNode getRouteNode(int rowIdx, int colIdx, TransportationType transportationType) {
+  public TransportationNode getRouteNode(GridPanePosition position, TransportationType transportationType) {
     for (Route route : routes) {
       if (route.getTransportationType() != transportationType) {
         continue;
       }
 
       RouteNodeMatrix routeNodeMatrix = route.getRouteNodeMatrix();
-      TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+      TransportationNode node = routeNodeMatrix.getNode(position);
       return node;
     }
     return null;

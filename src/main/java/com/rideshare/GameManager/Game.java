@@ -272,9 +272,8 @@ public class Game {
         // Pause the clock
         pause();
         // Calculate trips from player to mailbox
-        ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition().row,
-                _player.getGridPanePosition().col, mailbox.getGridPanePosition().row,
-                mailbox.getGridPanePosition().col);
+        ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition(),
+                mailbox.getGridPanePosition());
         Utils.print(String.format("Found trips!"));
 
         // Render the trips in the trip chooser
