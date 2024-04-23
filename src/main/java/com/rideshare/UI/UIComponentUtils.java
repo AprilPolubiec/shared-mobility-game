@@ -1,8 +1,10 @@
-package com.rideshare;
+package com.rideshare.UI;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.rideshare.App;
 
 import javafx.scene.ImageCursor;
 import javafx.scene.image.ImageView;

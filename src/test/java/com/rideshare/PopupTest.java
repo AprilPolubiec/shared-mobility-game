@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.UI.Popup;
+
 public class PopupTest {
     @Test
     public void Test_CanCreatePopup() {

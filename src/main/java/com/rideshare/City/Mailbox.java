@@ -1,7 +1,10 @@
-package com.rideshare;
+package com.rideshare.City;
 
 import java.util.TimerTask;
 
+import com.rideshare.App;
+import com.rideshare.Utils;
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 

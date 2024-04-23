@@ -8,6 +8,9 @@ import java.time.LocalTime;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.GameManager.Timer;
+import com.rideshare.GameManager.TimerState;
+
 public class TimerTest {
     // Runs a loop that forces the code to wait x seconds
     private void waitTime(int seconds) {

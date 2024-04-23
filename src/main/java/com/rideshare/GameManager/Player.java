@@ -1,8 +1,8 @@
-package com.rideshare;
+package com.rideshare.GameManager;
 
 import java.util.ArrayList;
 
-import com.rideshare.GameManager.Sprite;
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.Trip.TransportationNode;
 
 import javafx.animation.SequentialTransition;

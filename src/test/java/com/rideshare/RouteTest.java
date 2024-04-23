@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.City.City;
+import com.rideshare.City.Route;
 import com.rideshare.TransportationMode.TransportationMode;
 import com.rideshare.TransportationMode.TransportationMode.WalkingTransportationMode;
 

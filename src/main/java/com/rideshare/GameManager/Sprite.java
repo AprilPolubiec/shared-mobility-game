@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.rideshare.App;
-import com.rideshare.GridPanePosition;
-import com.rideshare.Timer;
 import com.rideshare.Utils;
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.TransportationMode.*;
 import com.rideshare.Trip.TransportationNode;

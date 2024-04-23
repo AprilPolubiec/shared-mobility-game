@@ -13,4 +13,6 @@ module com.rideshare {
     exports com.rideshare.Controllers;
     exports com.rideshare.TransportationMode;
     exports com.rideshare.Trip;
+    exports com.rideshare.City;
+    exports com.rideshare.UI;
 }

@@ -6,6 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.City.City.Mailbox;
+import com.rideshare.City.City.MailboxStatus;
+import com.rideshare.GameManager.TimerState;
+
 public class MailboxTest {
     @Test
     void Test_CanCreateMailbox() {

@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.GameManager;
 
 public enum PlayerStatus {
     IDLE,

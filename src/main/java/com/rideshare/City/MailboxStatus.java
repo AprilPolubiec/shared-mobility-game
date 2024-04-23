@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.City;
 
 public enum MailboxStatus {
     // Mailbox object has been constructed

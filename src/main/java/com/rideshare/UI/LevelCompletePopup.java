@@ -1,5 +1,6 @@
-package com.rideshare;
+package com.rideshare.UI;
 
+import com.rideshare.App;
 import com.rideshare.TileManager.TileUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

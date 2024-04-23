@@ -1,5 +1,5 @@
 package com.rideshare.Trip;
-import com.rideshare.RouteNodeMatrix;
+import com.rideshare.City.RouteNodeMatrix;
 import com.rideshare.TransportationMode.*;
 
 public class TransportationNode {

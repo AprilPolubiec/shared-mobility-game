@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.City.City;
+import com.rideshare.City.Route;
 import com.rideshare.GameManager.MapLoader;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TiledMapLayer;

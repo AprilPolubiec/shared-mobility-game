@@ -1,9 +1,9 @@
 package com.rideshare.GameManager;
 
 import com.rideshare.App;
-import com.rideshare.City;
-import com.rideshare.Mailbox;
-import com.rideshare.Route;
+import com.rideshare.City.City;
+import com.rideshare.City.Route;
+import com.rideshare.City.City.Mailbox;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;

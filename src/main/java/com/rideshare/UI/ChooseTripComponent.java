@@ -1,7 +1,8 @@
-package com.rideshare;
+package com.rideshare.UI;
 
 import java.util.ArrayList;
 
+import com.rideshare.App;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.Trip.Trip;
 

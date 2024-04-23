@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.City;
 
 import java.util.Arrays;
 import java.util.HashMap;

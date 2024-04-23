@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.GameManager.ScoreKeeper;
+
 public class ScoreKeeperTest {
     @Test
     public void Test_CanCreateScoreKeeper() {

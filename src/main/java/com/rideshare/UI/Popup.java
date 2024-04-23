@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.UI;
 public class Popup {
     // Attributes:
     // title

@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.TileManager;
 
 public class GridPanePosition {
     public int row;

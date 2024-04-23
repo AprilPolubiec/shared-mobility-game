@@ -11,9 +11,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import com.rideshare.ScoreKeeper;
+
 import com.rideshare.SaveManager.SaveLoad;
 import com.rideshare.AudioManager.AudioManager;
+import com.rideshare.GameManager.ScoreKeeper;
 
 
 public class HomeController {

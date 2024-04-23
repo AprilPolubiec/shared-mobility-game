@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.UI;
 
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.Trip.TripType;

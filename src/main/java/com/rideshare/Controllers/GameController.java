@@ -1,10 +1,11 @@
 package com.rideshare.Controllers;
 
 import java.io.IOException;
-import com.rideshare.City;
-import com.rideshare.Player;
+
+import com.rideshare.City.City;
 import com.rideshare.GameManager.Game;
 import com.rideshare.GameManager.MapLoader;
+import com.rideshare.GameManager.Player;
 import com.rideshare.TileManager.TileUtils;
 
 import javafx.fxml.FXML;

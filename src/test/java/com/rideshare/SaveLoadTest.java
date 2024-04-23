@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.rideshare.GameManager.Player;
 import com.rideshare.SaveManager.DataStorage;
 import com.rideshare.SaveManager.SaveLoad;
 

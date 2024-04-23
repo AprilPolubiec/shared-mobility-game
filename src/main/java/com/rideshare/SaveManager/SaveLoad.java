@@ -33,10 +33,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
-import com.rideshare.ScoreKeeper;
-import com.rideshare.UIComponentUtils;
-import com.rideshare.Player;
+import com.rideshare.GameManager.Player;
+import com.rideshare.GameManager.ScoreKeeper;
 import com.rideshare.GameManager.Sprite;
+import com.rideshare.UI.UIComponentUtils;
 
 public class SaveLoad {
     private final String GAME_DATA_DIR = "game_data/";
