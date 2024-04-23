@@ -36,16 +36,16 @@ public class Timer {
     }
 
     public void initialize() {
-        currentInGameTime = DAY_START;
-        state = TimerState.INITIALIZED;
+        this.currentInGameTime = DAY_START;
+        this.state = TimerState.INITIALIZED;
     }
 
     private void updateInGameTime() {
-        if (state == TimerState.RUNNING) {
-            currentInGameTime = currentInGameTime.plusMinutes(1);
+        if (this.state == TimerState.RUNNING) {
+            this.currentInGameTime = this.currentInGameTime.plusMinutes(1);
             // Update clock text
-            if (clockText != null) {
-                clockText.setText(currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
+            if (this.clockText != null) {
+                this.clockText.setText(this.currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
             }
             if (isEndOfDay()) {
                 System.out.println("End of day reached.");
@@ -55,40 +55,40 @@ public class Timer {
     }
 
     public void start() {
-        currentInGameTime = DAY_START;
-        state = TimerState.RUNNING;
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1.0 / 6), event -> updateInGameTime()));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        this.currentInGameTime = DAY_START;
+        this.state = TimerState.RUNNING;
+        this.timeline = new Timeline(new KeyFrame(Duration.seconds(1.0 / 6), event -> updateInGameTime()));
+        this.timeline.setCycleCount(Timeline.INDEFINITE);
+        this.timeline.play();
     }
 
     public void pause() {
-        state = TimerState.PAUSED;
-        timeline.pause();
-        isPaused = true;
+        this.state = TimerState.PAUSED;
+        this.timeline.pause();
+        this.isPaused = true;
     }
 
     public void resume() {
-        timeline.play();
-        state = TimerState.RUNNING;
-        isPaused = false;
+        this.timeline.play();
+        this.state = TimerState.RUNNING;
+        this.isPaused = false;
     }
 
     private boolean isEndOfDay() {
-        return currentInGameTime.equals(DAY_END);
+        return this.currentInGameTime.equals(DAY_END);
     }
 
     public void resetTimer() {
-        currentInGameTime = DAY_START;
-        isPaused = false;
-        timeline.stop();
+        this.currentInGameTime = DAY_START;
+        this.isPaused = false;
+        this.timeline.stop();
         System.out.println("Timer reset.");
     }
 
     public void stop() {
-        state = TimerState.STOPPED;
-        isPaused = false;
-        timeline.stop();
+        this.state = TimerState.STOPPED;
+        this.isPaused = false;
+        this.timeline.stop();
         System.out.println("Timer has been stopped.");
     }
 
@@ -120,10 +120,10 @@ public class Timer {
         panelImageView.setFitHeight(150);
         panelImageView.setFitWidth(300);
 
-        clockText = new Text("00:00AM");
-        clockText.setFont(font);
-        clockText.setFill(javafx.scene.paint.Color.BLACK);
-        timeModalRoot.getChildren().add(clockText);
+        this.clockText = new Text("00:00AM");
+        this.clockText.setFont(this.font);
+        this.clockText.setFill(javafx.scene.paint.Color.BLACK);
+        timeModalRoot.getChildren().add(this.clockText);
 
         root.getChildren().add(timeModalRoot);
     }

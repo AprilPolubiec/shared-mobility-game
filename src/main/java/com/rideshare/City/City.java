@@ -31,8 +31,8 @@ import com.rideshare.Trip.TransportationNode;
 public class City {
   private ArrayList<Route> routes;
   private ArrayList<Mailbox> mailboxes;
-  private int size;
-  private TileManager _tileManager;
+  private final int size;
+  private TileManager tileManager;
 
   public City(int size) {
     this.size = size;
@@ -52,7 +52,7 @@ public class City {
   }
 
   public void setTileManager(TileManager tm) {
-    this._tileManager = tm;
+    this.tileManager = tm;
   }
 
   public ArrayList<Route> getRoutes() {
@@ -63,7 +63,7 @@ public class City {
    * Clears the city from the UI
    */
   public void clear() {
-    this._tileManager.clear();
+    this.tileManager.clear();
   }
 
   /**
@@ -162,8 +162,7 @@ public class City {
       }
 
       RouteNodeMatrix routeNodeMatrix = route.getRouteNodeMatrix();
-      TransportationNode node = routeNodeMatrix.getNode(position);
-      return node;
+        return routeNodeMatrix.getNode(position);
     }
     return null;
   }
