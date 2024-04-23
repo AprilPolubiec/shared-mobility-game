@@ -58,14 +58,27 @@ public class City {
     return routes;
   }
 
+  /**
+   * Clears the city from the UI
+   */
   public void clear() {
     this._tileManager.clear();
   }
 
+  /**
+   * Get all mailboxes in the city
+   * 
+   * @return ArrayList<Mailbox> mailboxes
+   */
   public ArrayList<Mailbox> getMailboxes() {
     return this.mailboxes;
   }
 
+  /**
+   * Get all mailboxes that are waiting to be selected
+   * 
+   * @return ArrayList<Mailbox>
+   */
   public ArrayList<Mailbox> getWaitingMailboxes() {
     ArrayList<Mailbox> waitingMailboxes = new ArrayList<>();
     for (Mailbox mailbox : this.mailboxes) {
@@ -76,26 +89,26 @@ public class City {
     return waitingMailboxes;
   }
 
-  public ArrayList<Mailbox> getFailedOrCompletedMailboxes() {
-    ArrayList<Mailbox> failedOrCompleted = new ArrayList<>();
+  /**
+   * Get all mailboxes that are neither failed nor completed
+   * 
+   * @return ArrayList<Mailbox>
+   */
+  public ArrayList<Mailbox> getMailboxesLeft() {
+    ArrayList<Mailbox> mailboxesLeft = new ArrayList<>();
     for (Mailbox mailbox : this.mailboxes) {
-      if (mailbox.isExpired() || mailbox.isCompleted()) {
-        failedOrCompleted.add(mailbox);
+      if (!mailbox.isExpired() && !mailbox.isCompleted()) {
+        mailboxesLeft.add(mailbox);
       }
     }
-    return failedOrCompleted;
+    return mailboxesLeft;
   }
 
-  public ArrayList<Mailbox> getReadyMailboxes() {
-    ArrayList<Mailbox> readyMailboxes = new ArrayList<>();
-    for (Mailbox mailbox : this.mailboxes) {
-      if (mailbox.isReady()) {
-        readyMailboxes.add(mailbox);
-      }
-    }
-    return readyMailboxes;
-  }
-
+  /**
+   * Get mailboxes that have not yet been rendered
+   * 
+   * @return ArrayList<Mailbox>
+   */
   public ArrayList<Mailbox> getUninitializedMailboxes() {
     ArrayList<Mailbox> uninitializedMailboxes = new ArrayList<>();
     for (Mailbox mailbox : this.mailboxes) {
@@ -106,6 +119,9 @@ public class City {
     return uninitializedMailboxes;
   }
 
+  /**
+   * Render and show all mailboxes in the city
+   */
   public void showAllMailboxes() {
     for (Mailbox mailbox : mailboxes) {
       if (!mailbox.isInitialized()) {

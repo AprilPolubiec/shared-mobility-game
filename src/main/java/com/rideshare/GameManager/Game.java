@@ -88,7 +88,7 @@ public class Game {
 
     private void renderGameOver() {
         GameOverPopup gameOverPopup = new GameOverPopup();
-        gameOverPopup.render(this._root); 
+        gameOverPopup.render(this._root);
         gameOverPopup.onRepeatLevelSelected(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -116,7 +116,6 @@ public class Game {
         intializeEducationalContentContainer();
         this.start();
     }
-
 
     private void initializeTimer() {
         this._timer = new Timer();
@@ -158,8 +157,7 @@ public class Game {
         Utils.print(String.format("Starting game loop"));
         _timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
             // Get the mailboxes that have not been rendered yet
-            int numMailboxes = _city.getMailboxes().size();
-            int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
+            int mailboxesLeft = _city.getMailboxesLeft().size();
             Utils.print(String.format("%s mailboxes left", mailboxesLeft));
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
 
@@ -195,12 +193,6 @@ public class Game {
 
     public int getLevel() {
         return this._level;
-    }
-
-    public int getMailboxesLeft() {
-        int numMailboxes = _city.getMailboxes().size();
-        int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
-        return mailboxesLeft;
     }
 
     public Timer getTimer() {
@@ -307,7 +299,8 @@ public class Game {
         });
     }
 
-    // Player state has changed to idle and stopped at the destination - mark mailbox completed
+    // Player state has changed to idle and stopped at the destination - mark
+    // mailbox completed
     private void handleTripCompleted() {
         _currentMailbox.markComplete();
         // _currentTrip.getEmission();
@@ -333,7 +326,7 @@ public class Game {
     }
 
     private boolean isLevelOver() {
-        return getMailboxesLeft() == 0 || getTimer().getState() == TimerState.STOPPED;
+        return _city.getMailboxesLeft().size() == 0 || getTimer().getState() == TimerState.STOPPED;
     }
 
 }
