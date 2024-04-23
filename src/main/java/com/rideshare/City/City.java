@@ -54,7 +54,7 @@ public class City {
   public ArrayList<Mailbox> getWaitingMailboxes() {
     ArrayList<Mailbox> waitingMailboxes = new ArrayList<>();
     for (Mailbox mailbox : this.mailboxes) {
-      if (mailbox.getStatus() == MailboxStatus.WAITING) {
+      if (mailbox.isWaiting()) {
         waitingMailboxes.add(mailbox);
       }
     }
@@ -64,7 +64,7 @@ public class City {
   public ArrayList<Mailbox> getFailedOrCompletedMailboxes() {
     ArrayList<Mailbox> failedOrCompleted = new ArrayList<>();
     for (Mailbox mailbox : this.mailboxes) {
-      if (mailbox.getStatus() == MailboxStatus.FAILED || mailbox.getStatus() == MailboxStatus.COMPLETED) {
+      if (mailbox.isExpired() || mailbox.isCompleted()) {
         failedOrCompleted.add(mailbox);
       }
     }
@@ -74,7 +74,7 @@ public class City {
   public ArrayList<Mailbox> getReadyMailboxes() {
     ArrayList<Mailbox> readyMailboxes = new ArrayList<>();
     for (Mailbox mailbox : this.mailboxes) {
-      if (mailbox.getStatus() == MailboxStatus.READY) {
+      if (mailbox.isReady()) {
         readyMailboxes.add(mailbox);
       }
     }
@@ -84,7 +84,7 @@ public class City {
   public ArrayList<Mailbox> getUninitializedMailboxes() {
     ArrayList<Mailbox> uninitializedMailboxes = new ArrayList<>();
     for (Mailbox mailbox : this.mailboxes) {
-      if (mailbox.getStatus() == MailboxStatus.UNINITIALIZED) {
+      if (!mailbox.isInitialized()) {
         uninitializedMailboxes.add(mailbox);
       }
     }
@@ -93,7 +93,7 @@ public class City {
 
   public void showAllMailboxes() {
     for (Mailbox mailbox : mailboxes) {
-      if (mailbox.status.get() == MailboxStatus.UNINITIALIZED) {
+      if (!mailbox.isInitialized()) {
         mailbox.render();
       }
       mailbox.show();

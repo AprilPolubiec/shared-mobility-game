@@ -1,7 +1,5 @@
 package com.rideshare.City;
 
-import java.util.TimerTask;
-
 import com.rideshare.App;
 import com.rideshare.Utils;
 import com.rideshare.TileManager.GridPanePosition;
@@ -10,7 +8,6 @@ import com.rideshare.TileManager.TileUtils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -25,18 +22,19 @@ import javafx.util.Duration;
 public class Mailbox {
    private int _row;
    private int _col;
-   ObjectProperty<MailboxStatus> status = new SimpleObjectProperty<>();
-   boolean _isVisible = false;
-   TileManager _tileManager;
-   ImageView _mailboxTile;
-   int _mailboxTileImageIdx;
-   int _houseTileId;
-   Integer _duration; // In seconds
-   Integer _timeLeft = 0; // In seconds
-   Timeline _timeline;
-   // DateTime startTime; // Maybe
-   MediaPlayer mailboxWaitingAudio;
-   MediaPlayer mailboxCompletedAudio;
+   private ObjectProperty<MailboxStatus> status = new SimpleObjectProperty<>();
+   private boolean _isVisible = false;
+   private TileManager _tileManager;
+   private ImageView _mailboxTile;
+   private int _mailboxTileImageIdx;
+   private int _houseTileId;
+   private Integer _duration; // In seconds
+   private Integer _timeLeft = 0; // In seconds
+   private Timeline _timeline;
+
+   // TODO: move to AudioManager
+   private MediaPlayer mailboxWaitingAudio;
+   private MediaPlayer mailboxCompletedAudio;
 
    public Mailbox(int row, int col, int houseTileId, TileManager tileManager) {
       _row = row;
@@ -87,8 +85,32 @@ public class Mailbox {
       _timeLeft = _duration;
    }
 
-   public MailboxStatus getStatus() {
-      return this.status.get();
+   public boolean isInitialized() {
+      return this.status.get() != MailboxStatus.UNINITIALIZED;
+   }
+
+   public boolean isReady() {
+      return this.status.get() != MailboxStatus.READY;
+   }
+
+   public boolean isCompleted() {
+      return this.status.get() == MailboxStatus.COMPLETED;
+   }
+
+   public boolean isSelected() {
+      return this.status.get() == MailboxStatus.SELECTED;
+   }
+
+   public boolean isExpired() {
+      return this.status.get() == MailboxStatus.FAILED;
+   }
+
+   public boolean isWaiting() {
+      return this.status.get() == MailboxStatus.WAITING;
+   }
+
+   public boolean isInProgress() {
+      return this.status.get() == MailboxStatus.IN_PROGRESS;
    }
 
    public int getTimeLeft() {

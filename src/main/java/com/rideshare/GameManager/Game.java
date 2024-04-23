@@ -24,7 +24,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Game {
@@ -250,13 +249,13 @@ public class Game {
                     MailboxStatus newStatus) {
                 System.out.println(String.format("Status changed for [%s %s]: %s ", mailbox.getGridPanePosition().row,
                         mailbox.getGridPanePosition().col, newStatus));
-                if (newStatus == MailboxStatus.SELECTED) {
+                if (mailbox.isSelected()) {
                     handleMailboxSelected(mailbox);
                 }
-                if (newStatus == MailboxStatus.COMPLETED) {
+                if (mailbox.isCompleted()) {
                     handleMailboxCompleted();
                 }
-                if (newStatus == MailboxStatus.FAILED) {
+                if (mailbox.isExpired()) {
                     handleMailboxFailed();
                 }
             }
@@ -273,7 +272,7 @@ public class Game {
             return;
         }
 
-        if (_currentMailbox != null && _currentMailbox.getStatus() == MailboxStatus.SELECTED) {
+        if (_currentMailbox != null && _currentMailbox.isSelected()) {
             _currentMailbox.markWaiting();
         }
         _currentMailbox = mailbox;
