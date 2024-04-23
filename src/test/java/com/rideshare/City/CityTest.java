@@ -5,32 +5,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
 import com.rideshare.City.City;
 import com.rideshare.City.Route;
-import com.rideshare.City.City.Mailbox;
+import com.rideshare.TileManager.GridPanePosition;
 
 public class CityTest {
     @Test
     void Test_CanCreateCity() {
-        Route[] routes = {new Route("Green Line"), new Route("Red Line"), new Route("Blue Line")};
-        Mailbox[] mailboxes = {new Mailbox(), new Mailbox(), new Mailbox()};
-        int difficultyLevel = 5;
-        var dimensions = 5;
-        City c = new City("Dublin", routes, mailboxes, 5);
-    
-        assertEquals("Dublin", c.getName());
-        assertEquals(routes.length, c.getRoutes().length);
-        assertEquals(mailboxes.length, c.getMailboxes().length);
-        assertEquals(dimensions, c.getDimensions());
+        City c = new City(30);
+        assertEquals(30, c.getSize());
     }
 
     @Test
     void Test_CanAddMailboxes() {
-        City c = new City("Dublin");
-        c.addMailboxes(5);
-        assertEquals(c.getMailboxes().length, 5);
+        City c = new City(30);
+
+        ArrayList<Mailbox> mailboxes = new ArrayList<Mailbox>();
+        Mailbox m = new Mailbox(new GridPanePosition(0, 0), 0, null);
+        mailboxes.add(m);
+        c.setMailboxes(mailboxes);
+        assertEquals(c.getMailboxes().size(), 1);
     }
 }
