@@ -76,7 +76,7 @@ public abstract class Sprite {
             e.printStackTrace();
         }
     }
-    
+
     // To render at specific coordinates
     protected void render(AnchorPane root, int xPos, int yPos) {
         // Place on the screen
@@ -114,7 +114,7 @@ public abstract class Sprite {
         yPos = TileUtils.TILE_SIZE_IN_PIXELS * startPosition.col;
         imageView.setX(xPos);
         imageView.setY(yPos);
-        
+
         root.getChildren().add(imageView);
         spriteLoop().playFromStart();
     }
@@ -142,7 +142,7 @@ public abstract class Sprite {
 
         };
         this.spriteLoop.setCycleCount(Animation.INDEFINITE);
-        
+
         return this.spriteLoop;
     }
 
@@ -155,67 +155,68 @@ public abstract class Sprite {
             TransportationNode currentNode = nodes.get(i);
             TransportationNode nextNode = nodes.get(i + 1);
             if (i == 0) {
-                if (currentNode.row < nextNode.row) {
+                if (currentNode.getPosition().row < nextNode.getPosition().row) {
                     direction = "down";
                 }
-                if (currentNode.row > nextNode.row) {
+                if (currentNode.getPosition().row > nextNode.getPosition().row) {
                     direction = "up";
                 }
-                if (currentNode.col > nextNode.col) {
+                if (currentNode.getPosition().col > nextNode.getPosition().col) {
                     direction = "left";
                 }
-                if (currentNode.col < nextNode.col) {
+                if (currentNode.getPosition().col < nextNode.getPosition().col) {
                     direction = "right";
                 }
             }
 
-            TransportationMode transportationMode = currentNode.modeOfTransport;
+            TransportationMode transportationMode = currentNode.getModeOfTransport();
             double minutes = (TileUtils.TILE_DISTANCE_IN_KM / transportationMode.getSpeed()) * 60.0; // Number of game
                                                                                                      // minutes to go
                                                                                                      // 0.5 km
             double seconds = Timer.gameMinutesToSeconds(minutes);
             TranslateTransition transition = new TranslateTransition(Duration.seconds(seconds), this.imageView);
 
-            if (currentNode.row < nextNode.row) {
+            if (currentNode.getPosition().row < nextNode.getPosition().row) {
                 transition.setByY(TileUtils.TILE_SIZE_IN_PIXELS);
                 yPos += TileUtils.TILE_SIZE_IN_PIXELS;
             }
-            if (currentNode.row > nextNode.row) {
+            if (currentNode.getPosition().row > nextNode.getPosition().row) {
                 transition.setByY(-TileUtils.TILE_SIZE_IN_PIXELS);
                 yPos -= TileUtils.TILE_SIZE_IN_PIXELS;
             }
-            if (currentNode.col > nextNode.col) {
+            if (currentNode.getPosition().col > nextNode.getPosition().col) {
                 transition.setByX(-TileUtils.TILE_SIZE_IN_PIXELS);
                 xPos -= TileUtils.TILE_SIZE_IN_PIXELS;
             }
-            if (currentNode.col < nextNode.col) {
+            if (currentNode.getPosition().col < nextNode.getPosition().col) {
                 transition.setByX(TileUtils.TILE_SIZE_IN_PIXELS);
                 xPos += TileUtils.TILE_SIZE_IN_PIXELS;
             }
 
-            // Utils.print(String.format("Now at [%s, %s]", getGridPanePosition().row, getGridPanePosition().col));
+            // Utils.print(String.format("Now at [%s, %s]", getGridPanePosition().row,
+            // getGridPanePosition().col));
             final TransportationNode nextNextNode = i + 2 < nodes.size() ? nodes.get(i + 2) : null;
 
             transition.setOnFinished(e -> {
                 if (nextNextNode != null) {
-                    if (nextNode.row < nextNextNode.row) {
+                    if (nextNode.getPosition().row < nextNextNode.getPosition().row) {
                         direction = "down";
                     }
-                    if (nextNode.row > nextNextNode.row) {
+                    if (nextNode.getPosition().row > nextNextNode.getPosition().row) {
                         direction = "up";
                     }
-                    if (nextNode.col > nextNextNode.col) {
+                    if (nextNode.getPosition().col > nextNextNode.getPosition().col) {
                         direction = "left";
                     }
-                    if (nextNode.col < nextNextNode.col) {
+                    if (nextNode.getPosition().col < nextNextNode.getPosition().col) {
                         direction = "right";
                     }
-                    switch (nextNode.transportationType) {
+                    switch (nextNode.getTransportationType()) {
                         case CAR:
                             load("car");
                             break;
                         case BUS:
-                            if (nextNode.row == nextNextNode.row && nextNode.col == nextNextNode.col) {
+                            if (nextNode.getPosition().equals(nextNextNode.getPosition())) {
                                 load(spriteName);
                             } else {
                                 load("bus");
@@ -231,7 +232,6 @@ public abstract class Sprite {
         }
         return sequentialTransition;
     }
-
 
     protected void onRouteCompleted() {
         isMoving = false;

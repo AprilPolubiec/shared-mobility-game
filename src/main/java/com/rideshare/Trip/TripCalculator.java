@@ -225,8 +225,9 @@ public class TripCalculator {
                         int yDistance = Math.abs(rowIdx - goalNode.position.row);
                         int distance = xDistance + yDistance;
 
-                        if (closestStation == null || distance < Math.abs(closestStation.position.col - goalNode.position.col)
-                                + Math.abs(closestStation.position.row - goalNode.position.row)) {
+                        if (closestStation == null
+                                || distance < Math.abs(closestStation.position.col - goalNode.position.col)
+                                        + Math.abs(closestStation.position.row - goalNode.position.row)) {
                             closestStation = matrix[rowIdx][colIdx];
                         }
                     }
@@ -247,8 +248,9 @@ public class TripCalculator {
                 startStation.position.row, startStation.position.col));
         TransportationNode endStation = getClosestStation(goalNode, transportationType,
                 startStation.modeOfTransport.getName());
-        Utils.print(String.format("End station: %s [%s, %s]", endStation.modeOfTransport.getName(), endStation.position.row,
-                endStation.position.col));
+        Utils.print(
+                String.format("End station: %s [%s, %s]", endStation.modeOfTransport.getName(), endStation.position.row,
+                        endStation.position.col));
 
         // TODO: handle if start and end are the same, we can just skip this path finder
         if (startStation == endStation) {
@@ -257,8 +259,10 @@ public class TripCalculator {
         Trip baseLeg;
 
         TripType tripType = transportationType == TransportationType.TRAIN ? TripType.TRAIN : TripType.BUS;
-        TransportationNode startStationEntryNode = getStartNode(new GridPanePosition(startStation.position.row, startStation.position.col));
-        TransportationNode endStationEntryNode = getStartNode(new GridPanePosition(endStation.position.row, endStation.position.col));
+        TransportationNode startStationEntryNode = getStartNode(
+                new GridPanePosition(startStation.position.row, startStation.position.col));
+        TransportationNode endStationEntryNode = getStartNode(
+                new GridPanePosition(endStation.position.row, endStation.position.col));
         Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStationEntryNode);
         Trip middleLeg = runPathFinding(tripType, startStation, startStation, endStation);
         Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStationEntryNode, endStationEntryNode, goalNode);
@@ -304,7 +308,8 @@ public class TripCalculator {
             return null;
         }
         while (goalReached == false) {
-            GridPanePosition currentNodePosition = new GridPanePosition(currentNode.position.row, currentNode.position.col);
+            GridPanePosition currentNodePosition = new GridPanePosition(currentNode.position.row,
+                    currentNode.position.col);
 
             closeAllNodes(currentNodePosition, currentNode);
             openNeighbors(currentNodePosition, currentNode);
@@ -345,7 +350,7 @@ public class TripCalculator {
             // print(String.format("BEST NODE: [%s, %s] %s", currentNode.row,
             // currentNode.col,
             // currentNode.transportationType.name()));
-            if (currentNode.position.row == goalNode.position.row && currentNode.position.col == goalNode.position.col) {
+            if (currentNode.position.equals(goalNode.position)) {
                 goalNode.parent = currentNode.parent;
                 goalReached = true;
                 // Do the thing

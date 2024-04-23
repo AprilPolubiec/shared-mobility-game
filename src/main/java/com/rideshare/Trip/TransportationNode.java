@@ -96,6 +96,23 @@ public class TransportationNode {
         checked = true;
     }
 
+    // Getters
+    // NOTE: majority of the attributes in here are "default" so they can be
+    // accessed freely within the package
+    // Very few outside packages access these nodes and if they do, the interaction
+    // is highly restricted to only these getters
+    public TransportationMode getModeOfTransport() {
+        return modeOfTransport;
+    }
+
+    public GridPanePosition getPosition() {
+        return this.position;
+    }
+
+    public TransportationType getTransportationType() {
+        return this.transportationType;
+    }
+
     public void getCost(TransportationNode startNode, TransportationNode endNode, TripType tripType) {
         // GET G COST
         int xDistance = Math.abs(this.position.col - startNode.position.col);
