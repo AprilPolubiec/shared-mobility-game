@@ -135,19 +135,7 @@ public class SaveLoad {
             AnchorPane.setLeftAnchor(playerNameText, 150 - (playerNameText.getLayoutBounds().getWidth() / 2));
 
             playerOption.getChildren().addAll(panel, playerNameText);
-            playerOption.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    playerOption.setCursor(Cursor.HAND);
-                    playerOption.setEffect(new ColorAdjust(0, 0, -0.2, 0));
-                }
-            });
-            playerOption.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    playerOption.setEffect(new ColorAdjust(0, 0, 0, 0));
-                }
-            });
+            UIComponentUtils.addHoverCursor(playerOption, true);
             playerOption.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -179,7 +167,8 @@ public class SaveLoad {
                     .mapToInt(v -> v)
                     .max().orElseThrow(NoSuchElementException::new);
 
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(String.format("%s/%s.dat", directoryString, lastLevelCompleted)));
+            ObjectInputStream ois = new ObjectInputStream(
+                    new FileInputStream(String.format("%s/%s.dat", directoryString, lastLevelCompleted)));
             DataStorage ds = (DataStorage) ois.readObject();
 
             Player loadedPlayer = new Player(playerName, ds.spriteName);

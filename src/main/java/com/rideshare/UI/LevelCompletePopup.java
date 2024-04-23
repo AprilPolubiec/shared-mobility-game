@@ -49,12 +49,7 @@ public class LevelCompletePopup {
         nextLevelButton.setTranslateX(135);
 
         for (Button button : new Button[] { nextLevelButton, repeatLevelButton }) {
-            button.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent me) {
-                    button.setCursor(Cursor.HAND);
-                }
-            });
+            UIComponentUtils.addHoverCursor(button, false);
         }
 
         this.dialogRoot.getChildren().addAll(repeatLevelButton, nextLevelButton);

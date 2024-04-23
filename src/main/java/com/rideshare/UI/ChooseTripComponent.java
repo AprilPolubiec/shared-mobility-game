@@ -53,22 +53,7 @@ public class ChooseTripComponent {
         for (int i = 0; i < trips.size(); i++) {
             Trip trip = trips.get(i);
             AnchorPane tripAnchor = UIComponentUtils.createStyledDialog(100.0, 300.0);
-            tripAnchor.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent me) {
-                    _root.setCursor(Cursor.HAND);
-                    tripAnchor.setEffect(new ColorAdjust(0, 0, -0.2, 0));
-                }
-            });
-
-            tripAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent me) {
-                    _root.setCursor(Cursor.DEFAULT);
-                    tripAnchor.setEffect(new ColorAdjust(0, 0, 0, 0));
-                }
-            });
-
+            UIComponentUtils.addHoverCursor(tripAnchor, true);
             tripAnchor.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
                 @Override

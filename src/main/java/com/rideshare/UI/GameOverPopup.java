@@ -31,18 +31,14 @@ public class GameOverPopup {
         AnchorPane.setTopAnchor(this.dialogRoot, top);
         AnchorPane.setLeftAnchor(this.dialogRoot, left);
 
-       // Add buttons
-       repeatLevelButton.setPrefSize(108, 108);
-       repeatLevelButton.setOpacity(0.0);
-       repeatLevelButton.setTranslateY(255);
-       repeatLevelButton.setTranslateX(150);
-       this.dialogRoot.getChildren().add(repeatLevelButton);
-       repeatLevelButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent me) {
-            repeatLevelButton.setCursor(Cursor.HAND);
-        }
-    });
+        // Add buttons
+        repeatLevelButton.setPrefSize(108, 108);
+        repeatLevelButton.setOpacity(0.0);
+        repeatLevelButton.setTranslateY(255);
+        repeatLevelButton.setTranslateX(150);
+        this.dialogRoot.getChildren().add(repeatLevelButton);
+
+        UIComponentUtils.addHoverCursor(repeatLevelButton, false);
     }
 
     public void render(AnchorPane root) {

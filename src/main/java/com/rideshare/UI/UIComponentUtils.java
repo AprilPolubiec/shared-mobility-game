@@ -9,6 +9,7 @@ import com.rideshare.App;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.event.EventHandler;
 
 import javafx.scene.input.MouseEvent;
@@ -44,19 +45,25 @@ public class UIComponentUtils {
         return new ImageView(panelUrl);
     }
 
-    static public void addHoverCursor(Node node) {
+    static public void addHoverCursor(Node node, boolean shouldDarken) {
         node.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-               node.setCursor(Cursor.HAND);
+                node.setCursor(Cursor.HAND);
+                if (shouldDarken) {
+                    node.setEffect(new ColorAdjust(0, 0, -0.2, 0));
+                }
             }
-         });
-         node.setOnMouseExited(new EventHandler<MouseEvent>() {
+        });
+        node.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-               node.setCursor(Cursor.DEFAULT);
+                node.setCursor(Cursor.DEFAULT);
+                if (shouldDarken) {
+                    node.setEffect(new ColorAdjust(0, 0, 0, 0));
+                }
             }
-         });
+        });
     }
 
     static public ImageCursor getCursor() {
