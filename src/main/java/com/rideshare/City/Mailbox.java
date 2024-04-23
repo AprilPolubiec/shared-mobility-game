@@ -65,7 +65,7 @@ public class Mailbox {
             markSelected();
          }
       });
-      UIComponentUtils.addHoverCursor(_mailboxTile);
+      UIComponentUtils.addHoverCursor(_mailboxTile, false);
       status.set(MailboxStatus.READY);
    }
 
