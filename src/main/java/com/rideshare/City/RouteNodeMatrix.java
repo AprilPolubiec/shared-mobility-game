@@ -39,12 +39,13 @@ public class RouteNodeMatrix {
     this.name = name;
     this.matrix = new TransportationNode[mapDataMatrix.length][mapDataMatrix[0].length];
     this.transportationType = transportationType;
+    
     for (int i = 0; i < mapDataMatrix.length; i++) {
       int rowIdx = i;
       int[] row = mapDataMatrix[i];
       for (int j = 0; j < row.length; j++) {
         int colIdx = j;
-        TransportationNode node = new TransportationNode(colIdx, rowIdx, transportationType, this);
+        TransportationNode node = new TransportationNode(new GridPanePosition(rowIdx, colIdx), transportationType, this);
         boolean isStopCode = Arrays.asList(stopCodes.get(transportationType)).contains(mapDataMatrix[rowIdx][colIdx]);
         if (isStopCode) {
           node.setAsValidStop();
@@ -57,6 +58,7 @@ public class RouteNodeMatrix {
         matrix[rowIdx][colIdx] = node;
       }
     }
+  
   }
 
   public String getRouteName() {

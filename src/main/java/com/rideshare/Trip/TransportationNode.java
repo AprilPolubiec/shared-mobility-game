@@ -1,29 +1,29 @@
 package com.rideshare.Trip;
+
 import com.rideshare.City.RouteNodeMatrix;
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TransportationMode.*;
 
 public class TransportationNode {
     TransportationNode parent;
-    public int col;
-    public int row;
+    GridPanePosition position;
+    TransportationMode modeOfTransport;
+    TransportationType transportationType;
+    RouteNodeMatrix routeMatrix;
+    int fCost; // Sum of gCost and hCost
     int gCost; // Distance between start node and current node
     int hCost; // Distance between current node and goal node
-    int fCost; // Sum of gCost and hCost
-    int co2EmissionRate; // https://www.youtube.com/watch?v=T0Qv4-KkAUo
-    int speed;
-    boolean start;
-    boolean goal;
-    boolean solid;
-    boolean open;
-    boolean checked;
-    boolean canStop;
-    public TransportationMode modeOfTransport;
-    public TransportationType transportationType;
-    RouteNodeMatrix routeMatrix;
 
-    public TransportationNode(int col, int row, TransportationType transportationType, RouteNodeMatrix routeNodeMatrix) {
-        this.col = col;
-        this.row = row;
+    private boolean start;
+    private boolean goal;
+    private boolean solid;
+    private boolean open;
+    private boolean checked;
+    private boolean canStop;
+
+    public TransportationNode(GridPanePosition position, TransportationType transportationType,
+            RouteNodeMatrix routeNodeMatrix) {
+        this.position = position;
         this.routeMatrix = routeNodeMatrix;
         this.transportationType = transportationType;
         String name = routeNodeMatrix.getRouteName();
@@ -35,17 +35,14 @@ public class TransportationNode {
                 modeOfTransport = new CarTransportationMode(name);
                 break;
             case TRAIN:
-                modeOfTransport = new TrainTransportationMode(name);  
+                modeOfTransport = new TrainTransportationMode(name);
                 break;
             case WALKING:
                 modeOfTransport = new WalkingTransportationMode(name);
                 break;
             default:
-                break;
-            
+                throw new IllegalArgumentException("Transportation type is invalid.");
         }
-        co2EmissionRate = modeOfTransport.getEmissionRate();
-        speed = modeOfTransport.getSpeed();
 
         // Check if it is a stop or what
         // renderNode();
@@ -65,6 +62,14 @@ public class TransportationNode {
 
     public boolean isSolid() {
         return this.solid;
+    }
+
+    public boolean isOpen() {
+        return this.open;
+    }
+
+    public boolean isChecked() {
+        return this.checked;
     }
 
     public void setAsStart() {
@@ -93,31 +98,30 @@ public class TransportationNode {
 
     public void getCost(TransportationNode startNode, TransportationNode endNode, TripType tripType) {
         // GET G COST
-        int xDistance = Math.abs(this.col - startNode.col);
-        int yDistance = Math.abs(this.row - startNode.row);
+        int xDistance = Math.abs(this.position.col - startNode.position.col);
+        int yDistance = Math.abs(this.position.row - startNode.position.row);
         this.gCost = xDistance + yDistance;
 
         // GET HCOST
-        xDistance = Math.abs(this.col - endNode.col);
-        yDistance = Math.abs(this.row - endNode.row);
+        xDistance = Math.abs(this.position.col - endNode.position.col);
+        yDistance = Math.abs(this.position.row - endNode.position.row);
         this.hCost = xDistance + yDistance;
         switch (tripType) {
             case EFFICIENT:
-                this.hCost += this.co2EmissionRate; // Weighted by emission for now
+                this.hCost += this.modeOfTransport.getEmissionRate(); // Weighted by emission for now
                 break;
             case FAST:
-                this.hCost -= this.speed; // Weighted by speed
+                this.hCost -= this.modeOfTransport.getSpeed(); // Weighted by speed
                 break;
             case TRANSIT_ONLY:
                 // TODO: turn off car nodes??
                 // if (transportationType == TransportationType.TRAIN) {
-                //     this.hCost -= 1000;
+                // this.hCost -= 1000;
                 // }
                 break;
             default:
                 break;
         }
-        
 
         // GET FCOST
         this.fCost = this.gCost + this.hCost;

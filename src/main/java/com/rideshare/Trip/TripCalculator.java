@@ -40,8 +40,8 @@ public class TripCalculator {
         GridPanePosition housePosition = Mailbox.getHousePosition(endPosition.row, endPosition.col);
         this._goalNode = getGoalNode(housePosition);
         print(String.format("Starting search from [%s, %s] to [%s, %s]", startPosition.row, startPosition.col,
-                _goalNode.row,
-                _goalNode.col));
+                _goalNode.position.row,
+                _goalNode.position.col));
 
         // Option 1: Bus
         Trip busTrip = runTransitPathFinding(this._startNode, this._goalNode, TransportationType.BUS);
@@ -77,9 +77,9 @@ public class TripCalculator {
         ArrayList<TransportationNode> startNodeOptions = city.getRouteNodes(position);
         int minEmissions = Integer.MAX_VALUE;
         for (TransportationNode transportationNode : startNodeOptions) {
-            if (transportationNode.co2EmissionRate < minEmissions) {
+            if (transportationNode.modeOfTransport.getEmissionRate() < minEmissions) {
                 startNode = transportationNode;
-                minEmissions = transportationNode.co2EmissionRate;
+                minEmissions = transportationNode.modeOfTransport.getEmissionRate();
             }
         }
         return startNode;
@@ -92,7 +92,7 @@ public class TripCalculator {
         if (housePosition.below().row < cityHeight) { // Prefer just below the house
             ArrayList<TransportationNode> nodesBelow = city.getRouteNodes(housePosition.below());
             for (TransportationNode node : nodesBelow) {
-                if (node.transportationType == TransportationType.WALKING && !node.solid) {
+                if (node.transportationType == TransportationType.WALKING && !node.isSolid()) {
                     return node;
                 }
             }
@@ -101,7 +101,7 @@ public class TripCalculator {
         if (housePosition.toTheLeft().col >= 0) {
             ArrayList<TransportationNode> leftNodes = city.getRouteNodes(housePosition.toTheLeft());
             for (TransportationNode node : leftNodes) {
-                if (node.transportationType == TransportationType.WALKING && !node.solid) {
+                if (node.transportationType == TransportationType.WALKING && !node.isSolid()) {
                     return node;
                 }
             }
@@ -110,7 +110,7 @@ public class TripCalculator {
         if (housePosition.toTheRight().col < cityWidth) {
             ArrayList<TransportationNode> rightNodes = city.getRouteNodes(housePosition.toTheRight());
             for (TransportationNode node : rightNodes) {
-                if (node.transportationType == TransportationType.WALKING && !node.solid) {
+                if (node.transportationType == TransportationType.WALKING && !node.isSolid()) {
                     return node;
                 }
             }
@@ -119,7 +119,7 @@ public class TripCalculator {
         if (housePosition.above().row >= 0) {
             ArrayList<TransportationNode> aboveNodes = city.getRouteNodes(housePosition.above());
             for (TransportationNode node : aboveNodes) {
-                if (node.transportationType == TransportationType.WALKING && !node.solid) {
+                if (node.transportationType == TransportationType.WALKING && !node.isSolid()) {
                     return node;
                 }
             }
@@ -136,7 +136,7 @@ public class TripCalculator {
         if (position.above().row >= 0) { // Node above
             // print(String.format("Opening nodes at [%s, %s]", row - 1, col));
             openNode(this.currentRouteMatrix.getNode(position.above()), currentNode);
-            if (currentNode.canStop) {
+            if (currentNode.canStop()) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 // Check all of the surrounding route options!
                 for (Route route : this.city.getRoutes()) {
@@ -148,7 +148,7 @@ public class TripCalculator {
         if (position.toTheLeft().col >= 0) { // Node to the left
             // print(String.format("Opening nodes at [%s, %s]", row, col - 1));
             openNode(this.currentRouteMatrix.getNode(position.toTheLeft()), currentNode);
-            if (currentNode.canStop) {
+            if (currentNode.canStop()) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.getRoutes()) {
                     openNode(route.getRouteNodeMatrix().getNode(position.toTheLeft()), currentNode);
@@ -159,7 +159,7 @@ public class TripCalculator {
         if (position.below().row < this.cityHeight) { // Node below
             // print(String.format("Opening nodes at [%s, %s]", position.below(), col));
             openNode(this.currentRouteMatrix.getNode(position.below()), currentNode);
-            if (currentNode.canStop) {
+            if (currentNode.canStop()) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.getRoutes()) {
                     openNode(route.getRouteNodeMatrix().getNode(position.below()), currentNode);
@@ -170,7 +170,7 @@ public class TripCalculator {
         if (position.toTheRight().col < this.cityWidth) { // Node to the right
             // print(String.format("Opening nodes at [%s, %s]", row, col + 1));
             openNode(this.currentRouteMatrix.getNode(position.toTheRight()), currentNode);
-            if (currentNode.canStop) {
+            if (currentNode.canStop()) {
                 // print("Valid switch spot - opening all transportation nodes.");
                 for (Route route : this.city.getRoutes()) {
                     openNode(route.getRouteNodeMatrix().getNode(position.toTheRight()), currentNode);
@@ -206,7 +206,7 @@ public class TripCalculator {
         // First - find the closest train to our starting nodes and ending nodes
         for (Route route : city.getRoutes()) {
             if (route.getTransportationType() == transportationType
-                    && (routeName == null || route.name.equals(routeName))) {
+                    && (routeName == null || route.getName().equals(routeName))) {
                 transitMatrices.add(route.getRouteNodeMatrix());
             }
         }
@@ -221,12 +221,12 @@ public class TripCalculator {
                 for (int j = 0; j < matrix[rowIdx].length; j++) {
                     int colIdx = j;
                     if (matrix[i][j].canStop()) {
-                        int xDistance = Math.abs(colIdx - goalNode.col);
-                        int yDistance = Math.abs(rowIdx - goalNode.row);
+                        int xDistance = Math.abs(colIdx - goalNode.position.col);
+                        int yDistance = Math.abs(rowIdx - goalNode.position.row);
                         int distance = xDistance + yDistance;
 
-                        if (closestStation == null || distance < Math.abs(closestStation.col - goalNode.col)
-                                + Math.abs(closestStation.row - goalNode.row)) {
+                        if (closestStation == null || distance < Math.abs(closestStation.position.col - goalNode.position.col)
+                                + Math.abs(closestStation.position.row - goalNode.position.row)) {
                             closestStation = matrix[rowIdx][colIdx];
                         }
                     }
@@ -244,11 +244,11 @@ public class TripCalculator {
             return null;
         }
         Utils.print(String.format("Start station: %s [%s, %s]", startStation.modeOfTransport.getName(),
-                startStation.row, startStation.col));
+                startStation.position.row, startStation.position.col));
         TransportationNode endStation = getClosestStation(goalNode, transportationType,
                 startStation.modeOfTransport.getName());
-        Utils.print(String.format("End station: %s [%s, %s]", endStation.modeOfTransport.getName(), endStation.row,
-                endStation.col));
+        Utils.print(String.format("End station: %s [%s, %s]", endStation.modeOfTransport.getName(), endStation.position.row,
+                endStation.position.col));
 
         // TODO: handle if start and end are the same, we can just skip this path finder
         if (startStation == endStation) {
@@ -257,8 +257,8 @@ public class TripCalculator {
         Trip baseLeg;
 
         TripType tripType = transportationType == TransportationType.TRAIN ? TripType.TRAIN : TripType.BUS;
-        TransportationNode startStationEntryNode = getStartNode(new GridPanePosition(startStation.row, startStation.col));
-        TransportationNode endStationEntryNode = getStartNode(new GridPanePosition(endStation.row, endStation.col));
+        TransportationNode startStationEntryNode = getStartNode(new GridPanePosition(startStation.position.row, startStation.position.col));
+        TransportationNode endStationEntryNode = getStartNode(new GridPanePosition(endStation.position.row, endStation.position.col));
         Trip firstLeg = runPathFinding(TripType.EFFICIENT, startNode, startNode, startStationEntryNode);
         Trip middleLeg = runPathFinding(tripType, startStation, startStation, endStation);
         Trip lastLeg = runPathFinding(TripType.EFFICIENT, endStationEntryNode, endStationEntryNode, goalNode);
@@ -286,7 +286,7 @@ public class TripCalculator {
                 int rowIdx = i;
                 for (int j = 0; j < nodeMatrix[rowIdx].length; j++) {
                     TransportationNode n = nodeMatrix[i][j];
-                    if (!route.name.equals(startNode.modeOfTransport.getName())) {
+                    if (!route.getName().equals(startNode.modeOfTransport.getName())) {
                         n.setAsChecked();
                         checkedList.add(n);
                     }
@@ -304,7 +304,7 @@ public class TripCalculator {
             return null;
         }
         while (goalReached == false) {
-            GridPanePosition currentNodePosition = new GridPanePosition(currentNode.row, currentNode.col);
+            GridPanePosition currentNodePosition = new GridPanePosition(currentNode.position.row, currentNode.position.col);
 
             closeAllNodes(currentNodePosition, currentNode);
             openNeighbors(currentNodePosition, currentNode);
@@ -345,7 +345,7 @@ public class TripCalculator {
             // print(String.format("BEST NODE: [%s, %s] %s", currentNode.row,
             // currentNode.col,
             // currentNode.transportationType.name()));
-            if (currentNode.row == goalNode.row && currentNode.col == goalNode.col) {
+            if (currentNode.position.row == goalNode.position.row && currentNode.position.col == goalNode.position.col) {
                 goalNode.parent = currentNode.parent;
                 goalReached = true;
                 // Do the thing
@@ -364,20 +364,20 @@ public class TripCalculator {
     }
 
     private void openNode(TransportationNode node, TransportationNode currentNode) {
-        Boolean isCheckableNode = node.open == false && node.checked == false && node.solid == false;
+        Boolean isCheckableNode = node.isOpen() == false && node.isChecked() == false && node.isSolid() == false;
 
         if (isCheckableNode) {
             if (currentNode.modeOfTransport.hasStops()) {
                 // We are currently on a form of public transportation - the only nodes we can
                 // open are nodes on the same path
-                if (!currentNode.canStop
+                if (!currentNode.canStop()
                         && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName()))
                     return;
             }
             if (node.modeOfTransport.hasStops()) {
                 // If the node we are checking is a public transit - it has to either be a valid
                 // stop or be on the transit path
-                if (!node.canStop && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName()))
+                if (!node.canStop() && !node.modeOfTransport.getName().equals(currentNode.modeOfTransport.getName()))
                     return;
             }
             node.setAsOpen();

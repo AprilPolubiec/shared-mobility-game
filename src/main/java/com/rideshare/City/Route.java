@@ -12,7 +12,7 @@ import com.rideshare.TransportationMode.TransportationType;
 public class Route {
     private RouteNodeMatrix nodeMatrix;
     private TransportationType transportationType;
-    public String name;
+    private String name;
 
     public Route(int[][] routeMatrix, TransportationType transportationType, String name) {
         nodeMatrix = new RouteNodeMatrix(routeMatrix, transportationType, name);
@@ -20,10 +20,22 @@ public class Route {
         this.name = name;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Get the transportation node matrix for this route
+     * @return RouteNodeMatrix
+     */
     public RouteNodeMatrix getRouteNodeMatrix() {
         return nodeMatrix;
     }
 
+    /**
+     * Get transportation type of this route
+     * @return TransportationType
+     */
     public TransportationType getTransportationType() {
         return this.transportationType;
     }

@@ -124,7 +124,7 @@ import com.rideshare.TileManager.TileUtils;
                 tripDuration, tripDistance, tripEmission));
         System.out.println("Trip node list: ");
         for (TransportationNode transportationNode : _nodeList) {
-            System.out.println(String.format("[%s, %s] %s", transportationNode.row, transportationNode.col,
+            System.out.println(String.format("[%s, %s] %s", transportationNode.position.row, transportationNode.position.col,
                     transportationNode.transportationType.name()));
         }
     }
