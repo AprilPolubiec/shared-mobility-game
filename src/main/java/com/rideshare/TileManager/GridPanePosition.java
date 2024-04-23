@@ -8,4 +8,17 @@ public class GridPanePosition {
         this.row = row;
         this.col = col;
     }
+
+    public GridPanePosition toTheLeft() {
+        return new GridPanePosition(row, col - 1);
+    }
+    public GridPanePosition toTheRight() {
+        return new GridPanePosition(row, col + 1);
+    }
+    public GridPanePosition below() {
+        return new GridPanePosition(row + 1, col);
+    }
+    public GridPanePosition above() {
+        return new GridPanePosition(row - 1, col);
+    }
 }

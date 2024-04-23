@@ -27,8 +27,8 @@ public class Mailbox {
    private Timeline _timeline;
    private AudioManager audio = new AudioManager();
 
-   public Mailbox(GridPanePosition position, int houseTileId, TileManager tileManager) {
-      position = new GridPanePosition(position.row, position.col + 1);
+   public Mailbox(GridPanePosition housePosition, int houseTileId, TileManager tileManager) {
+      position = housePosition.toTheRight(); // To the right of the house
       _tileManager = tileManager;
       _houseTileId = houseTileId;
       status.set(MailboxStatus.UNINITIALIZED);
@@ -45,7 +45,7 @@ public class Mailbox {
     * @return GridPanePosition
     */
    public static GridPanePosition getHousePosition(int row, int col) {
-      return new GridPanePosition(row, col - 1);
+      return new GridPanePosition(row, col).toTheLeft();
    }
 
    // #endregion
@@ -123,7 +123,7 @@ public class Mailbox {
    }
 
    public void markComplete() {
-      _tileManager.drawTile(202, new GridPanePosition(position.row - 1, position.col));
+      _tileManager.drawTile(202, position.above());
       _tileManager.replaceTileImage(_mailboxTile, TileUtils.COMPLETED_FLAG_IDS[0]);
       this.status.set(MailboxStatus.COMPLETED);
       audio.playMailboxCompletedAudio();
@@ -138,7 +138,7 @@ public class Mailbox {
    }
 
    public void markFailed() {
-      _tileManager.drawTile(201, new GridPanePosition(position.row - 1, position.col));
+      _tileManager.drawTile(201, position.above());
       this.status.set(MailboxStatus.FAILED);
    }
 
