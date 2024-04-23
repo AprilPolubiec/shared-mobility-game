@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.City;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

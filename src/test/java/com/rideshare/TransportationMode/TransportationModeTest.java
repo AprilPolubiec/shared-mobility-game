@@ -1,10 +1,8 @@
-package com.rideshare;
+package com.rideshare.TransportationMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-
-import com.rideshare.TransportationMode.TransportationMode;
 
 public class TransportationModeTest {
     @Test 
@@ -13,7 +11,7 @@ public class TransportationModeTest {
         int speed = 5;
         String displayName = "Luas";
         boolean hasStops = true;
-        TransportationMode tm = new TransportationMode(emissionRate, speed, displayName, hasStops);
+        TransportationMode tm = new TransportationMode(displayName, emissionRate, speed, hasStops);
         assertEquals(emissionRate, tm.getEmissionRate());
         assertEquals(speed, tm.getSpeed());
         assertEquals(displayName, tm.getName());

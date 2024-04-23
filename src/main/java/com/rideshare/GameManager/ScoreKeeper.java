@@ -117,6 +117,9 @@ public class ScoreKeeper {
             throw new IllegalArgumentException("Attempted to complete more mailboxes than exist.");
         }
         this.mailboxesCompleted = numCompleted;
+        // TODO: setting the mailbox text is not ideal here - we should have a separate
+        // function. for example - look at what happens when we try to test this code in
+        // Test_CanCalculateScore
         this.mailboxText.setText(String.format("%s/%s Mailboxes", this.mailboxesCompleted, this.totalMailboxes));
     }
 
