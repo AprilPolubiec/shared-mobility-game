@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.UI;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

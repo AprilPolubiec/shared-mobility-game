@@ -1,17 +1,17 @@
-package com.rideshare;
+package com.rideshare.TransportationMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.rideshare.TransportationMode.BusTransportationMode;
+import com.rideshare.TransportationMode.TrainTransportationMode;
 import com.rideshare.TransportationMode.TransportationMode;
 
-public class BusTransportationModeTest {
+public class TrainTransportationModeTest {
     @Test 
-    public void Test_CanCreateBusTransportationMode(){;
-        String displayName = "CitiBus";
-        TransportationMode tm = new BusTransportationMode(displayName);
+    public void Test_CanCreateTrainTransportationMode(){;
+        String displayName = "Metro";
+        TransportationMode tm = new TrainTransportationMode(displayName);
         
         assertEquals(0, tm.getEmissionRate());
         assertEquals(5, tm.getSpeed());

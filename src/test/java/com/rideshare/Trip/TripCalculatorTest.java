@@ -1,4 +1,4 @@
-package com.rideshare;
+package com.rideshare.Trip;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
