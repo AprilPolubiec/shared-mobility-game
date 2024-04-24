@@ -45,8 +45,7 @@ public class Game {
     private ChooseTripComponent _tripChooser;
     private EducationalPopup _educationalContent;
     private SaveLoad _saveLoad;
-    private int mailboxesLeft;
-    private ScoreKeeper scoreKeeper;
+   
 
     public Game(AnchorPane root, City city, Player player) {
         Utils.print(String.format("Creating a game"));
@@ -55,14 +54,13 @@ public class Game {
         this._root = root;
         this._tripCalculator = new TripCalculator(this._city);
         _saveLoad = new SaveLoad();
-
+        
         initializeTimer();
         initializeScoreKeeper();
         initializeTripChooser();
         initializeGameLoop();
         intializeEducationalContentContainer();
 
-        // cl
         System.out.println(this._player.getScoreKeeper().getMapName());
     }
 
@@ -127,6 +125,7 @@ public class Game {
     private void initializeTimer() {
         this._timer = new Timer();
         this._timer.render(_root);
+        initializePause(_root);
     }
 
     private void initializeScoreKeeper() {
@@ -340,6 +339,12 @@ public class Game {
 
     private boolean isLevelOver() {
         return getMailboxesLeft() == 0 || getTimer().getState() == TimerState.STOPPED;
+    }
+
+
+    private void initializePause(AnchorPane _root) {
+        _timer.renderPauseButton(_root);
+         
     }
 
 }

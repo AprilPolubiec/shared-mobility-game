@@ -17,6 +17,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.Background;
 
 public class Timer {
     private final LocalTime DAY_START = LocalTime.of(5, 0, 0);
@@ -27,6 +35,8 @@ public class Timer {
     private Timeline _timeline;
     Text _clockText;
     Font _font;
+    private Button pauseButton;
+
 
     public Timer() {
         this._font = Font.loadFont(getClass().getResourceAsStream("/fonts/digital-7.ttf"), 48);
@@ -145,5 +155,64 @@ public class Timer {
         Utils.print(String.format("%s minutes left on timer", minutesLeft));
         return minutesLeft;
     }
+
+
+    public void renderPauseButton(AnchorPane root) {
+        Image pauseImage = new Image(getClass().getResourceAsStream("/images/ui/pauseButton.png"));
+        Image playImage = new Image(getClass().getResourceAsStream("/images/ui/playButton.png"));
+
+        pauseButton = new Button();
+        AnchorPane.setTopAnchor(pauseButton, 418.0); 
+        AnchorPane.setRightAnchor(pauseButton, 298.0);
+
+        BackgroundImage backgroundImage = new BackgroundImage(
+                        pauseImage,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.DEFAULT,
+                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false)
+                );
+
+                
+        Background background = new Background(backgroundImage);
+        pauseButton.setBackground(background);
+
+
+        double desiredWidth = 305; 
+        double desiredHeight = 200; 
+        pauseButton.setPrefWidth(desiredWidth);
+        pauseButton.setPrefHeight(desiredHeight); 
+
+
+        pauseButton.setOnAction(e -> {
+            if (getState() == TimerState.RUNNING) {
+                pause();
+                pauseButton.setBackground(new Background(new BackgroundImage(
+                        playImage,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.DEFAULT,
+                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false)
+                )));
+            } else {
+                resume();
+                pauseButton.setBackground(new Background(new BackgroundImage(
+                        pauseImage,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.DEFAULT,
+                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false)
+                )));
+            }
+        });
+        root.getChildren().add(pauseButton);
+    }
+
+    public Button getPauseButton() {
+        return pauseButton;
+    }
+
+     
+    
 
 }
