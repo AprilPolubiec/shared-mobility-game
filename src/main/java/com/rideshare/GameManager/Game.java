@@ -127,6 +127,7 @@ public class Game {
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         this._player.getScoreKeeper().setMailboxesCompleted(0);
         this._level = this._player.getScoreKeeper().getLevel();
+        this._player.getScoreKeeper().setCo2Used(0);
         this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
     }
 
@@ -230,8 +231,8 @@ public class Game {
     }
 
     private void showMailbox(Mailbox mailbox) {
-        Utils.print(String.format("Showing mailbox at [%s, %s]", mailbox.getPosition().row,
-                mailbox.getPosition().col));
+        Utils.print(String.format("Showing mailbox at [%s, %s]", mailbox.getGridPanePosition().row,
+                mailbox.getGridPanePosition().col));
 
         mailbox.render();
         mailbox.show();
@@ -239,8 +240,8 @@ public class Game {
             @Override
             public void changed(ObservableValue<? extends MailboxStatus> observable, MailboxStatus oldStatus,
                     MailboxStatus newStatus) {
-                System.out.println(String.format("Status changed for [%s %s]: %s ", mailbox.getPosition().row,
-                        mailbox.getPosition().col, newStatus));
+                System.out.println(String.format("Status changed for [%s %s]: %s ", mailbox.getGridPanePosition().row,
+                        mailbox.getGridPanePosition().col, newStatus));
                 if (mailbox.isSelected()) {
                     handleMailboxSelected(mailbox);
                 }
@@ -273,7 +274,7 @@ public class Game {
         pause();
         // Calculate trips from player to mailbox
         ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition(),
-                mailbox.getPosition());
+                mailbox.getGridPanePosition());
         Utils.print(String.format("Found trips!"));
 
         // Render the trips in the trip chooser

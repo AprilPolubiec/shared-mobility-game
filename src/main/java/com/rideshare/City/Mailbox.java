@@ -146,7 +146,7 @@ public class Mailbox {
       this.status.set(MailboxStatus.WAITING);
    }
 
-   public GridPanePosition getPosition() {
+   public GridPanePosition getGridPanePosition() {
       return position;
    }
    // #endregion

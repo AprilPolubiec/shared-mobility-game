@@ -15,8 +15,10 @@ public class AudioManager {
     // want and only ever load in the media once
     private static final Logger LOGGER = Logger.getLogger(AudioManager.class.getName());
     private static MediaPlayer mainMediaPlayer;
-    private static MediaPlayer mailboxWaitingAudio;
-    private static MediaPlayer mailboxCompleteAudio;
+
+    // Not static because it had weird behavior when being shared across mailboxes
+    private MediaPlayer mailboxWaitingAudio;
+    private MediaPlayer mailboxCompleteAudio;
 
     private boolean muted = false;
 
@@ -56,7 +58,8 @@ public class AudioManager {
     public void playMailboxWaitingAudio() {
         try {
             if (mailboxWaitingAudio == null) {
-                Media waitingMedia = new Media(Objects.requireNonNull(App.class.getResource("/images/audio/question_003.mp3")).toString());
+                Media waitingMedia = new Media(
+                        Objects.requireNonNull(App.class.getResource("/images/audio/question_003.mp3")).toString());
                 mailboxWaitingAudio = new MediaPlayer(waitingMedia);
             }
             mailboxWaitingAudio.play();

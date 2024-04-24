@@ -10,8 +10,8 @@ public class MailboxTest {
     void Test_CanCreateMailbox() {
         Mailbox mailbox = new Mailbox(new GridPanePosition(1, 0), 0, null);
 
-        assertEquals(1, mailbox.getPosition().col);
-        assertEquals(1, mailbox.getPosition().row);
+        assertEquals(1, mailbox.getGridPanePosition().col);
+        assertEquals(1, mailbox.getGridPanePosition().row);
         assertTrue(mailbox.isReady());
     }
 }

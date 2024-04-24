@@ -62,7 +62,12 @@ public class SaveLoad {
 
     public void save(Player player) {
         try {
-            int currentLevel = player.getScoreKeeper().getLevel();
+            int currentLevel = player.getScoreKeeper().getLevel() - 1; // TODO: this is very very bad! right now,
+                                                                       // Game.java updates the score before calling
+                                                                       // this which is why we decrement it here - its
+                                                                       // too much of an assumption that the scorekeeper
+                                                                       // will be +1 of the actual level - needs to be
+                                                                       // fixed in the future
             String playerName = player.getPlayerName();
             Path playerDirectory = Paths.get(String.format("game_data/%s", playerName));
             if (!Files.exists(playerDirectory)) {
