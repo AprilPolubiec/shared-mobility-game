@@ -10,18 +10,21 @@ package com.rideshare.TransportationMode;
     hasStops (boolean): true/false value, indicates whether the mode has stops
  */
 public class TransportationMode {
+    //Instance Field Declarations
     private final String name;
     protected final int co2EmissionRate;
     protected final int speed;
     protected final boolean hasStops;
-    
+
+    //Class Constructor
     public TransportationMode(String name, int co2eEmissionRate, int speed, boolean hasStops) {
         this.name = name;
         this.co2EmissionRate = co2eEmissionRate;
         this.speed = speed;
         this.hasStops = hasStops;
     }
-    
+
+    //Class Getter Methods
     /** 
      * @return String
      */
@@ -43,6 +46,7 @@ public class TransportationMode {
         return this.speed;
     }
 
+    //Status Check Methods
     public boolean hasStops() {
         return this.hasStops;
     }
