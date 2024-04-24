@@ -10,7 +10,7 @@ public class LevelCompletePopup extends Popup {
     private Button nextLevelButton;
 
     public LevelCompletePopup() {
-        super("/images/ui/level_complete.png");
+        super("/images/ui/level_complete.png", 400, 360);
 
         // Add buttons
         repeatLevelButton = new Button();
@@ -32,5 +32,45 @@ public class LevelCompletePopup extends Popup {
         this.dialogRoot.getChildren().addAll(repeatLevelButton, nextLevelButton);
     }
 
-    // ... rest of the methods remain unchanged
+    // TODO: animate the increase?
+    public void setScore(int score) {
+        Text scoreText = new Text(String.format("%s", score));
+        scoreText.setTranslateY(170);
+        scoreText.setTranslateX(50);
+        scoreText.setFont(font);
+        this.dialogRoot.getChildren().add(scoreText);
+    }
+
+    public void setEmission(int emission) {
+        Text emissionText = new Text(String.format("%s", emission));
+        emissionText.setTranslateY(207);
+        emissionText.setTranslateX(100);
+        emissionText.setFont(smallFont);
+        this.dialogRoot.getChildren().add(emissionText);
+    }
+
+    public void setTime(String time) {
+        Text emissionText = new Text(String.format("%s", time));
+        emissionText.setTranslateY(233);
+        emissionText.setTranslateX(100);
+        emissionText.setFont(smallFont);
+        this.dialogRoot.getChildren().add(emissionText);
+    }
+
+    public void render(AnchorPane root) {
+        root.getChildren().add(this.dialogRoot);
+    }
+
+    public void onNextLevelSelected(EventHandler<ActionEvent> listener) {
+        nextLevelButton.setOnAction(listener);
+    }
+
+    public void onRepeatLevelSelected(EventHandler<ActionEvent> listener) {
+        repeatLevelButton.setOnAction(listener);
+    }
+
+    public void hide() {
+        this.dialogRoot.setVisible(false);
+    }
+
 }

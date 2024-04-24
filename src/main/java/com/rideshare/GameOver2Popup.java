@@ -2,13 +2,16 @@ package com.rideshare;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class GameOverPopup extends Popup {
     private Button repeatLevelButton;
 
     public GameOverPopup() {
-        super("/images/ui/level_failed.png");
+        super("/images/ui/level_failed.png", 402, 362);
 
         // Add buttons
         repeatLevelButton = new Button();
@@ -20,5 +23,11 @@ public class GameOverPopup extends Popup {
         this.dialogRoot.getChildren().add(repeatLevelButton);
     }
 
-    // ... rest of the methods remain unchanged
+    public void onRepeatLevelSelected(EventHandler<ActionEvent> listener) {
+        repeatLevelButton.setOnAction(listener);
+    }
+
+    public void hide() {
+        this.dialogRoot.setVisible(false);
+    }
 }
