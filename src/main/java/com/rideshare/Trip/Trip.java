@@ -3,6 +3,9 @@ package com.rideshare.Trip;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import com.rideshare.TileManager.TileUtils;
 
 /**
@@ -10,6 +13,8 @@ import com.rideshare.TileManager.TileUtils;
  */
 
 public class Trip {
+    private static final Logger LOGGER = Logger.getLogger(Trip.class.getName());
+
     private float tripDuration = 0; // In game time minutes
     private float tripDistance = 0; // In km
     private float tripEmission = 0; // In /km (gallons?)
@@ -19,8 +24,8 @@ public class Trip {
     public Trip(TransportationNode endNode, TransportationNode startNode, TripType tripType) {
         this.tripType = tripType;
         if (startNode == endNode) {
-            // TODO: @sadhbh - great place to put a log warning that the user attempted to
-            // create a trip with the same start and end node
+            // Log warning that the user attempted to create a trip with the same start and end node
+            LOGGER.log(Level.WARNING, "Attempted to create a trip with the same start and end node");
             return;
         }
         System.out.println(String.format("Creating %s trip", tripType.name()));
