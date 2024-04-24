@@ -1,16 +1,10 @@
 package com.rideshare.City;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static java.time.temporal.ChronoUnit.SECONDS;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import com.rideshare.City.City;
-import com.rideshare.City.Route;
 import com.rideshare.TileManager.GridPanePosition;
 
 public class CityTest {
