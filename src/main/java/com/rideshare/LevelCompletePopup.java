@@ -32,7 +32,7 @@ public class LevelCompletePopup extends Popup {
         this.dialogRoot.getChildren().addAll(repeatLevelButton, nextLevelButton);
     }
 
-    // TODO: animate the increase?
+    // TODO: animate the increase
     public void setScore(int score) {
         Text scoreText = new Text(String.format("%s", score));
         scoreText.setTranslateY(170);
