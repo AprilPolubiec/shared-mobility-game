@@ -11,9 +11,10 @@ import com.rideshare.Trip.TransportationNode;
 
 // RouteNodeMatrix is a matrix of Transportation nodes for a given route
 public class RouteNodeMatrix {
-  private TransportationNode[][] matrix;
-  private TransportationType transportationType;
-  private String name;
+  //Instance Field Declarations
+  private final TransportationNode[][] matrix;
+  private final TransportationType transportationType;
+  private final String name;
 
   // For each transportation type, contains all tile ids where it is valid to
   // enter/exit
@@ -35,34 +36,38 @@ public class RouteNodeMatrix {
     openCodes.put(TransportationType.TRAIN, TileUtils.TRAIN_TILE_IDS);
   }
 
+  //Class Constructor
   public RouteNodeMatrix(int[][] mapDataMatrix, TransportationType transportationType, String name) {
     this.name = name;
     this.matrix = new TransportationNode[mapDataMatrix.length][mapDataMatrix[0].length];
     this.transportationType = transportationType;
-    
+
     for (int i = 0; i < mapDataMatrix.length; i++) {
-      int rowIdx = i;
-      int[] row = mapDataMatrix[i];
+        int[] row = mapDataMatrix[i];
       for (int j = 0; j < row.length; j++) {
-        int colIdx = j;
-        TransportationNode node = new TransportationNode(new GridPanePosition(rowIdx, colIdx), transportationType, this);
-        boolean isStopCode = Arrays.asList(stopCodes.get(transportationType)).contains(mapDataMatrix[rowIdx][colIdx]);
+          TransportationNode node = new TransportationNode(new GridPanePosition(i, j), transportationType, this);
+        boolean isStopCode = Arrays.asList(stopCodes.get(transportationType)).contains(mapDataMatrix[i][j]);
         if (isStopCode) {
           node.setAsValidStop();
         }
-        boolean isOpenCode = Arrays.asList(openCodes.get(transportationType)).contains(mapDataMatrix[rowIdx][colIdx])
+        boolean isOpenCode = Arrays.asList(openCodes.get(transportationType)).contains(mapDataMatrix[i][j])
             || isStopCode;
         if (!isOpenCode) {
           node.setAsSolid();
         }
-        matrix[rowIdx][colIdx] = node;
+        matrix[i][j] = node;
       }
     }
-  
+
   }
 
+  //Class Getter Methods
   public String getRouteName() {
     return this.name;
+  }
+
+  public TransportationNode[][] get() {
+    return matrix;
   }
 
   /**
@@ -79,10 +84,7 @@ public class RouteNodeMatrix {
     return matrix[position.row][position.col];
   }
 
-  public TransportationNode[][] get() {
-    return matrix;
-  }
-
+  //TODO: Methods declared but never used. Should they be utilised or deleted?
   public TransportationType getTransportationType() {
     return this.transportationType;
   }
