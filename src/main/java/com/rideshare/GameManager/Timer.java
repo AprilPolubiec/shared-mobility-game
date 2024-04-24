@@ -6,6 +6,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
@@ -20,31 +21,31 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class Timer {
-    private final LocalTime DAY_START = LocalTime.of(5, 0, 0);
-    private final LocalTime DAY_END = LocalTime.of(0, 0, 0);
+    private static final LocalTime DAY_START = LocalTime.of(5, 0, 0);
+    private static final LocalTime DAY_END = LocalTime.of(0, 0, 0);
     boolean isPaused = false;
     private LocalTime currentInGameTime;
     private TimerState state = TimerState.UNINITIALIZED;
-    private Timeline _timeline;
-    Text _clockText;
-    Font _font;
+    private Timeline timeline;
+    Text clockText;
+    Font font;
 
     public Timer() {
-        this._font = Font.loadFont(getClass().getResourceAsStream("/fonts/digital-7.ttf"), 48);
+        this.font = Font.loadFont(getClass().getResourceAsStream("/fonts/digital-7.ttf"), 48);
         initialize();
     }
 
     public void initialize() {
-        currentInGameTime = DAY_START;
-        state = TimerState.INITIALIZED;
+        this.currentInGameTime = DAY_START;
+        this.state = TimerState.INITIALIZED;
     }
 
     private void updateInGameTime() {
-        if (state == TimerState.RUNNING) {
-            currentInGameTime = currentInGameTime.plusMinutes(1);
+        if (this.state == TimerState.RUNNING) {
+            this.currentInGameTime = this.currentInGameTime.plusMinutes(1);
             // Update clock text
-            if (_clockText != null) {
-                _clockText.setText(currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
+            if (this.clockText != null) {
+                this.clockText.setText(this.currentInGameTime.format(DateTimeFormatter.ofPattern("HH:mm a")));
             }
             if (isEndOfDay()) {
                 System.out.println("End of day reached.");
@@ -54,40 +55,40 @@ public class Timer {
     }
 
     public void start() {
-        currentInGameTime = DAY_START;
-        state = TimerState.RUNNING;
-        _timeline = new Timeline(new KeyFrame(Duration.seconds(1.0 / 6), event -> updateInGameTime()));
-        _timeline.setCycleCount(Timeline.INDEFINITE);
-        _timeline.play();
+        this.currentInGameTime = DAY_START;
+        this.state = TimerState.RUNNING;
+        this.timeline = new Timeline(new KeyFrame(Duration.seconds(1.0 / 6), event -> updateInGameTime()));
+        this.timeline.setCycleCount(Timeline.INDEFINITE);
+        this.timeline.play();
     }
 
     public void pause() {
-        state = TimerState.PAUSED;
-        _timeline.pause();
-        isPaused = true;
+        this.state = TimerState.PAUSED;
+        this.timeline.pause();
+        this.isPaused = true;
     }
 
     public void resume() {
-        _timeline.play();
-        state = TimerState.RUNNING;
-        isPaused = false;
+        this.timeline.play();
+        this.state = TimerState.RUNNING;
+        this.isPaused = false;
     }
 
     private boolean isEndOfDay() {
-        return currentInGameTime.equals(DAY_END);
+        return this.currentInGameTime.equals(DAY_END);
     }
 
     public void resetTimer() {
-        currentInGameTime = DAY_START;
-        isPaused = false;
-        _timeline.stop();
+        this.currentInGameTime = DAY_START;
+        this.isPaused = false;
+        this.timeline.stop();
         System.out.println("Timer reset.");
     }
 
     public void stop() {
-        state = TimerState.STOPPED;
-        isPaused = false;
-        _timeline.stop();
+        this.state = TimerState.STOPPED;
+        this.isPaused = false;
+        this.timeline.stop();
         System.out.println("Timer has been stopped.");
     }
 
@@ -112,17 +113,17 @@ public class Timer {
     public void render(AnchorPane root) {
         StackPane timeModalRoot = new StackPane();
         ImageView panelImageView = new ImageView(
-                new Image(getClass().getResourceAsStream("/images/ui/grey_panel.png")));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/ui/grey_panel.png"))));
         timeModalRoot.getChildren().add(panelImageView);
         AnchorPane.setBottomAnchor(timeModalRoot, 0.0);
         AnchorPane.setLeftAnchor(timeModalRoot, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);
         panelImageView.setFitHeight(150);
         panelImageView.setFitWidth(300);
 
-        _clockText = new Text("00:00AM");
-        _clockText.setFont(_font);
-        _clockText.setFill(javafx.scene.paint.Color.BLACK);
-        timeModalRoot.getChildren().add(_clockText);
+        this.clockText = new Text("00:00AM");
+        this.clockText.setFont(this.font);
+        this.clockText.setFill(javafx.scene.paint.Color.BLACK);
+        timeModalRoot.getChildren().add(this.clockText);
 
         root.getChildren().add(timeModalRoot);
     }
