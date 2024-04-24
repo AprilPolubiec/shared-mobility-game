@@ -33,10 +33,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
-import com.rideshare.ScoreKeeper;
-import com.rideshare.UIComponentUtils;
-import com.rideshare.Player;
+import com.rideshare.GameManager.Player;
+import com.rideshare.GameManager.ScoreKeeper;
 import com.rideshare.GameManager.Sprite;
+import com.rideshare.UI.UIComponentUtils;
 
 public class SaveLoad {
     private final String GAME_DATA_DIR = "game_data/";
@@ -62,7 +62,12 @@ public class SaveLoad {
 
     public void save(Player player) {
         try {
-            int currentLevel = player.getScoreKeeper().getLevel();
+            int currentLevel = player.getScoreKeeper().getLevel() - 1; // TODO: this is very very bad! right now,
+                                                                       // Game.java updates the score before calling
+                                                                       // this which is why we decrement it here - its
+                                                                       // too much of an assumption that the scorekeeper
+                                                                       // will be +1 of the actual level - needs to be
+                                                                       // fixed in the future
             String playerName = player.getPlayerName();
             Path playerDirectory = Paths.get(String.format("game_data/%s", playerName));
             if (!Files.exists(playerDirectory)) {
@@ -135,19 +140,7 @@ public class SaveLoad {
             AnchorPane.setLeftAnchor(playerNameText, 150 - (playerNameText.getLayoutBounds().getWidth() / 2));
 
             playerOption.getChildren().addAll(panel, playerNameText);
-            playerOption.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    playerOption.setCursor(Cursor.HAND);
-                    playerOption.setEffect(new ColorAdjust(0, 0, -0.2, 0));
-                }
-            });
-            playerOption.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    playerOption.setEffect(new ColorAdjust(0, 0, 0, 0));
-                }
-            });
+            UIComponentUtils.addHoverCursor(playerOption, true);
             playerOption.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -179,7 +172,8 @@ public class SaveLoad {
                     .mapToInt(v -> v)
                     .max().orElseThrow(NoSuchElementException::new);
 
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(String.format("%s/%s.dat", directoryString, lastLevelCompleted)));
+            ObjectInputStream ois = new ObjectInputStream(
+                    new FileInputStream(String.format("%s/%s.dat", directoryString, lastLevelCompleted)));
             DataStorage ds = (DataStorage) ois.readObject();
 
             Player loadedPlayer = new Player(playerName, ds.spriteName);

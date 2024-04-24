@@ -10,12 +10,13 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
-import com.rideshare.Route;
-import com.rideshare.RouteNodeMatrix;
-import com.rideshare.TransportationNode;
-import com.rideshare.TransportationType;
+import com.rideshare.City.Route;
+import com.rideshare.City.RouteNodeMatrix;
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileUtils;
+import com.rideshare.TransportationMode.TransportationType;
+import com.rideshare.Trip.TransportationNode;
 
 public class MapLoaderTest {
     @Test
@@ -61,7 +62,7 @@ public class MapLoaderTest {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {
                 int colIdx = j;
-                TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+                TransportationNode node = routeNodeMatrix.getNode(new GridPanePosition(rowIdx, colIdx));
                 int dataValue = matrix[rowIdx][colIdx];
                 if (Arrays.asList(TileUtils.GRASS_TILE_IDS).contains(dataValue)) {
                     assertTrue(node.canStop());
@@ -86,7 +87,7 @@ public class MapLoaderTest {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {
                 int colIdx = j;
-                TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+                TransportationNode node = routeNodeMatrix.getNode(new GridPanePosition(rowIdx, colIdx));
                 int dataValue = matrix[rowIdx][colIdx];
                 if (Arrays.asList(TileUtils.ROAD_TILE_IDS).contains(dataValue)) {
                     assertTrue(node.canStop());
@@ -114,7 +115,7 @@ public class MapLoaderTest {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {
                 int colIdx = j;
-                TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+                TransportationNode node = routeNodeMatrix.getNode(new GridPanePosition(rowIdx, colIdx));
                 int dataValue = matrix[rowIdx][colIdx];
                 if (Arrays.asList(TileUtils.STOP_TILE_IDS).contains(dataValue)) {
                     assertTrue(node.canStop());
@@ -143,7 +144,7 @@ public class MapLoaderTest {
             int rowIdx = i;
             for (int j = 0; j < matrix[rowIdx].length; j++) {
                 int colIdx = j;
-                TransportationNode node = routeNodeMatrix.getNode(rowIdx, colIdx);
+                TransportationNode node = routeNodeMatrix.getNode(new GridPanePosition(rowIdx, colIdx));
                 int dataValue = matrix[rowIdx][colIdx];
                 ArrayList<Integer> openValues = new ArrayList<Integer>();
                 Collections.addAll(openValues, 145, 147);
@@ -166,11 +167,11 @@ public class MapLoaderTest {
         ArrayList<Route> busRoutes = MapLoader.getRoutes(map, "Bus", TransportationType.BUS);
         assertEquals(2, busRoutes.size());
         Route busRoute1 = busRoutes.get(0);
-        assertEquals("39A", busRoute1.name);
-        assertEquals("39A", busRoute1.getRouteNodeMatrix().getNode(0, 0).modeOfTransport.getName());
+        assertEquals("39A", busRoute1.getName());
+        assertEquals("39A", busRoute1.getRouteNodeMatrix().getNode(new GridPanePosition(0, 0)).getModeOfTransport().getName());
         Route busRoute2 = busRoutes.get(1);
-        assertEquals("119", busRoute2.name);
-        assertEquals("119", busRoute2.getRouteNodeMatrix().getNode(0, 0).modeOfTransport.getName());
+        assertEquals("119", busRoute2.getName());
+        assertEquals("119", busRoute2.getRouteNodeMatrix().getNode(new GridPanePosition(0, 0)).getModeOfTransport().getName());
 
     }
     
