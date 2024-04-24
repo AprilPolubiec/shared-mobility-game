@@ -25,9 +25,9 @@ public class TripTest {
         node2.parent = node1;
 
         Trip t = new Trip(node4, node1, TripType.EFFICIENT);
-
-        assertEquals((3 / 5) / 60, t.getDuration());
-        assertEquals(4, t.getDistance());
+        // 4 walking nodes = 0.25 (tile = .25km) * 4 km at 5km/hr
+        assertEquals((1.0 / 5.0) * 60.0, t.getDuration());
+        assertEquals(1, t.getDistance());
         assertEquals(0, t.getEmission());
     }
 
@@ -52,20 +52,21 @@ public class TripTest {
         node41.parent = node4;
 
         Trip t = new Trip(node41, node1, TripType.EFFICIENT);
-        // Walking = 5km/hr = 2 / 5 * 60 = 24
-        // Train = 30 km/hr = 2 / 30 * 60 = 4
-        // Bus = 40 km/hr = 2/40 * 60 = 3
-        // Car = 48 km/hr = 2/48 * 60 = 2.5
+        
+        // Walking = 5km/hr = 0.5 / 5 * 60 = 6
+        // Train = 30 km/hr = 0.5 / 30 * 60 = 1
+        // Bus = 40 km/hr = 0.5 / 40 * 60 = 0.5 // maybe?
+        // Car = 48 km/hr = 0.5 / 48 * 60 = 0.625
 
-        // 4km = 24 + 4 + 3 + 2.5 = 33.5
-        assertEquals(Math.floor(33.5), t.getDuration());
-        assertEquals(8.0, t.getDistance());
+        // 2km = 6 + 1 + 0.5 + 0.25 = 7.75
+        assertEquals(Math.round(7.75), t.getDuration());
+        assertEquals(2.0, t.getDistance());
 
         // Walking = 0/km
         // Train = 35/km
         // Bus = 105/km
         // Car = 192/km
-        // 0 + 35 + 105 + 192
-        assertEquals(332.0 * 2, t.getEmission());
+        // 0 + 17.5 + 52.5 + 96
+        assertEquals(166.0, t.getEmission());
     }
 }

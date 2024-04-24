@@ -59,7 +59,7 @@ import com.rideshare.TileManager.TileUtils;
             this._nodeList.add(current);
 
             currentLegDistance += TileUtils.TILE_DISTANCE_IN_KM; // Each node = .5km
-            currentLegDuration += (TileUtils.TILE_DISTANCE_IN_KM / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go 0.5 km
+            currentLegDuration += (TileUtils.TILE_DISTANCE_IN_KM / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go 0.25 km
             currentLegEmission += (float) current.modeOfTransport.getEmissionRate() * TileUtils.TILE_DISTANCE_IN_KM; // Emission rate is in km/hr
 
             if (current.parent == null || current.transportationType != current.parent.transportationType) {
@@ -94,16 +94,20 @@ import com.rideshare.TileManager.TileUtils;
         this.tripType = tripType;
     }
 
+    /**
+     * Get duration of trip in minutes (game-time)
+     * @return tripDuration
+     */
     public double getDuration() {
-        return Math.floor(this.tripDuration);
+        return Math.round(this.tripDuration);
     }
 
     public double getDistance() {
-        return Math.floor(this.tripDistance);
+        return Math.round(this.tripDistance);
     }
 
     public double getEmission() {
-        return Math.floor(this.tripEmission);
+        return Math.round(this.tripEmission);
     }
 
     public Trip appendTrip(Trip trip) {
