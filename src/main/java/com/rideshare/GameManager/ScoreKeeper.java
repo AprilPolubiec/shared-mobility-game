@@ -38,33 +38,23 @@ import javafx.util.Duration;
  */
 
 public class ScoreKeeper {
-    private final int maxCo2Budget = 8500; // NOTE: budget - average driver does about 160km per day, electric vehicle
-                                           // emits 53 per km. budget = 160*53 = 8480
-    int co2Used;
-    private int mailboxesCompleted;
-    private int totalMailboxes;
-    private int minutesLeft;
-    double mailboxesMultiplier;
-    int score;
-    Integer scoreWithTimeBonus;
-    int level;
-    boolean exceededBudgetFlag;
-    int amountOverBudget;
-    private String playerName;
-    private ProgressBar emissionsProgressBar;
+    private final int MAX_CO2_BUDGET = 8500;
+    int co2Used = 0;
+    private int mailboxesCompleted = 0;
+    private int totalMailboxes = 0;
+    int score = 0;
+    Integer scoreWithTimeBonus = 0;
+    int level = 0;
+    private String playerName = null;
+    private ProgressBar emissionsProgressBar = null;
 
-    private Text scoreText;
-    private Text mailboxText;
-    private Text co2Text;
+    private Text scoreText = null;
+    private Text mailboxText = null;
+    private Text co2Text = null;
 
     // The ScoreKeeper constructor
     public ScoreKeeper() {
-        this.co2Used = 0;
-        this.mailboxesCompleted = 0;
-        this.totalMailboxes = 0;
-        this.level = 0;
-        this.exceededBudgetFlag = false;
-        this.amountOverBudget = 0;
+
     }
 
     public void setPlayerName(String name) {
@@ -96,7 +86,7 @@ public class ScoreKeeper {
         this.scoreText.setFont(Font.font("Futura Bold", 21));
         scoreVbox.getChildren().add(scoreText);
 
-        this.co2Text = new Text(String.format("CO2 Used: %s/%s", 0, this.maxCo2Budget));
+        this.co2Text = new Text(String.format("CO2 Used: %s/%s", 0, this.MAX_CO2_BUDGET));
         this.co2Text.setFont(Font.font("Futura Bold", 21));
         scoreVbox.getChildren().add(co2Text);
 
@@ -145,9 +135,8 @@ public class ScoreKeeper {
         return this.level;
     }
 
-    public int updateLevel() {
+    public void updateLevel() {
         this.level += 1;
-        return this.level;
     }
 
     public String getMapName() {
@@ -165,7 +154,7 @@ public class ScoreKeeper {
 
         this.co2Used += incrementValue;
         if (!this.hasExceededBudget()) {
-            this.co2Text.setText(String.format("CO2 Used: %s/%s", this.co2Used, this.maxCo2Budget));
+            this.co2Text.setText(String.format("CO2 Used: %s/%s", this.co2Used, this.MAX_CO2_BUDGET));
             updateProgressBar();
         }
 
@@ -175,7 +164,7 @@ public class ScoreKeeper {
     public void updateProgressBar() {
         Timeline timeline = new Timeline();
         KeyValue keyValue = new KeyValue(emissionsProgressBar.progressProperty(),
-                1.0 - ((double) co2Used / (double) maxCo2Budget));
+                1.0 - ((double) co2Used / (double) MAX_CO2_BUDGET));
         KeyFrame keyFrame = new KeyFrame(new Duration(1000), keyValue);
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
@@ -183,18 +172,17 @@ public class ScoreKeeper {
 
     // Don't know if we need this so I'll just leave it here. I imagine level
     // incrementer
-    public int setLevel(int newLevel) {
+    public void setLevel(int newLevel) {
         if (newLevel < 0) {
             throw new IllegalArgumentException("Input value must be a positive integer");
         }
 
         this.level = newLevel;
-        return this.level;
     }
 
     // budget checkers
     public boolean hasExceededBudget() {
-        return this.co2Used > this.maxCo2Budget;
+        return this.co2Used > this.MAX_CO2_BUDGET;
     }
 
     public int calculateLevelScore(int minutesLeft) {
@@ -204,20 +192,16 @@ public class ScoreKeeper {
         return scoreWithTimeBonus;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     // Faster you get a mailbox, the more it is worth
     public void updateScore(Mailbox mailbox, Trip trip) {
         int timeLeftOnMailbox = mailbox.getTimeLeft(); // This we want as high as possible
         int tripEmission = (int) trip.getEmission(); // This we want as low as possible
         // 100 points per second left on the mailbox
         // Plus the proportion of the total budget that was unused
-        this.score += (timeLeftOnMailbox * 100) + (int) ((1.0 - ((double) tripEmission / maxCo2Budget)) * 100);
+        this.score += (timeLeftOnMailbox * 100) + (int) ((1.0 - ((double) tripEmission / MAX_CO2_BUDGET)) * 100);
         this.scoreText.setText(String.format("Score: %s", this.score));
         Utils.print(String.format("Updating score: (%s * 100) + (int)((1.0 - (%s / %s)) * 100) = %s", timeLeftOnMailbox,
-                tripEmission, maxCo2Budget, this.score));
+                tripEmission, MAX_CO2_BUDGET, this.score));
     }
 
     public int getCurrentScore(int score) {
@@ -238,7 +222,7 @@ public class ScoreKeeper {
     public void print() {
         Utils.print("SCOREKEEPER");
         Utils.print(String.format("Mailboxes completed: %s/%s", mailboxesCompleted, totalMailboxes));
-        Utils.print(String.format("CO2 used: %s/%s", co2Used, maxCo2Budget));
+        Utils.print(String.format("CO2 used: %s/%s", co2Used, MAX_CO2_BUDGET));
         Utils.print(String.format("Score: %s", this.score));
     }
 }
