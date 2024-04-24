@@ -160,7 +160,7 @@ public class City {
     }
     this.tileManager = tm;
   }
-  
+
   //Class Rendering Methods
   /**
    * Clears the city from the UI
