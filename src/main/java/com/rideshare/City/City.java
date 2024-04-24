@@ -13,19 +13,23 @@ import com.rideshare.Trip.TransportationNode;
  * It contains various modes of transportation which can navigate on various
  * routes to take people from one place to another.
  * Attributes:
- * Name (string): name to identify the city by (eg: “Dublin”)
  * Routes (Route[]): all the possible routes that can be traveled on in the city
- * DifficultyLevel (Integer): indicates the “difficulty” of the city, integer 0
- * - 10, where 0 is the easiest and 10 is the hardest.
  * Mailboxes (Mailbox[]): a list of Mailboxes which exist within this city
- * Dimensions - what is the height/width of the city?
+ * Size - what is the height/width of the city?
+ * TileManager - for rendering
  * 
  * Methods:
- * constructor - at your discretion
- * getters/setters - at your discretion
- * loadCity(): Prepares a city for gameplay and renders the map to be visible to
- * the player (is this necessary?)
- * addMailboxes(int count): adds n mailboxes to the city
+ * getSize
+ * setRoutes
+ * getRoutes
+ * setMailboxes
+ * setTileManager
+ * getMailboxes
+ * getWaitingMailboxes
+ * getMailboxesLeft
+ * getUninitializedMailboxes
+ * showAllMailboxes
+ * clear
  */
 
 public class City {
@@ -133,8 +137,7 @@ public class City {
   }
 
   /**
-   * @param rowIdx Row/y to get node at
-   * @param colIdx Column/x to get node at
+   * @param position
    * @return ArrayList<TransportationNode> list of transportation nodes which
    *         exist at these coordinates in the city
    */
@@ -146,25 +149,6 @@ public class City {
       nodes.add(node);
     }
     return nodes;
-  }
-
-  /**
-   * @param rowIdx             Row/y to get node at
-   * @param colIdx             Column/x to get node at
-   * @param transportationType
-   * @return ArrayList<TransportationNode> list of transportation nodes which
-   *         exist at these coordinates in the city
-   */
-  public TransportationNode getRouteNode(GridPanePosition position, TransportationType transportationType) {
-    for (Route route : routes) {
-      if (route.getTransportationType() != transportationType) {
-        continue;
-      }
-
-      RouteNodeMatrix routeNodeMatrix = route.getRouteNodeMatrix();
-        return routeNodeMatrix.getNode(position);
-    }
-    return null;
   }
 
 }
