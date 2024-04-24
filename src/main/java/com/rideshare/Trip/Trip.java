@@ -6,61 +6,47 @@ import java.util.Collections;
 import com.rideshare.TileManager.TileUtils;
 
 /**
- * Description: A trip is a series of Routes that can be taken to get from point
- * A
- * to point B and the statistics associated with taking the trip (carbon, time,
- * length, etc.). The main purpose of this class is to store information about
- * the
- * Trip - it does not handle any visualizations (ie: moving player across the
- * screen, that occurs elsewhere)
- * 
- * Attributes:
- * StartPosition ([int, int]): coordinates of where the trip started
- * EndPosition ([int, int]): coordinates of where the trip ended
- * TripPath (Route[]): the chronologically ordered series of Routes which can be
- * taken in order to get from StartPosition to EndPosition
- * TripLength (int): the time needed overall to complete the route
- * TripDistance (int): the distance between start position and end position
- * TripEmission (int): how much emission will be created upon completion of this
- * route
- * Status (Status): Ready, InProgress, Paused, Complete; current status of the
- * trip
- * Player (Player): the player which is interacting with the trip
- * Methods:
- * StartTrip(): sets the Trip Status to “InProgress”
- * EndTrip(): sets the Trip Status to “Complete”
- * PauseTrip(): sets the Trip Status to Paused
- * GetScore(): Calculates final score of a trip taking into account the time,
- * CO2 emission, etc. - should utilize the TripCalculator
- * CalculateCO2Emission(): Calculates CO2 taken for a trip.
- * GetStatus: Check the status of the trip
- * 
+ * TODO
  */
 
- public class Trip {
-    private float tripDuration; // In game time minutes
-    private float tripDistance; // In km
-    private float tripEmission; // In /km (gallons?)
+public class Trip {
+    private float tripDuration = 0; // In game time minutes
+    private float tripDistance = 0; // In km
+    private float tripEmission = 0; // In /km (gallons?)
     private ArrayList<TransportationNode> _nodeList = new ArrayList<>();
     private TripType tripType;
 
-    // private int _score;
-    private ArrayList<Trip> legs = new ArrayList<>();
-
     public Trip(TransportationNode endNode, TransportationNode startNode, TripType tripType) {
         this.tripType = tripType;
+        if (startNode == endNode) {
+            // TODO: @sadhbh - great place to put a log warning that the user attempted to
+            // create a trip with the same start and end node
+            return;
+        }
         System.out.println(String.format("Creating %s trip", tripType.name()));
         TransportationNode current = endNode;
         float currentLegDistance = 0;
         float currentLegDuration = 0;
         float currentLegEmission = 0;
+
+        // TODO: iterations are here to prevent infinite loop but this is a hacky
+        // solution, especially as maps get bigger - temporary
         int iterations = 0;
         while (current != null & iterations <= 200) {
             this._nodeList.add(current);
 
             currentLegDistance += TileUtils.TILE_DISTANCE_IN_KM; // Each node = .5km
-            currentLegDuration += (TileUtils.TILE_DISTANCE_IN_KM / current.modeOfTransport.getSpeed()) * 60.0; // Number of minutes to go 0.25 km
-            currentLegEmission += (float) current.modeOfTransport.getEmissionRate() * TileUtils.TILE_DISTANCE_IN_KM; // Emission rate is in km/hr
+            currentLegDuration += (TileUtils.TILE_DISTANCE_IN_KM / current.modeOfTransport.getSpeed()) * 60.0; // Number
+                                                                                                               // of
+                                                                                                               // minutes
+                                                                                                               // to go
+                                                                                                               // 0.25
+                                                                                                               // km
+            currentLegEmission += (float) current.modeOfTransport.getEmissionRate() * TileUtils.TILE_DISTANCE_IN_KM; // Emission
+                                                                                                                     // rate
+                                                                                                                     // is
+                                                                                                                     // in
+                                                                                                                     // km/hr
 
             if (current.parent == null || current.transportationType != current.parent.transportationType) {
                 this.tripDuration += currentLegDuration;
@@ -71,21 +57,28 @@ import com.rideshare.TileManager.TileUtils;
                 currentLegDuration = 0;
             }
 
+            // Check that the parent is a valid coordinate
+            if (current.parent != null && !current.parent.position.isAdjacent(current.position)) {
+                // @Sadhbh - great place for a logger warning that a route was invalid -
+                // printing out the coordinates would be helpful for debugging too
+                // Wipe everything
+                tripDuration = 0;
+                tripDistance = 0;
+                tripEmission = 0;
+                _nodeList = new ArrayList<>();
+                return;
+            }
+
             current = current.parent;
             iterations++;
-            
         }
         Collections.reverse(_nodeList); // Reverse list so its from start to end
-        legs.add(this);
     }
 
     public ArrayList<TransportationNode> getNodeList() {
         return _nodeList;
     }
 
-    // public int getScore() {
-    //     return this._score;
-    // }
     public TripType getTripType() {
         return this.tripType;
     }
@@ -96,25 +89,42 @@ import com.rideshare.TileManager.TileUtils;
 
     /**
      * Get duration of trip in minutes (game-time)
+     * 
      * @return tripDuration
      */
     public double getDuration() {
         return Math.round(this.tripDuration);
     }
 
+    /**
+     * Get trip distance in km
+     * 
+     * @return tripDistance
+     */
     public double getDistance() {
         return Math.round(this.tripDistance);
     }
 
+    /**
+     * Get trip emission in CO2e/km
+     * 
+     * @return tripEmission
+     */
     public double getEmission() {
         return Math.round(this.tripEmission);
     }
 
+    /**
+     * Appends an existing trip to this trip, updating all stats as well. Returns
+     * the newly merged trips.
+     * 
+     * @param trip
+     * @return
+     */
     public Trip appendTrip(Trip trip) {
         if (trip == null) {
             return this; // Do nothing
         }
-        legs.add(trip);
         this._nodeList.addAll(trip.getNodeList());
         this.tripDistance += trip.tripDistance;
         this.tripDuration += trip.tripDuration;
@@ -123,13 +133,13 @@ import com.rideshare.TileManager.TileUtils;
     }
 
     public void print() {
-        System.out.println(String.format("%s Trip (%s legs)\n Duration: %s Distance: %s Emission: %s", tripType.name(),
-                legs.size(),
+        System.out.println(String.format("%s Trip\n Duration: %s Distance: %s Emission: %s", tripType.name(),
                 tripDuration, tripDistance, tripEmission));
         System.out.println("Trip node list: ");
         for (TransportationNode transportationNode : _nodeList) {
-            System.out.println(String.format("[%s, %s] %s", transportationNode.position.row, transportationNode.position.col,
-                    transportationNode.transportationType.name()));
+            System.out.println(
+                    String.format("[%s, %s] %s", transportationNode.position.row, transportationNode.position.col,
+                            transportationNode.transportationType.name()));
         }
     }
 }

@@ -29,4 +29,10 @@ public class GridPanePosition {
     public boolean equals(GridPanePosition position) {
         return this.row == position.row && this.col == position.col;
     }
+
+    // Checks if two grid pane positions are adjacent (but not diagonal)
+    public boolean isAdjacent(GridPanePosition position) {
+        return position.equals(this.toTheLeft()) || position.equals(this.toTheRight()) || position.equals(this.above())
+                || position.equals(this.below());
+    }
 }
