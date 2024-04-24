@@ -1,12 +1,11 @@
 package com.rideshare.City;
 
-import java.util.ArrayList;
-
-import com.rideshare.City.City;
 import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TransportationMode.TransportationType;
 import com.rideshare.Trip.TransportationNode;
+
+import java.util.ArrayList;
 
 /**
  * Description: A city represents a location which can be visualized as a map.
@@ -19,7 +18,7 @@ import com.rideshare.Trip.TransportationNode;
  * - 10, where 0 is the easiest and 10 is the hardest.
  * Mailboxes (Mailbox[]): a list of Mailboxes which exist within this city
  * Dimensions - what is the height/width of the city?
- * 
+ *
  * Methods:
  * constructor - at your discretion
  * getters/setters - at your discretion
@@ -29,46 +28,31 @@ import com.rideshare.Trip.TransportationNode;
  */
 
 public class City {
+  //Instance Field Declarations
   private ArrayList<Route> routes;
   private ArrayList<Mailbox> mailboxes;
   private final int size;
   private TileManager tileManager;
 
+  //Class Constructor
   public City(int size) {
+    if (size < 0) {
+      throw new IllegalArgumentException("Size cannot be a negative value.");
+    }
     this.size = size;
   }
 
+  //Class Getter Methods
   // TODO: do we really need to store size in city?
-  public int getSize() {
-    return this.size;
-  }
-
-  public void setRoutes(ArrayList<Route> routes) {
-    this.routes = routes;
-  }
-
-  public void setMailboxes(ArrayList<Mailbox> mailboxes) {
-    this.mailboxes = mailboxes;
-  }
-
-  public void setTileManager(TileManager tm) {
-    this.tileManager = tm;
-  }
+  public int getSize() { return this.size; }
 
   public ArrayList<Route> getRoutes() {
     return routes;
   }
 
   /**
-   * Clears the city from the UI
-   */
-  public void clear() {
-    this.tileManager.clear();
-  }
-
-  /**
    * Get all mailboxes in the city
-   * 
+   *
    * @return ArrayList<Mailbox> mailboxes
    */
   public ArrayList<Mailbox> getMailboxes() {
@@ -76,23 +60,8 @@ public class City {
   }
 
   /**
-   * Get all mailboxes that are waiting to be selected
-   * 
-   * @return ArrayList<Mailbox>
-   */
-  public ArrayList<Mailbox> getWaitingMailboxes() {
-    ArrayList<Mailbox> waitingMailboxes = new ArrayList<>();
-    for (Mailbox mailbox : this.mailboxes) {
-      if (mailbox.isWaiting()) {
-        waitingMailboxes.add(mailbox);
-      }
-    }
-    return waitingMailboxes;
-  }
-
-  /**
    * Get all mailboxes that are neither failed nor completed
-   * 
+   *
    * @return ArrayList<Mailbox>
    */
   public ArrayList<Mailbox> getMailboxesLeft() {
@@ -106,8 +75,23 @@ public class City {
   }
 
   /**
+   * Get all mailboxes that are waiting to be selected
+   *
+   * @return ArrayList<Mailbox>
+   */
+  public ArrayList<Mailbox> getWaitingMailboxes() {
+    ArrayList<Mailbox> waitingMailboxes = new ArrayList<>();
+    for (Mailbox mailbox : this.mailboxes) {
+      if (mailbox.isWaiting()) {
+        waitingMailboxes.add(mailbox);
+      }
+    }
+    return waitingMailboxes;
+  }
+
+  /**
    * Get mailboxes that have not yet been rendered
-   * 
+   *
    * @return ArrayList<Mailbox>
    */
   public ArrayList<Mailbox> getUninitializedMailboxes() {
@@ -118,18 +102,6 @@ public class City {
       }
     }
     return uninitializedMailboxes;
-  }
-
-  /**
-   * Render and show all mailboxes in the city
-   */
-  public void showAllMailboxes() {
-    for (Mailbox mailbox : mailboxes) {
-      if (!mailbox.isInitialized()) {
-        mailbox.render();
-      }
-      mailbox.show();
-    }
   }
 
   /**
@@ -162,9 +134,50 @@ public class City {
       }
 
       RouteNodeMatrix routeNodeMatrix = route.getRouteNodeMatrix();
-        return routeNodeMatrix.getNode(position);
+      return routeNodeMatrix.getNode(position);
     }
     return null;
   }
 
+  //Class Setter Methods
+  public void setRoutes(ArrayList<Route> routes) {
+    if (routes == null) {
+      throw new IllegalArgumentException("Routes cannot be null.");
+    }
+    this.routes = routes;
+  }
+
+  public void setMailboxes(ArrayList<Mailbox> mailboxes) {
+    if (mailboxes == null) {
+      throw new IllegalArgumentException("Mailboxes cannot be null");
+    }
+    this.mailboxes = mailboxes;
+  }
+
+  public void setTileManager(TileManager tm) {
+    if (tm == null) {
+      throw new IllegalArgumentException("TileManager cannot be null.");
+    }
+    this.tileManager = tm;
+  }
+  
+  //Class Rendering Methods
+  /**
+   * Clears the city from the UI
+   */
+  public void clear() {
+    this.tileManager.clear();
+  }
+
+  /**
+   * Render and show all mailboxes in the city
+   */
+  public void showAllMailboxes() {
+    for (Mailbox mailbox : mailboxes) {
+      if (!mailbox.isInitialized()) {
+        mailbox.render();
+      }
+      mailbox.show();
+    }
+  }
 }

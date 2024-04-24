@@ -17,7 +17,6 @@ public class AudioManager {
     private static MediaPlayer mainMediaPlayer;
     private static MediaPlayer mailboxWaitingAudio;
     private static MediaPlayer mailboxCompleteAudio;
-
     private boolean muted = false;
 
     public AudioManager() {
