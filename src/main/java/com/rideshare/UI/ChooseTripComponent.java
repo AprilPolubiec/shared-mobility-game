@@ -50,7 +50,7 @@ public class ChooseTripComponent {
         component.getChildren().add(titleText);
         for (int i = 0; i < trips.size(); i++) {
             Trip trip = trips.get(i);
-            AnchorPane tripAnchor = UIComponentUtils.createStyledDialog(100.0, 300.0);
+            AnchorPane tripAnchor = UIComponentUtils.createStyledDialog(100.0, UIComponentUtils.RIGHT_PANEL_WIDTH);
             UIComponentUtils.addHoverCursor(tripAnchor, true);
             tripAnchor.setOnMouseClicked(new EventHandler<MouseEvent>() {
 

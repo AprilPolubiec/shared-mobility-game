@@ -21,6 +21,8 @@ public class UIComponentUtils {
     public static final Set<String> UI_COLORS = new HashSet<String>(
             Arrays.asList("blue", "green", "grey", "red", "yellow"));
 
+    public static final double RIGHT_PANEL_WIDTH= 300.0;
+
     static public AnchorPane createStyledDialog(double height, double width) {
         AnchorPane root = new AnchorPane();
         root.setPrefHeight(height);

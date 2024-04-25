@@ -10,6 +10,10 @@ import java.util.Objects;
 
 import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
+import com.rideshare.GameManager.TimerState;
+import com.rideshare.City.Mailbox;
+import com.rideshare.UI.ChooseTripComponent;
+import com.rideshare.UI.UIComponentUtils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,6 +23,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.Background;
 
 public class Timer {
     private static final LocalTime DAY_START = LocalTime.of(5, 0, 0);
@@ -29,6 +41,7 @@ public class Timer {
     private Timeline timeline;
     Text clockText;
     Font font;
+    private Button pauseButton;
 
     public Timer() {
         this.font = Font.loadFont(getClass().getResourceAsStream("/fonts/digital-7.ttf"), 48);
@@ -148,4 +161,58 @@ public class Timer {
         return minutesLeft;
     }
 
+
+    public void renderPauseButton(AnchorPane root) {
+        Image pauseImage = new Image(getClass().getResourceAsStream("/images/ui/pauseButton.png"));
+        Image playImage = new Image(getClass().getResourceAsStream("/images/ui/playButton.png"));
+
+        pauseButton = new Button();
+        UIComponentUtils.addHoverCursor(pauseButton, true); 
+        AnchorPane.setTopAnchor(pauseButton, 418.0); 
+        AnchorPane.setRightAnchor(pauseButton, 298.0);
+
+        BackgroundImage backgroundImage = new BackgroundImage(
+                        pauseImage,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.DEFAULT,
+                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false)
+                );
+
+                
+        Background background = new Background(backgroundImage);
+        pauseButton.setBackground(background);
+
+        double desiredHeight = 200; 
+        pauseButton.setPrefWidth(UIComponentUtils.RIGHT_PANEL_WIDTH + 5);
+        pauseButton.setPrefHeight(desiredHeight); 
+
+
+        pauseButton.setOnAction(e -> {
+            if (this.state == TimerState.RUNNING) {
+                pause();
+                Mailbox.disableMailboxes();
+                pauseButton.setBackground(new Background(new BackgroundImage(
+                        playImage,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.DEFAULT,
+                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false)
+                )));
+            } else if(!Mailbox.mailboxesClickable){
+                resume();
+                Mailbox.enableMailboxes();
+
+                pauseButton.setBackground(new Background(new BackgroundImage(
+                        pauseImage,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.DEFAULT,
+                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false)
+                )));
+            }
+                
+        });
+        root.getChildren().add(pauseButton);
+    }
 }
