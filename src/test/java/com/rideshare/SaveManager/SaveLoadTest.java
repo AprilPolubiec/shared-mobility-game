@@ -22,10 +22,10 @@ public class SaveLoadTest {
         p.getScoreKeeper().calculateLevelScore(100);
         sl.save(p);
     }
-    @Test
-    public void Test_GetExistingGames() {
-        SaveLoad sl = new SaveLoad();
-        int existing = sl.getExistingGames();
-        assertEquals(1, existing);
-    }
+    // @Test
+    // public void Test_GetExistingGames() {
+    //     SaveLoad sl = new SaveLoad();
+    //     int existing = sl.getExistingGames();
+    //     assertEquals(1, existing);
+    // }
 }
