@@ -11,7 +11,8 @@ public class ScoreKeeperTest {
     @Test
     public void Test_CanCreateScoreKeeper() {
         ScoreKeeper scoreKeeper = new ScoreKeeper();
-        scoreKeeper.setTotalMailboxes(10);;
+        scoreKeeper.setTotalMailboxes(10);
+        ;
         // scoreKeeper.co2Budget = 10; - it's a constant variable
         assertEquals(0, scoreKeeper.getMailboxesCompleted());
         assertEquals(10, scoreKeeper.getTotalMailboxes());
@@ -36,7 +37,7 @@ public class ScoreKeeperTest {
         ScoreKeeper scoreKeeper = new ScoreKeeper();
         int newCO2 = scoreKeeper.incrementCO2Used(8501);
         boolean hasExceededBudget = scoreKeeper.hasExceededBudget();
-        
+
         assertEquals(true, hasExceededBudget);
         assertEquals(8500, newCO2);
     }
@@ -54,5 +55,27 @@ public class ScoreKeeperTest {
         assertEquals(38, result);
     }
 
-    // TODO: more tests!
+    @Test
+    public void Test_CanResetScore() {
+        ScoreKeeper scoreKeeper = new ScoreKeeper();
+        scoreKeeper.setTotalMailboxes(10);
+        scoreKeeper.setMailboxesCompleted(5);
+        scoreKeeper.incrementCO2Used(1000);
+
+        scoreKeeper.resetScore();
+
+        assertEquals(0, scoreKeeper.getTotalMailboxes());
+        assertEquals(0, scoreKeeper.getMailboxesCompleted());
+        assertEquals(0, scoreKeeper.getCo2Used());
+    }
+
+    @Test
+    public void Test_CanNotExceedMailboxesCompleted() {
+        ScoreKeeper scoreKeeper = new ScoreKeeper();
+        scoreKeeper.setTotalMailboxes(10);
+        scoreKeeper.setMailboxesCompleted(10);
+
+        assertThrows(Exception.class, () -> scoreKeeper.incrementMailboxesCompleted(1));
+    }
+
 }

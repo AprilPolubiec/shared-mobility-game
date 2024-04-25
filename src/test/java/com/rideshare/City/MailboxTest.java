@@ -14,4 +14,5 @@ public class MailboxTest {
         assertEquals(1, mailbox.getGridPanePosition().row);
         assertTrue(mailbox.isReady());
     }
+
 }
