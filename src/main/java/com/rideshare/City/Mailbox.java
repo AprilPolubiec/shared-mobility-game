@@ -50,10 +50,21 @@ public class Mailbox {
 
    // #endregion
 
+   private static boolean mailboxesClickable = true;
+
+
+    public static void disableMailboxes() {
+        mailboxesClickable = false;
+    }
+
+    public static void enableMailboxes() {
+        mailboxesClickable = true;
+    }
+
    public void render() {
       this._mailboxTile = _tileManager.drawMailbox(_houseTileId, position);
       _mailboxTile.setOnMouseClicked(event -> {
-         if (status.get() == MailboxStatus.WAITING) {
+        if (mailboxesClickable && status.get() == MailboxStatus.WAITING) {
             markSelected();
          }
       });

@@ -11,6 +11,7 @@ import java.util.Objects;
 import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.GameManager.TimerState;
+import com.rideshare.City.Mailbox;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -189,6 +190,7 @@ public class Timer {
         pauseButton.setOnAction(e -> {
             if (getState() == TimerState.RUNNING) {
                 pause();
+                Mailbox.disableMailboxes();
                 pauseButton.setBackground(new Background(new BackgroundImage(
                         playImage,
                         BackgroundRepeat.NO_REPEAT,
@@ -198,6 +200,7 @@ public class Timer {
                 )));
             } else {
                 resume();
+                Mailbox.enableMailboxes();
                 pauseButton.setBackground(new Background(new BackgroundImage(
                         pauseImage,
                         BackgroundRepeat.NO_REPEAT,
