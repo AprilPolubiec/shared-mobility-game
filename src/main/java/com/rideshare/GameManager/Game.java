@@ -39,7 +39,6 @@ public class Game {
     private ChooseTripComponent _tripChooser;
     private EducationalPopup _educationalContent;
     private SaveLoad _saveLoad;
-   
 
     public Game(AnchorPane root, City city, Player player) {
         Utils.print(String.format("Creating a game"));
@@ -48,7 +47,7 @@ public class Game {
         this._root = root;
         this._tripCalculator = new TripCalculator(this._city);
         _saveLoad = new SaveLoad();
-        
+
         initializeTimer();
         initializeScoreKeeper();
         initializeTripChooser();
@@ -161,17 +160,8 @@ public class Game {
             Utils.print(String.format("%s mailboxes left", mailboxesLeft));
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
 
-            // // No more mailboxes are left - we've completed the level
-            // if (mailboxesLeft == 0) {
-            //     _timer.stop();
-            //     handleLevelCompleted();
-            //     // If timer has stopped with mailboxes left over
-            // } else if (_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0) {
-            //     handleLevelFailed();
-            //     // If the timer is running, we can show a random mailbox
-            // } else 
-            if (_timer.getState() == TimerState.RUNNING) {
-                int numUninitializedMailboxes = _city.getUninitializedMailboxes().size();
+            int numUninitializedMailboxes = _city.getUninitializedMailboxes().size();
+            if (_timer.getState() == TimerState.RUNNING && numUninitializedMailboxes >= 0) {
                 int randomMailboxIndex = new Random().nextInt(numUninitializedMailboxes);
                 Mailbox mailboxToShow = _city.getUninitializedMailboxes().get(randomMailboxIndex);
                 showMailbox(mailboxToShow);
@@ -325,7 +315,7 @@ public class Game {
             _timer.stop();
             handleLevelCompleted();
             // If timer has stopped with mailboxes left over
-        } 
+        }
 
         // TODO: Handle level completed here
     }
@@ -338,10 +328,9 @@ public class Game {
         return _city.getMailboxesLeft().size() == 0 || getTimer().getState() == TimerState.STOPPED;
     }
 
-
     private void initializePause(AnchorPane _root) {
         _timer.renderPauseButton(_root);
-         
+
     }
 
 }
