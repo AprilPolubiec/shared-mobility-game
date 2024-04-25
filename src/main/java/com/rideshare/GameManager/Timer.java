@@ -12,6 +12,7 @@ import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.GameManager.TimerState;
 import com.rideshare.City.Mailbox;
+import com.rideshare.UI.ChooseTripComponent;
 import com.rideshare.UI.UIComponentUtils;
 
 import javafx.animation.KeyFrame;
@@ -198,9 +199,10 @@ public class Timer {
                         BackgroundPosition.DEFAULT,
                         new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false)
                 )));
-            } else {
+            } else if(!Mailbox.mailboxesClickable){
                 resume();
                 Mailbox.enableMailboxes();
+
                 pauseButton.setBackground(new Background(new BackgroundImage(
                         pauseImage,
                         BackgroundRepeat.NO_REPEAT,
@@ -209,6 +211,7 @@ public class Timer {
                         new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false)
                 )));
             }
+                
         });
         root.getChildren().add(pauseButton);
     }

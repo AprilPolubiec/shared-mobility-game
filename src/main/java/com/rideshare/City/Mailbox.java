@@ -50,7 +50,7 @@ public class Mailbox {
 
    // #endregion
 
-   private static boolean mailboxesClickable = true;
+   public static boolean mailboxesClickable = true;
 
 
     public static void disableMailboxes() {
@@ -141,7 +141,9 @@ public class Mailbox {
    }
 
    public void markSelected() {
+      if (mailboxesClickable ==true){
       this.status.set(MailboxStatus.SELECTED);
+      }
    }
 
    public void markInProgress() {
