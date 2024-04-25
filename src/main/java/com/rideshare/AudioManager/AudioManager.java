@@ -15,8 +15,8 @@ public class AudioManager {
     // want and only ever load in the media once
     private static final Logger LOGGER = Logger.getLogger(AudioManager.class.getName());
     private static MediaPlayer mainMediaPlayer;
-    private static MediaPlayer mailboxWaitingAudio;
-    private static MediaPlayer mailboxCompleteAudio;
+    private MediaPlayer mailboxWaitingAudio;
+    private MediaPlayer mailboxCompleteAudio;
     private boolean muted = false;
 
     public AudioManager() {
