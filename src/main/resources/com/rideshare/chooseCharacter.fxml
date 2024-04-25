@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -10,9 +11,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rideshare.Controllers.ChooseCharacterController">
    <children>
-      <ImageView fitHeight="948.0" fitWidth="1674.0" layoutX="-9.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="1522.0" fitWidth="2090.0" layoutX="-13.0" layoutY="-333.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../images/bg/home-2.png" />
+            <Image url="@../../images/bg/home-3.jpeg" />
          </image>
       </ImageView>
       <AnchorPane layoutX="484.0" layoutY="280.0" prefHeight="284.0" prefWidth="358.0">
@@ -31,11 +32,17 @@
                <image>
                   <Image url="@../../images/ui/red_sliderRight.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <ImageView fx:id="leftButton" fitHeight="51.0" fitWidth="48.0" layoutX="27.0" layoutY="151.0" onMouseClicked="#onLeftButtonClicked" pickOnBounds="true">
                <image>
                   <Image url="@../../images/ui/red_sliderLeft.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <Text layoutX="88.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your character">
                <font>
@@ -51,7 +58,7 @@
       </AnchorPane>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="750.0" layoutY="658.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../images/ui/green_button00.png" />
+            <Image url="@../../images/ui/red_button00.png" />
          </image>
       </ImageView>
       <Text fill="WHITE" layoutX="819.0" layoutY="691.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
@@ -59,7 +66,10 @@
             <Font name="Futura Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="startButton" layoutX="749.0" layoutY="656.0" mnemonicParsing="false" onAction="#onStartButtonClicked" opacity="0.0" prefHeight="51.0" prefWidth="200.0" />
+      <Button fx:id="startButton" layoutX="749.0" layoutY="656.0" mnemonicParsing="false" onAction="#onStartButtonClicked" opacity="0.0" prefHeight="51.0" prefWidth="200.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="501.0" layoutY="659.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/ui/grey_button00.png" />
@@ -70,6 +80,9 @@
             <Font name="Futura Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="backButton" layoutX="500.0" layoutY="657.0" mnemonicParsing="false" onAction="#onBackButtonClicked" opacity="0.0" prefHeight="51.0" prefWidth="200.0" />
+      <Button fx:id="backButton" layoutX="500.0" layoutY="657.0" mnemonicParsing="false" onAction="#onBackButtonClicked" opacity="0.0" prefHeight="51.0" prefWidth="200.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
    </children>
 </AnchorPane>
