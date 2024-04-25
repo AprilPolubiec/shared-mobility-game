@@ -45,8 +45,8 @@ public class HomeController {
         try {
             _root = root;
             _stage = stage;
-            _stage.setWidth(720);
-            _stage.setHeight(439);
+            // _stage.setWidth(720);
+            // _stage.setHeight(439);
             _stage.centerOnScreen();
             setScene(false);
             _stage.show();
