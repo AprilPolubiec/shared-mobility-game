@@ -115,24 +115,24 @@ public class SaveLoad {
 
     public void renderExistingGames(AnchorPane root) {
         ScrollPane gameList = new ScrollPane();
-        gameList.setPrefHeight(300);
-        gameList.setPrefWidth(302);
-        AnchorPane.setTopAnchor(gameList, (UIComponentUtils.getStageHeight(root) / 2) - 150);
-        AnchorPane.setLeftAnchor(gameList, (UIComponentUtils.getStageWidth(root) / 2) - 150);
+        gameList.setPrefHeight(400);
+        gameList.setPrefWidth(402);
+        AnchorPane.setTopAnchor(gameList, (UIComponentUtils.getStageHeight(root) / 2) - 200);
+        AnchorPane.setLeftAnchor(gameList, (UIComponentUtils.getStageWidth(root) / 2) - 200);
         List<String> existingPlayers = getExistingGames();
         VBox playerStack = new VBox();
         for (String playerName : existingPlayers) {
             // Create a panel with the player name
             AnchorPane playerOption = new AnchorPane();
             ImageView panel = UIComponentUtils.getPanel("red");
-            panel.setFitWidth(300);
+            panel.setFitWidth(400);
             panel.setFitHeight(100);
 
             Text playerNameText = new Text(playerName);
             playerNameText.setFont(new Font("Futura Bold", 14));
             playerNameText.setFill(Color.WHITE);
             AnchorPane.setTopAnchor(playerNameText, 40.0);
-            AnchorPane.setLeftAnchor(playerNameText, 150 - (playerNameText.getLayoutBounds().getWidth() / 2));
+            AnchorPane.setLeftAnchor(playerNameText, 200 - (playerNameText.getLayoutBounds().getWidth() / 2));
 
             playerOption.getChildren().addAll(panel, playerNameText);
             playerOption.setOnMouseEntered(new EventHandler<MouseEvent>() {
