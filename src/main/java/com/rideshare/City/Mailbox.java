@@ -74,11 +74,23 @@ public class Mailbox {
       return new GridPanePosition(row, col).toTheLeft();
    }
 
+   public static boolean mailboxesClickable = true;
+
+
+    public static void disableMailboxes() {
+        mailboxesClickable = false;
+    }
+
+    public static void enableMailboxes() {
+        mailboxesClickable = true;
+    }
+   
    //Class Render Methods
+
    public void render() {
       this.mailboxTile = this.tileManager.drawMailbox(this.houseTileId, position);
       this.mailboxTile.setOnMouseClicked(event -> {
-         if (status.get() == MailboxStatus.WAITING) {
+        if (mailboxesClickable && status.get() == MailboxStatus.WAITING) {
             markSelected();
          }
       });
@@ -134,7 +146,9 @@ public class Mailbox {
    }
 
    public void markSelected() {
+      if (mailboxesClickable ==true){
       this.status.set(MailboxStatus.SELECTED);
+      }
    }
 
    public void markInProgress() {
