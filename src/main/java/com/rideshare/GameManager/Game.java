@@ -161,15 +161,16 @@ public class Game {
             Utils.print(String.format("%s mailboxes left", mailboxesLeft));
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
 
-            // No more mailboxes are left - we've completed the level
-            if (mailboxesLeft == 0) {
-                _timer.stop();
-                handleLevelCompleted();
-                // If timer has stopped with mailboxes left over
-            } else if (_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0) {
-                handleLevelFailed();
-                // If the timer is running, we can show a random mailbox
-            } else if (_timer.getState() == TimerState.RUNNING) {
+            // // No more mailboxes are left - we've completed the level
+            // if (mailboxesLeft == 0) {
+            //     _timer.stop();
+            //     handleLevelCompleted();
+            //     // If timer has stopped with mailboxes left over
+            // } else if (_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0) {
+            //     handleLevelFailed();
+            //     // If the timer is running, we can show a random mailbox
+            // } else 
+            if (_timer.getState() == TimerState.RUNNING) {
                 int numUninitializedMailboxes = _city.getUninitializedMailboxes().size();
                 int randomMailboxIndex = new Random().nextInt(numUninitializedMailboxes);
                 Mailbox mailboxToShow = _city.getUninitializedMailboxes().get(randomMailboxIndex);
@@ -318,6 +319,15 @@ public class Game {
         scoreKeeper.setMailboxesCompleted(scoreKeeper.getMailboxesCompleted() + 1);
         scoreKeeper.updateScore(_currentMailbox, _currentTrip);
         scoreKeeper.print();
+
+        int mailboxesLeft = _city.getMailboxesLeft().size();
+        if (mailboxesLeft == 0) {
+            _timer.stop();
+            handleLevelCompleted();
+            // If timer has stopped with mailboxes left over
+        } 
+
+        // TODO: Handle level completed here
     }
 
     private void handleMailboxFailed() {
