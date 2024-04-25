@@ -5,7 +5,8 @@ import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TransportationMode.*;
 
 public class TransportationNode {
-    TransportationNode parent;
+    //Instance Field Declaration
+     TransportationNode parent;
     GridPanePosition position;
     TransportationMode modeOfTransport;
     TransportationType transportationType;
@@ -13,7 +14,6 @@ public class TransportationNode {
     int fCost; // Sum of gCost and hCost
     int gCost; // Distance between start node and current node
     int hCost; // Distance between current node and goal node
-
     private boolean start;
     private boolean goal;
     private boolean solid;
@@ -21,6 +21,7 @@ public class TransportationNode {
     private boolean checked;
     private boolean canStop;
 
+    //Class Constructor
     public TransportationNode(GridPanePosition position, TransportationType transportationType,
             RouteNodeMatrix routeNodeMatrix) {
         this.position = position;

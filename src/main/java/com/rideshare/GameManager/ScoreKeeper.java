@@ -39,25 +39,29 @@ import javafx.util.Duration;
 
 public class ScoreKeeper {
     private final int MAX_CO2_BUDGET = 8500;
-    int co2Used = 0;
+    private int co2Used = 0;
     private int mailboxesCompleted = 0;
     private int totalMailboxes = 0;
-    int score = 0;
-    Integer scoreWithTimeBonus = 0;
-    int level = 0;
+    private int score = 0;
+    private Integer scoreWithTimeBonus = 0;
+    private int level = 0;
     private String playerName = null;
     private ProgressBar emissionsProgressBar = null;
-
     private Text scoreText = null;
     private Text mailboxText = null;
     private Text co2Text = null;
 
     // The ScoreKeeper constructor
     public ScoreKeeper() {
-
     }
 
     public void setPlayerName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Player name cannot be null.");
+        }
+        if (name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Player name cannot be empty.");
+        }
         this.playerName = name;
     }
 
@@ -128,6 +132,9 @@ public class ScoreKeeper {
     }
 
     public void setTotalMailboxes(int total) {
+        if (total < 0) {
+            throw new IllegalArgumentException("Input value must be a positive integer.");
+        }
         this.totalMailboxes = total;
     }
 
@@ -174,7 +181,7 @@ public class ScoreKeeper {
     // incrementer
     public void setLevel(int newLevel) {
         if (newLevel < 0) {
-            throw new IllegalArgumentException("Input value must be a positive integer");
+            throw new IllegalArgumentException("Input value must be a positive integer.");
         }
 
         this.level = newLevel;

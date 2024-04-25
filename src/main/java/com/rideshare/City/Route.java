@@ -10,16 +10,19 @@ import com.rideshare.TransportationMode.TransportationType;
  * city.
  */
 public class Route {
-    private RouteNodeMatrix nodeMatrix;
-    private TransportationType transportationType;
-    private String name;
+    //Instance Field Declarations
+    private final RouteNodeMatrix nodeMatrix;
+    private final TransportationType transportationType;
+    private final String name;
 
+    //Class Constructor
     public Route(int[][] routeMatrix, TransportationType transportationType, String name) {
         nodeMatrix = new RouteNodeMatrix(routeMatrix, transportationType, name);
         this.transportationType = transportationType;
         this.name = name;
     }
 
+    //Class Getter Methods
     public String getName() {
         return this.name;
     }
