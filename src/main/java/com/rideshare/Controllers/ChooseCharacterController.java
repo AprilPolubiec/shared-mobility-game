@@ -3,9 +3,9 @@ package com.rideshare.Controllers;
 import java.io.IOException;
 
 import com.rideshare.App;
-import com.rideshare.Player;
-import com.rideshare.UIComponentUtils;
 import com.rideshare.Utils;
+import com.rideshare.GameManager.Player;
+import com.rideshare.UI.UIComponentUtils;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

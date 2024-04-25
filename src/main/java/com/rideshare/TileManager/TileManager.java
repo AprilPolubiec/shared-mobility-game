@@ -45,7 +45,7 @@ public class TileManager {
                     if (tileId == 0) {
                         continue;
                     }
-                    drawTile(tileId, rowIdx, colIdx);
+                    drawTile(tileId, new GridPanePosition(rowIdx, colIdx));
                 }
             }
         }
@@ -56,18 +56,24 @@ public class TileManager {
         _root.getChildren().remove(_tileGrid);
     }
 
-    public ImageView drawTile(int tileId, int rowIdx, int colIdx) {
-        String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();
+    public ImageView drawMailbox(int houseTileId, GridPanePosition gridPosition) {
+        return drawTile(houseTileId + TileUtils.FLAG_HOUSE_OFFSET, gridPosition);
+    }
+
+    public ImageView drawTile(int tileId, GridPanePosition position) {
+        String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId)))
+                .toString();
         ImageView tileImage = new ImageView(tileUrl);
         tileImage.setFitHeight(TileUtils.TILE_SIZE_IN_PIXELS);
         tileImage.setFitWidth(TileUtils.TILE_SIZE_IN_PIXELS);
-        _tileGrid.add(tileImage, colIdx, rowIdx);
-        
+        _tileGrid.add(tileImage, position.col, position.row);
+
         return tileImage;
     }
 
     public ImageView replaceTileImage(ImageView tile, int tileId) {
-        String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId))).toString();
+        String tileUrl = App.class.getResource(String.format("/images/tiles/%s", getTileImageFileName(tileId)))
+                .toString();
         tile.setImage(new Image(tileUrl));
         return tile;
     }

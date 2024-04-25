@@ -1,14 +1,15 @@
 package com.rideshare.GameManager;
 
 import com.rideshare.App;
-import com.rideshare.City;
-import com.rideshare.Mailbox;
-import com.rideshare.Route;
-import com.rideshare.TransportationType;
+import com.rideshare.City.City;
+import com.rideshare.City.Route;
+import com.rideshare.City.Mailbox;
+import com.rideshare.TileManager.GridPanePosition;
 import com.rideshare.TileManager.MapJson;
 import com.rideshare.TileManager.TileManager;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.TileManager.TiledMapLayer;
+import com.rideshare.TransportationMode.TransportationType;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -51,6 +52,8 @@ public class MapLoader {
     }
 
     public static City createCityFromMapData(MapJson map) throws Exception {
+        City city = new City(map.height);
+    
         ArrayList<Route> routes = new ArrayList<Route>();
         ArrayList<Route> walkingRoute = getRoutes(map, "Walking", TransportationType.WALKING);
         ArrayList<Route> drivingRoute = getRoutes(map, "Roads", TransportationType.CAR);
@@ -62,7 +65,8 @@ public class MapLoader {
         routes.addAll(trainRoute);
 
         ArrayList<Mailbox> mailboxes = getMailboxes(map);
-        City city = new City(map.height, routes, mailboxes);
+        city.setMailboxes(mailboxes);
+        city.setRoutes(routes);
         return city;
     }
 
@@ -83,7 +87,7 @@ public class MapLoader {
                 int colIdx = j;
                 int value = mailboxMatrix[rowIdx][colIdx];
                 if (Arrays.asList(TileUtils.HOUSE_TILE_IDS).contains(value)) {
-                    Mailbox mailbox = new Mailbox(rowIdx, colIdx, value, _tileManager);
+                    Mailbox mailbox = new Mailbox(new GridPanePosition(rowIdx, colIdx), value, _tileManager);
                     // mailbox.setDuration(5); // TODO!
                     mailboxes.add(mailbox);
                 }
