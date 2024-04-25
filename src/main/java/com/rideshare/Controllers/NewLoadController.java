@@ -4,7 +4,7 @@ package com.rideshare.Controllers;
 import java.io.IOException;
 
 import com.rideshare.App;
-import com.rideshare.Player;
+import com.rideshare.GameManager.Player;
 import com.rideshare.SaveManager.SaveLoad;
 
 import javafx.beans.value.ChangeListener;

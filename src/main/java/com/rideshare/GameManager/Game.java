@@ -3,23 +3,18 @@ package com.rideshare.GameManager;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.rideshare.ChooseTripComponent;
-import com.rideshare.City;
-import com.rideshare.EducationalPopup;
-import com.rideshare.GameOverPopup;
-import com.rideshare.GridPanePosition;
-import com.rideshare.LevelCompletePopup;
-import com.rideshare.Mailbox;
-import com.rideshare.MailboxStatus;
-import com.rideshare.Player;
-import com.rideshare.PlayerStatus;
-import com.rideshare.ScoreKeeper;
-import com.rideshare.Timer;
-import com.rideshare.TimerState;
-import com.rideshare.Trip;
-import com.rideshare.TripCalculator;
 import com.rideshare.Utils;
+import com.rideshare.City.City;
+import com.rideshare.City.Mailbox;
+import com.rideshare.City.MailboxStatus;
 import com.rideshare.SaveManager.SaveLoad;
+import com.rideshare.TileManager.GridPanePosition;
+import com.rideshare.Trip.Trip;
+import com.rideshare.Trip.TripCalculator;
+import com.rideshare.UI.ChooseTripComponent;
+import com.rideshare.UI.EducationalPopup;
+import com.rideshare.UI.GameOverPopup;
+import com.rideshare.UI.LevelCompletePopup;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -29,7 +24,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Game {
@@ -45,8 +39,7 @@ public class Game {
     private ChooseTripComponent _tripChooser;
     private EducationalPopup _educationalContent;
     private SaveLoad _saveLoad;
-    private int mailboxesLeft;
-    private ScoreKeeper scoreKeeper;
+   
 
     public Game(AnchorPane root, City city, Player player) {
         Utils.print(String.format("Creating a game"));
@@ -55,14 +48,13 @@ public class Game {
         this._root = root;
         this._tripCalculator = new TripCalculator(this._city);
         _saveLoad = new SaveLoad();
-
+        
         initializeTimer();
         initializeScoreKeeper();
         initializeTripChooser();
         initializeGameLoop();
         intializeEducationalContentContainer();
 
-        // cl
         System.out.println(this._player.getScoreKeeper().getMapName());
     }
 
@@ -94,7 +86,7 @@ public class Game {
 
     private void renderGameOver() {
         GameOverPopup gameOverPopup = new GameOverPopup();
-        gameOverPopup.render(this._root); 
+        gameOverPopup.render(this._root);
         gameOverPopup.onRepeatLevelSelected(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -123,10 +115,10 @@ public class Game {
         this.start();
     }
 
-
     private void initializeTimer() {
         this._timer = new Timer();
         this._timer.render(_root);
+        initializePause(_root);
     }
 
     private void initializeScoreKeeper() {
@@ -134,6 +126,7 @@ public class Game {
         this._player.getScoreKeeper().setTotalMailboxes(_city.getMailboxes().size());
         this._player.getScoreKeeper().setMailboxesCompleted(0);
         this._level = this._player.getScoreKeeper().getLevel();
+        this._player.getScoreKeeper().setCo2Used(0);
         this._player.getScoreKeeper().renderEmissionsProgressBar(_root);
     }
 
@@ -164,20 +157,20 @@ public class Game {
         Utils.print(String.format("Starting game loop"));
         _timeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
             // Get the mailboxes that have not been rendered yet
-            int numMailboxes = _city.getMailboxes().size();
-            int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
+            int mailboxesLeft = _city.getMailboxesLeft().size();
             Utils.print(String.format("%s mailboxes left", mailboxesLeft));
             Utils.print(String.format("Timer state: %s", _timer.getState().name()));
 
-            // No more mailboxes are left - we've completed the level
-            if (mailboxesLeft == 0) {
-                _timer.stop();
-                handleLevelCompleted();
-                // If timer has stopped with mailboxes left over
-            } else if (_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0) {
-                handleLevelFailed();
-                // If the timer is running, we can show a random mailbox
-            } else if (_timer.getState() == TimerState.RUNNING) {
+            // // No more mailboxes are left - we've completed the level
+            // if (mailboxesLeft == 0) {
+            //     _timer.stop();
+            //     handleLevelCompleted();
+            //     // If timer has stopped with mailboxes left over
+            // } else if (_timer.getState() == TimerState.STOPPED && mailboxesLeft > 0) {
+            //     handleLevelFailed();
+            //     // If the timer is running, we can show a random mailbox
+            // } else 
+            if (_timer.getState() == TimerState.RUNNING) {
                 int numUninitializedMailboxes = _city.getUninitializedMailboxes().size();
                 int randomMailboxIndex = new Random().nextInt(numUninitializedMailboxes);
                 Mailbox mailboxToShow = _city.getUninitializedMailboxes().get(randomMailboxIndex);
@@ -201,12 +194,6 @@ public class Game {
 
     public int getLevel() {
         return this._level;
-    }
-
-    public int getMailboxesLeft() {
-        int numMailboxes = _city.getMailboxes().size();
-        int mailboxesLeft = numMailboxes - _city.getFailedOrCompletedMailboxes().size();
-        return mailboxesLeft;
     }
 
     public Timer getTimer() {
@@ -255,13 +242,13 @@ public class Game {
                     MailboxStatus newStatus) {
                 System.out.println(String.format("Status changed for [%s %s]: %s ", mailbox.getGridPanePosition().row,
                         mailbox.getGridPanePosition().col, newStatus));
-                if (newStatus == MailboxStatus.SELECTED) {
+                if (mailbox.isSelected()) {
                     handleMailboxSelected(mailbox);
                 }
-                if (newStatus == MailboxStatus.COMPLETED) {
+                if (mailbox.isCompleted()) {
                     handleMailboxCompleted();
                 }
-                if (newStatus == MailboxStatus.FAILED) {
+                if (mailbox.isExpired()) {
                     handleMailboxFailed();
                 }
             }
@@ -278,7 +265,7 @@ public class Game {
             return;
         }
 
-        if (_currentMailbox != null && _currentMailbox.getStatus() == MailboxStatus.SELECTED) {
+        if (_currentMailbox != null && _currentMailbox.isSelected()) {
             _currentMailbox.markWaiting();
         }
         _currentMailbox = mailbox;
@@ -286,9 +273,8 @@ public class Game {
         // Pause the clock
         pause();
         // Calculate trips from player to mailbox
-        ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition().row,
-                _player.getGridPanePosition().col, mailbox.getGridPanePosition().row,
-                mailbox.getGridPanePosition().col);
+        ArrayList<Trip> trips = _tripCalculator.calculateTrips(_player.getGridPanePosition(),
+                mailbox.getGridPanePosition());
         Utils.print(String.format("Found trips!"));
 
         // Render the trips in the trip chooser
@@ -313,7 +299,8 @@ public class Game {
         });
     }
 
-    // Player state has changed to idle and stopped at the destination - mark mailbox completed
+    // Player state has changed to idle and stopped at the destination - mark
+    // mailbox completed
     private void handleTripCompleted() {
         _currentMailbox.markComplete();
         // _currentTrip.getEmission();
@@ -332,6 +319,15 @@ public class Game {
         scoreKeeper.setMailboxesCompleted(scoreKeeper.getMailboxesCompleted() + 1);
         scoreKeeper.updateScore(_currentMailbox, _currentTrip);
         scoreKeeper.print();
+
+        int mailboxesLeft = _city.getMailboxesLeft().size();
+        if (mailboxesLeft == 0) {
+            _timer.stop();
+            handleLevelCompleted();
+            // If timer has stopped with mailboxes left over
+        } 
+
+        // TODO: Handle level completed here
     }
 
     private void handleMailboxFailed() {
@@ -339,7 +335,13 @@ public class Game {
     }
 
     private boolean isLevelOver() {
-        return getMailboxesLeft() == 0 || getTimer().getState() == TimerState.STOPPED;
+        return _city.getMailboxesLeft().size() == 0 || getTimer().getState() == TimerState.STOPPED;
+    }
+
+
+    private void initializePause(AnchorPane _root) {
+        _timer.renderPauseButton(_root);
+         
     }
 
 }

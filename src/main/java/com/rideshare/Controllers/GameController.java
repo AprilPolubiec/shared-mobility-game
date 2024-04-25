@@ -1,17 +1,15 @@
 package com.rideshare.Controllers;
 
 import java.io.IOException;
-import com.rideshare.City;
-import com.rideshare.Player;
+
+import com.rideshare.City.City;
 import com.rideshare.GameManager.Game;
 import com.rideshare.GameManager.MapLoader;
-import com.rideshare.TileManager.TileUtils;
+import com.rideshare.GameManager.Player;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class GameController {
