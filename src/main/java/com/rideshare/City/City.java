@@ -172,6 +172,8 @@ public class City {
   /**
    * Render and show all mailboxes in the city
    */
+
+  //TODO: Methods declared but never used. Should they be utilised or deleted?
   public void showAllMailboxes() {
     for (Mailbox mailbox : mailboxes) {
       if (!mailbox.isInitialized()) {
