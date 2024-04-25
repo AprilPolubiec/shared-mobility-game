@@ -62,7 +62,7 @@ public class ScoreKeeper {
     }
 
     public void render(AnchorPane root) {
-        AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(200.0, 300.0);
+        AnchorPane scorekeeperPane = UIComponentUtils.createStyledDialog(200.0, UIComponentUtils.RIGHT_PANEL_WIDTH);
         AnchorPane.setBottomAnchor(scorekeeperPane, 150.0);
         AnchorPane.setLeftAnchor(scorekeeperPane, TileUtils.TILE_SIZE_IN_PIXELS * 30.0);
 

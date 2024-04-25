@@ -12,6 +12,7 @@ import com.rideshare.Utils;
 import com.rideshare.TileManager.TileUtils;
 import com.rideshare.GameManager.TimerState;
 import com.rideshare.City.Mailbox;
+import com.rideshare.UI.UIComponentUtils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -165,6 +166,7 @@ public class Timer {
         Image playImage = new Image(getClass().getResourceAsStream("/images/ui/playButton.png"));
 
         pauseButton = new Button();
+        UIComponentUtils.addHoverCursor(pauseButton, true); 
         AnchorPane.setTopAnchor(pauseButton, 418.0); 
         AnchorPane.setRightAnchor(pauseButton, 298.0);
 
@@ -180,15 +182,13 @@ public class Timer {
         Background background = new Background(backgroundImage);
         pauseButton.setBackground(background);
 
-
-        double desiredWidth = 305; 
         double desiredHeight = 200; 
-        pauseButton.setPrefWidth(desiredWidth);
+        pauseButton.setPrefWidth(UIComponentUtils.RIGHT_PANEL_WIDTH + 5);
         pauseButton.setPrefHeight(desiredHeight); 
 
 
         pauseButton.setOnAction(e -> {
-            if (getState() == TimerState.RUNNING) {
+            if (this.state == TimerState.RUNNING) {
                 pause();
                 Mailbox.disableMailboxes();
                 pauseButton.setBackground(new Background(new BackgroundImage(
@@ -212,12 +212,4 @@ public class Timer {
         });
         root.getChildren().add(pauseButton);
     }
-
-    public Button getPauseButton() {
-        return pauseButton;
-    }
-
-     
-    
-
 }
