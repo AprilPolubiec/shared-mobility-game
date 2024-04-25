@@ -10,8 +10,8 @@ public class TrainTransportationModeTest {
         String displayName = "Metro";
         TransportationMode tm = new TrainTransportationMode(displayName);
         
-        assertEquals(0, tm.getEmissionRate());
-        assertEquals(5, tm.getSpeed());
+        assertEquals(35, tm.getEmissionRate());
+        assertEquals(30, tm.getSpeed());
         assertEquals(displayName, tm.getName());
         assertEquals(true, tm.hasStops());
     }

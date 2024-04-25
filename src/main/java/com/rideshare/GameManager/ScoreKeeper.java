@@ -104,7 +104,7 @@ public class ScoreKeeper {
 
     public void renderEmissionsProgressBar(AnchorPane root) {
         this.emissionsProgressBar = new ProgressBar(0);
-        emissionsProgressBar.setProgress(1);
+        emissionsProgressBar.setProgress(1 - (this.co2Used / this.MAX_CO2_BUDGET));
 
         VBox vBox = new VBox(emissionsProgressBar);
         emissionsProgressBar.setPrefWidth(TileUtils.TILE_SIZE_IN_PIXELS * 30);
