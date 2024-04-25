@@ -16,18 +16,18 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class Mailbox {
-   //Instance Field Declarations
+   // Instance Field Declarations
    private final GridPanePosition position;
    private final ObjectProperty<MailboxStatus> status = new SimpleObjectProperty<>();
    private final TileManager tileManager;
    private ImageView mailboxTile;
    private final int houseTileId;
    private boolean hasExpiration = false;
-    private Integer timeLeft = 0; // In seconds
+   private Integer timeLeft = 10; // In seconds
    private Timeline timeline;
    private final AudioManager audio = new AudioManager();
 
-   //Class Constructor
+   // Class Constructor
    public Mailbox(GridPanePosition housePosition, int houseTileId, TileManager tileManager) {
       position = housePosition.toTheRight(); // To the right of the house
       this.tileManager = tileManager;
@@ -35,7 +35,7 @@ public class Mailbox {
       status.set(MailboxStatus.UNINITIALIZED);
    }
 
-   //Class Getter Methods
+   // Class Getter Methods
    public GridPanePosition getGridPanePosition() {
       return position;
    }
@@ -44,24 +44,29 @@ public class Mailbox {
       return this.timeLeft;
    }
 
-   //Class Setter Methods
+   // Class Setter Methods
    public void setTimer() {
       timeline = new Timeline(new KeyFrame(Duration.seconds(1.0), event -> {
-         Utils.print(String.format("%s seconds left", timeLeft));
-         timeLeft -= 1;
-         if (status.get() == MailboxStatus.COMPLETED) { // Mailbox completed - stop the timer
-            timeline.stop();
+         if (timeLeft > 0) {
+            timeLeft -= 1;
+         } else {
+            timeline.stop(); // We're done here
          }
-         if (timeLeft == 0 && status.get() != MailboxStatus.COMPLETED) {
-            markFailed();
-            timeline.stop();
+         if (this.hasExpiration) {
+            if (status.get() == MailboxStatus.COMPLETED) { // Mailbox completed - stop the timer
+               this.timeline.stop();
+            }
+            if (timeLeft == 0 && status.get() != MailboxStatus.COMPLETED) {
+               markFailed();
+               this.timeline.stop();
+            }
          }
       }));
       timeline.setCycleCount(Timeline.INDEFINITE);
       timeline.play();
    }
 
-   //Class Static Methods
+   // Class Static Methods
    /**
     * Given the row and column of a mailbox, returns the position of the related
     * house (it is always the tile to the left)
@@ -76,21 +81,20 @@ public class Mailbox {
 
    public static boolean mailboxesClickable = true;
 
+   public static void disableMailboxes() {
+      mailboxesClickable = false;
+   }
 
-    public static void disableMailboxes() {
-        mailboxesClickable = false;
-    }
+   public static void enableMailboxes() {
+      mailboxesClickable = true;
+   }
 
-    public static void enableMailboxes() {
-        mailboxesClickable = true;
-    }
-   
-   //Class Render Methods
+   // Class Render Methods
 
    public void render() {
       this.mailboxTile = this.tileManager.drawMailbox(this.houseTileId, position);
       this.mailboxTile.setOnMouseClicked(event -> {
-        if (mailboxesClickable && status.get() == MailboxStatus.WAITING) {
+         if (mailboxesClickable && status.get() == MailboxStatus.WAITING) {
             markSelected();
          }
       });
@@ -104,15 +108,15 @@ public class Mailbox {
          // This is the first time we are showing the mailbox
          audio.playMailboxWaitingAudio();
          markWaiting();
-         if (hasExpiration) {
-            setTimer();
-         }
+         // if (hasExpiration) {
+         setTimer();
+         // }
       }
 
       this.mailboxTile.setOpacity(1);
    }
 
-   //Status Check Methods
+   // Status Check Methods
    public boolean isInitialized() {
       return this.status.get() != MailboxStatus.UNINITIALIZED;
    }
@@ -137,7 +141,7 @@ public class Mailbox {
       return this.status.get() == MailboxStatus.WAITING;
    }
 
-   //Status Setter Methods
+   // Status Setter Methods
    public void markComplete() {
       this.tileManager.drawTile(202, position.above());
       this.tileManager.replaceTileImage(this.mailboxTile, TileUtils.COMPLETED_FLAG_IDS[0]);
@@ -146,8 +150,8 @@ public class Mailbox {
    }
 
    public void markSelected() {
-      if (mailboxesClickable ==true){
-      this.status.set(MailboxStatus.SELECTED);
+      if (mailboxesClickable == true) {
+         this.status.set(MailboxStatus.SELECTED);
       }
    }
 
@@ -164,12 +168,12 @@ public class Mailbox {
       this.status.set(MailboxStatus.WAITING);
    }
 
-   //Additional Class Methods
+   // Additional Class Methods
    public void addStatusListener(ChangeListener<? super MailboxStatus> listener) {
       this.status.addListener(listener);
    }
 
-   //TODO: Methods declared but never used. Should they be utilised or deleted?
+   // TODO: Methods declared but never used. Should they be utilised or deleted?
    public void pauseTimer() {
       timeline.pause();
    }
@@ -188,6 +192,6 @@ public class Mailbox {
       }
       hasExpiration = true;
       // In seconds
-       timeLeft = duration;
+      timeLeft = duration;
    }
 }
