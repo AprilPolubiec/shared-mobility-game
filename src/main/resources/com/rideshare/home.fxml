@@ -27,7 +27,7 @@
             </Shadow>
          </effect>
       </Rectangle>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff" height="176.0" layoutX="152.0" layoutY="144.0" stroke="WHITE" strokeWidth="6.0" width="416.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff21c8" height="176.0" layoutX="152.0" layoutY="144.0" stroke="WHITE" strokeWidth="6.0" width="416.0" />
       <Text fill="WHITE" layoutX="165.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pedal &amp; Post">
          <font>
             <Font name="Futura Bold" size="57.0" />
