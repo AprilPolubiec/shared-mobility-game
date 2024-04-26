@@ -165,6 +165,8 @@ public class Game {
                 int randomMailboxIndex = new Random().nextInt(numUninitializedMailboxes);
                 Mailbox mailboxToShow = _city.getUninitializedMailboxes().get(randomMailboxIndex);
                 showMailbox(mailboxToShow);
+            } else if (_timer.getState() == TimerState.STOPPED) {
+                handleLevelFailed();
             }
         }));
         _timeline.setCycleCount(Animation.INDEFINITE);
